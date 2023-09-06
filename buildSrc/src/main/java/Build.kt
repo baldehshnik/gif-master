@@ -14,6 +14,12 @@ object Build {
             const val Material = "com.google.android.material:material:1.9.0"
         }
 
+        object Network {
+            const val Retrofit2 = "com.squareup.retrofit2:retrofit:2.9.0"
+            const val OkHttp = "com.squareup.okhttp3:okhttp:4.10.0"
+            const val ConverterGson = "com.squareup.retrofit2:converter-gson:2.3.0"
+        }
+
         object Testing {
             const val JUnit = "junit:junit:4.13.2"
             const val JUnitEXT = "androidx.test.ext:junit:1.1.5"
