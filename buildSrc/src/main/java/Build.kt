@@ -11,7 +11,11 @@ object Build {
         }
 
         object Google {
+            const val HiltVersion = "2.44"
+
             const val Material = "com.google.android.material:material:1.9.0"
+            const val Hilt = "com.google.dagger:hilt-android:$HiltVersion"
+            const val Compiler = "com.google.dagger:hilt-android-compiler:$HiltVersion"
         }
 
         object Network {
