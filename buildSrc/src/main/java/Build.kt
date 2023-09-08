@@ -30,4 +30,8 @@ object Build {
             const val EspressoCore = "androidx.test.espresso:espresso-core:3.5.1"
         }
     }
+
+    object Modules {
+        const val Core = ":core"
+    }
 }

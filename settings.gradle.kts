@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "gif-master"
 include(":app")
 include(":data")
+include(":core")
