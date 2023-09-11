@@ -6,8 +6,14 @@ object Build {
     object Libs {
 
         object Android {
+            const val RoomVersion = "2.5.2"
+
             const val CoreKtx = "androidx.core:core-ktx:1.9.0"
             const val AppCompat = "androidx.appcompat:appcompat:1.6.1"
+
+            const val Room = "androidx.room:room-runtime:$RoomVersion"
+            const val RoomKtx = "androidx.room:room-ktx:$RoomVersion"
+            const val RoomCompiler = "androidx.room:room-compiler:$RoomVersion"
         }
 
         object Google {
@@ -15,7 +21,7 @@ object Build {
 
             const val Material = "com.google.android.material:material:1.9.0"
             const val Hilt = "com.google.dagger:hilt-android:$HiltVersion"
-            const val Compiler = "com.google.dagger:hilt-android-compiler:$HiltVersion"
+            const val HiltCompiler = "com.google.dagger:hilt-android-compiler:$HiltVersion"
         }
 
         object Network {

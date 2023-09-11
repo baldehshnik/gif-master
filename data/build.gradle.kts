@@ -46,15 +46,18 @@ android {
 }
 
 dependencies {
-    
+
     implementation(project(Build.Modules.Core))
 
     implementation(Build.Libs.Android.CoreKtx)
     implementation(Build.Libs.Android.AppCompat)
+    implementation(Build.Libs.Android.Room)
+    implementation(Build.Libs.Android.RoomKtx)
+    kapt(Build.Libs.Android.RoomCompiler)
 
     implementation(Build.Libs.Google.Material)
     implementation(Build.Libs.Google.Hilt)
-    kapt(Build.Libs.Google.Compiler)
+    kapt(Build.Libs.Google.HiltCompiler)
 
     implementation(Build.Libs.Network.Retrofit2)
     implementation(Build.Libs.Network.OkHttp)
