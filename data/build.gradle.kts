@@ -15,7 +15,7 @@ android {
     defaultConfig {
         minSdk = Build.MinSdk
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.vd.study.data.DataTestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -66,4 +66,7 @@ dependencies {
     implementation(Build.Libs.Testing.JUnit)
     androidTestImplementation(Build.Libs.Testing.JUnitEXT)
     androidTestImplementation(Build.Libs.Testing.EspressoCore)
+    androidTestImplementation(Build.Libs.Testing.CoroutinesTesting)
+    androidTestImplementation(Build.Libs.Testing.HiltTesting)
+    kaptAndroidTest(Build.Libs.Google.HiltCompiler)
 }

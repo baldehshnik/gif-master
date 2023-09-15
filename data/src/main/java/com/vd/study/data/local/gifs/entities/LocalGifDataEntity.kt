@@ -23,7 +23,7 @@ data class LocalGifDataEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Int,
+    val id: Int = 0,
 
     @ColumnInfo(name = "title")
     val title: String,
@@ -35,7 +35,7 @@ data class LocalGifDataEntity(
     val rating: String,
 
     @Embedded(prefix = "author_")
-    val author: LocalGifAuthorDataEntity?,
+    val author: LocalGifAuthorDataEntity? = null,
 
     @ColumnInfo(name = "is_liked")
     val isLiked: Boolean,

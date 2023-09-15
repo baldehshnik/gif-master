@@ -2,15 +2,19 @@ package com.vd.study.data.local.accounts.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.vd.study.data.local.LocalDatabaseCore
 
-@Entity(tableName = LocalDatabaseCore.ACCOUNTS_TABLE_NAME)
+@Entity(
+    tableName = LocalDatabaseCore.ACCOUNTS_TABLE_NAME,
+    indices = [Index(value = ["email"], unique = true)]
+)
 data class AccountDataEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Int,
+    val id: Int = 0,
 
     @ColumnInfo(name = "username")
     val username: String,
@@ -22,11 +26,5 @@ data class AccountDataEntity(
     val email: String,
 
     @ColumnInfo(name = "password")
-    val password: String,
-
-    @ColumnInfo(name = "likes_number", defaultValue = "0")
-    val likesNumber: Int,
-
-    @ColumnInfo(name = "views_number", defaultValue = "0")
-    val viewsNumber: Int
+    val password: String
 )

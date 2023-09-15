@@ -34,6 +34,8 @@ object Build {
             const val JUnit = "junit:junit:4.13.2"
             const val JUnitEXT = "androidx.test.ext:junit:1.1.5"
             const val EspressoCore = "androidx.test.espresso:espresso-core:3.5.1"
+            const val CoroutinesTesting = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9"
+            const val HiltTesting = "com.google.dagger:hilt-android-testing:${Google.HiltVersion}"
         }
     }
 
