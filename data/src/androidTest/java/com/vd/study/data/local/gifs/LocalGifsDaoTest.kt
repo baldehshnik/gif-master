@@ -312,7 +312,7 @@ class LocalGifsDaoTest {
         val gif = createGifEntities(1)[0]
 
         val insertedAccountId = accountDao.writeAccount(account)
-        val answer = gifsDao.insertOrReplace(gif)
+        val answer = gifsDao.updateOrInsert(gif)
         val insertedGif = gifsDao.readGifById(1)
 
         assertEquals(1, insertedAccountId)
@@ -331,7 +331,7 @@ class LocalGifsDaoTest {
         val insertedAccountId = accountDao.writeAccount(account)
         val insertedGifId = gifsDao.writeGif(gif)
         val insertedGif = gifsDao.readGifById(1)
-        val updatedGifId = gifsDao.insertOrReplace(insertedGif!!.copy(title = "new title"))
+        val updatedGifId = gifsDao.updateOrInsert(insertedGif!!.copy(title = "new title"))
         val updatedGif = gifsDao.readGifById(1)
         val gifsCount = gifsDao.readSavedGifsCount(1)
 

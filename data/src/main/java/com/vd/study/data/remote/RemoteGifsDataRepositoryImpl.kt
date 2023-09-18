@@ -3,10 +3,10 @@ package com.vd.study.data.remote
 import com.vd.study.core.Result
 import com.vd.study.data.RemoteGifsDataRepository
 import com.vd.study.data.remote.entities.GifsListDataEntity
-import com.vd.study.data.remote.exceptions.FailedLoadException
-import com.vd.study.data.remote.exceptions.NotFoundException
-import com.vd.study.data.remote.exceptions.TimeoutException
-import com.vd.study.data.remote.exceptions.UnknownException
+import com.vd.study.data.exceptions.FailedLoadException
+import com.vd.study.data.exceptions.NotFoundException
+import com.vd.study.data.exceptions.TimeoutException
+import com.vd.study.data.exceptions.UnknownException
 import com.vd.study.data.remote.sources.GifsApiDataSource
 import javax.inject.Inject
 

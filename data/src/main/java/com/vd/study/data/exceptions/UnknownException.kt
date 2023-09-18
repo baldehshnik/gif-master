@@ -1,3 +1,3 @@
-package com.vd.study.data.remote.exceptions
+package com.vd.study.data.exceptions
 
 class UnknownException : Exception("Error")

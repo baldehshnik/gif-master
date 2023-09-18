@@ -1,10 +1,10 @@
 package com.vd.study.data.remote.sources
 
 import com.vd.study.data.remote.entities.GifsListDataEntity
-import com.vd.study.data.remote.exceptions.FailedLoadException
-import com.vd.study.data.remote.exceptions.NotFoundException
-import com.vd.study.data.remote.exceptions.TimeoutException
-import com.vd.study.data.remote.exceptions.UnknownException
+import com.vd.study.data.exceptions.FailedLoadException
+import com.vd.study.data.exceptions.NotFoundException
+import com.vd.study.data.exceptions.TimeoutException
+import com.vd.study.data.exceptions.UnknownException
 import retrofit2.Call
 import javax.inject.Inject
 
