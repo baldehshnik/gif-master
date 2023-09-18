@@ -17,3 +17,11 @@ inline fun executeDatabaseUpdating(
         Result.Error(UnknownException())
     }
 }
+
+inline fun <T> catchReadingExceptionOf(operation: () -> T): Result<T> {
+    return try {
+        Result.Correct(operation())
+    } catch (e: Exception) {
+        Result.Error(UnknownException())
+    }
+}

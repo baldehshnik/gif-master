@@ -1,6 +1,10 @@
+import org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -27,6 +31,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    tasks.withType<KaptGenerateStubsTask> {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -38,6 +47,8 @@ dependencies {
     implementation(Build.Libs.Android.AppCompat)
 
     implementation(Build.Libs.Google.Material)
+    implementation(Build.Libs.Google.Hilt)
+    kapt(Build.Libs.Google.HiltCompiler)
 
     implementation(Build.Libs.Testing.JUnit)
     androidTestImplementation(Build.Libs.Testing.JUnitEXT)
