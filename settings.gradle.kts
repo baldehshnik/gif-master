@@ -17,3 +17,4 @@ rootProject.name = "gif-master"
 include(":app")
 include(":data")
 include(":core")
+include(":features:account")
