@@ -21,15 +21,16 @@ class GifsApiDataSource @Inject constructor(
     }
 
     private fun <T> executeReadingWithCall(call: Call<T>): T {
-        try {
-            val response = call.execute()
-            if (response.isSuccessful) {
-                return response.body() ?: throw FailedLoadException()
-            } else {
-                throw getExceptionByCode(response.code())
-            }
+        val response = try {
+            call.execute()
         } catch (e: Exception) {
             throw UnknownException()
+        }
+
+        if (response.isSuccessful) {
+            return response.body() ?: throw FailedLoadException()
+        } else {
+            throw getExceptionByCode(response.code())
         }
     }
 
