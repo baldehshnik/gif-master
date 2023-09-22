@@ -14,7 +14,7 @@ data class RemoteGifDataEntity(
     val url: String,
 
     @SerializedName("user")
-    val author: GifAuthorDataEntity,
+    val author: GifAuthorDataEntity?,
 
     @SerializedName("rating")
     val rating: String
