@@ -52,4 +52,13 @@ class LocalGifsDataRepositoryImpl @Inject constructor(
             gifsDao.readSavedGifs(accountId)
         }
     }
+
+    override suspend fun readGifByUrl(
+        accountId: Int,
+        sourceUrl: String
+    ): Result<LocalGifDataEntity> = withContext(ioDispatcher) {
+        return@withContext catchReadingExceptionOf {
+            gifsDao.readGifByUrl(accountId, sourceUrl)
+        }
+    }
 }

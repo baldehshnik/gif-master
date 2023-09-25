@@ -32,6 +32,9 @@ interface LocalGifsDao {
     @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE id = :id LIMIT 1")
     suspend fun readGifById(id: Int): LocalGifDataEntity?
 
+    @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND source_url = :url LIMIT 1")
+    suspend fun readGifByUrl(accountId: Int, url: String): LocalGifDataEntity
+
     suspend fun updateOrInsert(gif: LocalGifDataEntity): Long {
         val insertedGif: LocalGifDataEntity? = readGifById(gif.id)
         return if (insertedGif == null) {

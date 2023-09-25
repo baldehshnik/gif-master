@@ -128,6 +128,23 @@ class LocalGifsDaoTest {
     }
 
     @Test
+    fun readGifByUrl_AfterReading_ReturnInsertedGif() = runTest {
+        val gifsDao = database.gifsDao
+        val accountDao = database.accountDao
+        val account = createAccountEntities(1)[0]
+        val gif = createGifEntities(1)[0]
+
+        val insertedAccountId = accountDao.writeAccount(account)
+        val insertedGifId = gifsDao.writeGif(gif)
+        val insertedGif = gifsDao.readGifByUrl(1, gif.url)
+
+        assertEquals(1, insertedAccountId)
+        assertEquals(1, insertedGifId)
+        assertNotEquals(null, insertedGif)
+        assertEquals(gif, insertedGif.copy(id = 0))
+    }
+
+    @Test
     fun readSavedGifsCount_AfterReading_Return0() = runTest {
         val gifsDao = database.gifsDao
 

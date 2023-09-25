@@ -5,6 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.vd.study.data.local.LocalDatabaseCore
 import com.vd.study.data.local.accounts.entities.AccountDataEntity
@@ -17,7 +18,8 @@ import com.vd.study.data.local.accounts.entities.AccountDataEntity
         childColumns = ["account_id"],
         onDelete = CASCADE,
         onUpdate = CASCADE
-    )]
+    )],
+    indices = [Index(value = ["source_url"], unique = true)]
 )
 data class LocalGifDataEntity(
 
