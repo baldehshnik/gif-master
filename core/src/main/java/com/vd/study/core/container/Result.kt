@@ -1,4 +1,4 @@
-package com.vd.study.core
+package com.vd.study.core.container
 
 import kotlinx.coroutines.runBlocking
 import kotlin.Exception

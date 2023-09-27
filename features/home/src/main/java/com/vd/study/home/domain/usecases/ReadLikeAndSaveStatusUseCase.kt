@@ -1,7 +1,7 @@
 package com.vd.study.home.domain.usecases
 
-import com.vd.study.core.IODispatcher
-import com.vd.study.core.Result
+import com.vd.study.core.dispatchers.IODispatcher
+import com.vd.study.core.container.Result
 import com.vd.study.home.domain.entities.GifEntity
 import com.vd.study.home.domain.entities.LikeAndSaveStatusEntity
 import com.vd.study.home.domain.repositories.HomeRepository

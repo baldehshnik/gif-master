@@ -1,7 +1,7 @@
 package com.vd.study.data.local.gifs
 
-import com.vd.study.core.IODispatcher
-import com.vd.study.core.Result
+import com.vd.study.core.dispatchers.IODispatcher
+import com.vd.study.core.container.Result
 import com.vd.study.data.LocalGifsDataRepository
 import com.vd.study.data.exceptions.FailedUpdateException
 import com.vd.study.data.local.catchReadingExceptionOf
@@ -12,7 +12,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class LocalGifsDataRepositoryImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val gifsDao: LocalGifsDao

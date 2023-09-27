@@ -41,5 +41,10 @@ object Build {
 
     object Modules {
         const val Core = ":core"
+        const val Data = ":data"
+
+        object Features {
+            const val Account = ":features:account"
+        }
     }
 }

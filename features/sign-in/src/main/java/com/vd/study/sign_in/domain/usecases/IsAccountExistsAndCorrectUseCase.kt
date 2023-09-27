@@ -1,7 +1,7 @@
 package com.vd.study.sign_in.domain.usecases
 
-import com.vd.study.core.IODispatcher
-import com.vd.study.core.Result
+import com.vd.study.core.dispatchers.IODispatcher
+import com.vd.study.core.container.Result
 import com.vd.study.sign_in.domain.entities.AccountEntity
 import com.vd.study.sign_in.domain.repositories.SignInRepository
 import kotlinx.coroutines.CoroutineDispatcher

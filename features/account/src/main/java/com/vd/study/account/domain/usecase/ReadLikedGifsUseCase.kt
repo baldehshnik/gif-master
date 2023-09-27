@@ -2,8 +2,8 @@ package com.vd.study.account.domain.usecase
 
 import com.vd.study.account.domain.entities.GifEntity
 import com.vd.study.account.domain.repositories.AccountRepository
-import com.vd.study.core.IODispatcher
-import com.vd.study.core.Result
+import com.vd.study.core.dispatchers.IODispatcher
+import com.vd.study.core.container.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext

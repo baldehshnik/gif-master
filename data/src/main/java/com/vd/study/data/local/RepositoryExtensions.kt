@@ -1,6 +1,6 @@
 package com.vd.study.data.local
 
-import com.vd.study.core.Result
+import com.vd.study.core.container.Result
 import com.vd.study.data.exceptions.UnknownException
 
 inline fun executeDatabaseUpdating(

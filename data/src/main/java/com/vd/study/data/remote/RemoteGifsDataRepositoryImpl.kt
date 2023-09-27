@@ -1,7 +1,7 @@
 package com.vd.study.data.remote
 
-import com.vd.study.core.IODispatcher
-import com.vd.study.core.Result
+import com.vd.study.core.dispatchers.IODispatcher
+import com.vd.study.core.container.Result
 import com.vd.study.data.RemoteGifsDataRepository
 import com.vd.study.data.remote.entities.GifsListDataEntity
 import com.vd.study.data.exceptions.FailedLoadException
@@ -12,7 +12,9 @@ import com.vd.study.data.remote.sources.GifsApiDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class RemoteGifsDataRepositoryImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val dataSource: GifsApiDataSource

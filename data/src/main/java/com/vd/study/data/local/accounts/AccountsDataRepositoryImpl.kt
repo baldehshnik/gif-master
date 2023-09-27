@@ -1,12 +1,12 @@
 package com.vd.study.data.local.accounts
 
-import com.vd.study.core.IODispatcher
+import com.vd.study.core.dispatchers.IODispatcher
 import com.vd.study.data.AccountsDataRepository
 import com.vd.study.data.exceptions.UnknownException
 import com.vd.study.data.local.accounts.entities.AccountDataEntity
 import com.vd.study.data.local.accounts.sources.AccountDao
 import javax.inject.Inject
-import com.vd.study.core.Result
+import com.vd.study.core.container.Result
 import com.vd.study.data.exceptions.FailedInsertException
 import com.vd.study.data.exceptions.FailedRemoveException
 import com.vd.study.data.exceptions.FailedUpdateException
@@ -15,7 +15,9 @@ import com.vd.study.data.local.catchReadingExceptionOf
 import com.vd.study.data.local.executeDatabaseUpdating
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import javax.inject.Singleton
 
+@Singleton
 class AccountsDataRepositoryImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val accountDao: AccountDao

@@ -1,4 +1,4 @@
-package com.vd.study.core
+package com.vd.study.core.dispatchers
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher

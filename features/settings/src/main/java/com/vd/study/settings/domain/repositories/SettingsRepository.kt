@@ -1,6 +1,6 @@
 package com.vd.study.settings.domain.repositories
 
-import com.vd.study.core.Result
+import com.vd.study.core.container.Result
 import com.vd.study.settings.domain.entities.AccountEntity
 
 interface SettingsRepository {

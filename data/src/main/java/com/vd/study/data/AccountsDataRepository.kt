@@ -1,7 +1,7 @@
 package com.vd.study.data
 
 import com.vd.study.data.local.accounts.entities.AccountDataEntity
-import com.vd.study.core.Result
+import com.vd.study.core.container.Result
 
 interface AccountsDataRepository {
 

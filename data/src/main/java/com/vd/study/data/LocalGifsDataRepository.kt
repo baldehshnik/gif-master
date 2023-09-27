@@ -1,6 +1,6 @@
 package com.vd.study.data
 
-import com.vd.study.core.Result
+import com.vd.study.core.container.Result
 import com.vd.study.data.local.gifs.entities.LocalGifDataEntity
 import kotlinx.coroutines.flow.Flow
 
