@@ -2,7 +2,6 @@ package com.vd.study.data.local.accounts
 
 import com.vd.study.core.dispatchers.IODispatcher
 import com.vd.study.data.AccountsDataRepository
-import com.vd.study.data.exceptions.UnknownException
 import com.vd.study.data.local.accounts.entities.AccountDataEntity
 import com.vd.study.data.local.accounts.sources.AccountDao
 import javax.inject.Inject
@@ -11,6 +10,7 @@ import com.vd.study.data.exceptions.FailedInsertException
 import com.vd.study.data.exceptions.FailedRemoveException
 import com.vd.study.data.exceptions.FailedUpdateException
 import com.vd.study.data.exceptions.NotFoundException
+import com.vd.study.data.local.accounts.entities.CheckAccountDataEntity
 import com.vd.study.data.local.catchReadingExceptionOf
 import com.vd.study.data.local.executeDatabaseUpdating
 import kotlinx.coroutines.CoroutineDispatcher
@@ -59,15 +59,17 @@ class AccountsDataRepositoryImpl @Inject constructor(
 
     override suspend fun readAccount(email: String): Result<AccountDataEntity> =
         withContext(ioDispatcher) {
-            return@withContext try {
-                val accountEntity = accountDao.readAccount(email)
-                if (accountEntity == null) {
-                    Result.Error(NotFoundException())
-                } else {
-                    Result.Correct(accountEntity)
-                }
-            } catch (e: Exception) {
-                Result.Error(UnknownException())
-            }
+            return@withContext catchReadingExceptionOf {
+                accountDao.readAccount(email)
+                    ?: return@catchReadingExceptionOf Result.Error(NotFoundException())
+            }.suspendMap { it as AccountDataEntity }
+        }
+
+    override suspend fun checkAccountExistence(account: CheckAccountDataEntity): Result<Boolean> =
+        withContext(ioDispatcher) {
+            return@withContext catchReadingExceptionOf {
+                accountDao.readAccountIdByEmailAndPassword(account.email, account.password)
+                    ?: return@catchReadingExceptionOf Result.Error(NotFoundException())
+            }.suspendMap { true }
         }
 }

@@ -48,6 +48,7 @@ dependencies {
     implementation(project(Build.Modules.Data))
     implementation(project(Build.Modules.Features.Account))
     implementation(project(Build.Modules.Features.SingUp))
+    implementation(project(Build.Modules.Features.SingIn))
 
     implementation(Build.Libs.Android.CoreKtx)
     implementation(Build.Libs.Android.AppCompat)

@@ -40,6 +40,66 @@ class AccountDaoTest {
     }
 
     @Test
+    fun readAccountIdByEmailAndPassword_AfterReading_ReturnOne() = runTest {
+        val accountDao = database.accountDao
+        val entities = createAccountEntities(1)
+        val accountEntity = entities[0]
+
+        val insertedAccountId = accountDao.writeAccount(accountEntity)
+        val accountIdAfterReading = accountDao.readAccountIdByEmailAndPassword(
+            accountEntity.email,
+            accountEntity.password
+        )
+
+        assertEquals(1, insertedAccountId)
+        assertEquals(1, accountIdAfterReading)
+    }
+
+    @Test
+    fun readAccountIdByEmailAndPassword_AfterReading_ReturnNegativeOneInvalidEmail() = runTest {
+        val accountDao = database.accountDao
+        val entities = createAccountEntities(1)
+        val accountEntity = entities[0]
+
+        val insertedAccountId = accountDao.writeAccount(accountEntity)
+        val accountIdAfterReading = accountDao.readAccountIdByEmailAndPassword(
+            "invalid_email@example.com",
+            accountEntity.password
+        )
+
+        assertEquals(1, insertedAccountId)
+        assertEquals(null, accountIdAfterReading)
+    }
+
+    @Test
+    fun readAccountIdByEmailAndPassword_AfterReading_ReturnNegativeOneInvalidPassword() = runTest {
+        val accountDao = database.accountDao
+        val entities = createAccountEntities(1)
+        val accountEntity = entities[0]
+
+        val insertedAccountId = accountDao.writeAccount(accountEntity)
+        val accountIdAfterReading = accountDao.readAccountIdByEmailAndPassword(
+            accountEntity.email,
+            "incorrect_password"
+        )
+
+        assertEquals(1, insertedAccountId)
+        assertEquals(null, accountIdAfterReading)
+    }
+
+    @Test
+    fun readAccountIdByEmailAndPassword_AfterReading_ReturnNegativeOneBecauseNonExistentAccount() = runTest {
+        val accountDao = database.accountDao
+
+        val accountIdAfterReading = accountDao.readAccountIdByEmailAndPassword(
+            "email@example.com",
+            "password"
+        )
+
+        assertEquals(null, accountIdAfterReading)
+    }
+
+    @Test
     fun addAccount_afterAdding_ReturnIdOfInsertedAccount() = runTest {
         val accountDao = database.accountDao
         val entities = createAccountEntities(1)

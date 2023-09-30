@@ -1,8 +1,8 @@
 package com.vd.study.sign_in.domain.usecases
 
-import com.vd.study.core.dispatchers.IODispatcher
 import com.vd.study.core.container.Result
-import com.vd.study.sign_in.domain.entities.AccountEntity
+import com.vd.study.core.dispatchers.IODispatcher
+import com.vd.study.sign_in.domain.entities.CheckAccountEntity
 import com.vd.study.sign_in.domain.repositories.SignInRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -13,7 +13,7 @@ class IsAccountExistsAndCorrectUseCase @Inject constructor(
     private val repository: SignInRepository
 ) {
 
-    suspend operator fun invoke(account: AccountEntity): Result<Boolean> = withContext(ioDispatcher) {
+    suspend operator fun invoke(account: CheckAccountEntity): Result<Boolean> = withContext(ioDispatcher) {
             return@withContext repository.isAccountExistsAndCorrect(account)
     }
 }

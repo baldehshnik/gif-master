@@ -25,4 +25,7 @@ interface AccountDao {
 
     @Query("SELECT * FROM ${LocalDatabaseCore.ACCOUNTS_TABLE_NAME} WHERE email = :email LIMIT 1")
     suspend fun readAccount(email: String): AccountDataEntity?
+
+    @Query("SELECT id FROM ${LocalDatabaseCore.ACCOUNTS_TABLE_NAME} WHERE email = :email AND password = :password LIMIT 1")
+    suspend fun readAccountIdByEmailAndPassword(email: String, password: String): Int?
 }
