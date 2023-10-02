@@ -50,6 +50,7 @@ dependencies {
     implementation(project(Build.Modules.Features.SingUp))
     implementation(project(Build.Modules.Features.SingIn))
     implementation(project(Build.Modules.Features.Home))
+    implementation(project(Build.Modules.Features.Settings))
 
     implementation(Build.Libs.Android.CoreKtx)
     implementation(Build.Libs.Android.AppCompat)

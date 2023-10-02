@@ -28,4 +28,7 @@ interface AccountDao {
 
     @Query("SELECT id FROM ${LocalDatabaseCore.ACCOUNTS_TABLE_NAME} WHERE email = :email AND password = :password LIMIT 1")
     suspend fun readAccountIdByEmailAndPassword(email: String, password: String): Int?
+
+    @Query("DELETE FROM ${LocalDatabaseCore.ACCOUNTS_TABLE_NAME} WHERE email = :email")
+    suspend fun deleteAccountByEmail(email: String): Int
 }

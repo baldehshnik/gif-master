@@ -48,6 +48,7 @@ object Build {
             const val SingUp = ":features:sign-up"
             const val SingIn = ":features:sign-in"
             const val Home = ":features:home"
+            const val Settings = ":features:settings"
         }
     }
 }
