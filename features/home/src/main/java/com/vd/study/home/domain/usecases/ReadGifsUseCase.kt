@@ -13,7 +13,7 @@ class ReadGifsUseCase @Inject constructor(
     private val repository: HomeRepository
 ) {
 
-    suspend operator fun invoke(): Result<GifEntity> = withContext(ioDispatcher) {
+    suspend operator fun invoke(): Result<List<GifEntity>> = withContext(ioDispatcher) {
         return@withContext repository.readGifs()
     }
 }
