@@ -1,5 +1,6 @@
 package com.vd.study.sign_up.presentation.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.vd.study.core.container.Result
@@ -26,13 +27,13 @@ class SignUpViewModel @Inject constructor(
     private val fieldErrorMessageFlow = MutableStateFlow<Pair<AccountRegistrationFields, Int>?>(null)
 
     private val _registrationResultLiveValue = MutableLiveData<Result<AccountEntity>>()
-    val registrationResultLiveValue get() = _registrationResultLiveValue
+    val registrationResultLiveValue: LiveData<Result<AccountEntity>> get() = _registrationResultLiveValue
 
     private val _focusFieldLiveEvent = MutableLiveData<AccountRegistrationFields>()
-    val focusFieldLiveEvent get() = _focusFieldLiveEvent
+    val focusFieldLiveEvent: LiveData<AccountRegistrationFields> get() = _focusFieldLiveEvent
 
     private val _clearFieldLiveEvent = MutableLiveData<AccountRegistrationFields>()
-    val clearFieldLiveEvent get() = _clearFieldLiveEvent
+    val clearFieldLiveEvent: LiveData<AccountRegistrationFields> get() = _clearFieldLiveEvent
 
     val stateLiveValue = combine(
         signUpInProgressFlow,
