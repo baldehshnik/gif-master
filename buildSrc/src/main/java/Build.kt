@@ -14,6 +14,8 @@ object Build {
             const val Room = "androidx.room:room-runtime:$RoomVersion"
             const val RoomKtx = "androidx.room:room-ktx:$RoomVersion"
             const val RoomCompiler = "androidx.room:room-compiler:$RoomVersion"
+
+            const val FragmentKtx = "androidx.fragment:fragment-ktx:1.6.1"
         }
 
         object Google {

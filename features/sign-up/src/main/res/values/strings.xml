@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sign_up_empty_field">Field is empty</string>
+    <string name="sign_up_incorrect_email">Email format is incorrect</string>
+    <string name="sign_up_short_password">Password is too short</string>
+</resources>
