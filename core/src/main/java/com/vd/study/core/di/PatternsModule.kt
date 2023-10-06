@@ -1,4 +1,4 @@
-package com.vd.study.sign_up.di
+package com.vd.study.core.di
 
 import android.util.Patterns
 import dagger.Module
