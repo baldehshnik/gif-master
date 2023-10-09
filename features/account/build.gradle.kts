@@ -47,6 +47,7 @@ dependencies {
 
     implementation(Build.Libs.Android.CoreKtx)
     implementation(Build.Libs.Android.AppCompat)
+    implementation(Build.Libs.Android.FragmentKtx)
 
     implementation(Build.Libs.Google.Material)
     implementation(Build.Libs.Google.Hilt)
