@@ -1,11 +1,10 @@
 package com.vd.study.sign_up.domain.usecases
 
-import com.vd.study.core.dispatchers.IODispatcher
-import javax.inject.Inject
 import com.vd.study.core.container.Result
+import com.vd.study.core.dispatchers.IODispatcher
+import com.vd.study.core.entities.MIN_PASSWORD_LENGTH
 import com.vd.study.sign_up.domain.entities.AccountEntity
 import com.vd.study.sign_up.domain.entities.AccountRegistrationFields
-import com.vd.study.sign_up.domain.entities.MIN_PASSWORD_LENGTH
 import com.vd.study.sign_up.domain.exceptions.EmptyFieldException
 import com.vd.study.sign_up.domain.exceptions.IncorrectEmailFormatException
 import com.vd.study.sign_up.domain.exceptions.ShortPasswordException
@@ -13,6 +12,7 @@ import com.vd.study.sign_up.domain.repositories.RegistrationRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.util.regex.Pattern
+import javax.inject.Inject
 import javax.inject.Named
 
 class RegisterAccountUseCase @Inject constructor(

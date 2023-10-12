@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="empty_field">Field is empty</string>
+    <string name="email_format_error">Incorrect email format</string>
+    <string name="password_too_short">Password is too short</string>
+</resources>
