@@ -1,7 +1,7 @@
 package com.vd.study.home.domain.entities
 
 data class FullGifEntity(
-    val id: String,
+    val id: Int,
     val title: String,
     val url: String,
     val author: GifAuthorEntity?,
@@ -15,7 +15,7 @@ data class FullGifEntity(
         @JvmStatic
         fun getInstateWith(gifEntity: GifEntity, status: LikeAndSaveStatusEntity): FullGifEntity {
             return FullGifEntity(
-                id = gifEntity.id,
+                id = status.gifId,
                 title = gifEntity.title,
                 url = gifEntity.url,
                 author = gifEntity.author,

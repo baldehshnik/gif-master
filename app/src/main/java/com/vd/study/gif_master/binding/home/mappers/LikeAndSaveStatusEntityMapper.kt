@@ -7,6 +7,6 @@ import com.vd.study.home.domain.entities.LikeAndSaveStatusEntity
 class LikeAndSaveStatusEntityMapper : Mapper<LocalGifDataEntity, LikeAndSaveStatusEntity> {
 
     override fun map(input: LocalGifDataEntity): LikeAndSaveStatusEntity {
-        return LikeAndSaveStatusEntity(input.isLiked, input.isSaved)
+        return LikeAndSaveStatusEntity(input.id, input.isLiked, input.isSaved)
     }
 }

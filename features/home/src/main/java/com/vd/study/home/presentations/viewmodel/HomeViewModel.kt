@@ -61,7 +61,7 @@ class HomeViewModel @AssistedInject constructor(
     private fun handleLikeAndSaveStatusReading(
         status: Result<LikeAndSaveStatusEntity>
     ): LikeAndSaveStatusEntity {
-        val emptyStatus = LikeAndSaveStatusEntity(isLiked = false, isSaved = false)
+        val emptyStatus = LikeAndSaveStatusEntity(gifId = -1, isLiked = false, isSaved = false)
         return status.getOrNull() ?: emptyStatus
     }
 
