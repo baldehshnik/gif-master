@@ -16,6 +16,8 @@ object Build {
             const val RoomCompiler = "androidx.room:room-compiler:$RoomVersion"
 
             const val FragmentKtx = "androidx.fragment:fragment-ktx:1.6.1"
+
+            const val Paging = "androidx.paging:paging-runtime:3.2.1"
         }
 
         object Google {

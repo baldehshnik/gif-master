@@ -10,6 +10,27 @@ import retrofit2.converter.gson.GsonConverterFactory
 class GifsApiServiceTest {
 
     @Test
+    fun readGifsWithPaging_AfterGetRequest_Return50GifsAnd50MoreAfter() {
+        val retrofit = createRetrofit()
+
+        val call = retrofit.readGifs(0)
+        val data = call.execute().body()
+
+        val call2 = retrofit.readGifs(50)
+        val data2 = call2.execute().body()
+
+        assertEquals(true, call.isExecuted)
+        assertNotEquals(null, data)
+        assertEquals(50, data!!.data.size)
+
+        assertEquals(true, call2.isExecuted)
+        assertNotEquals(null, data2)
+        assertEquals(50, data2!!.data.size)
+
+        assertNotEquals(data2.data[16], data.data[16])
+    }
+
+    @Test
     fun readGifs_AfterGetRequest_Return50Gifs() {
         val retrofit = createRetrofit()
 

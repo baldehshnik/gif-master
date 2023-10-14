@@ -8,6 +8,10 @@ import com.vd.study.gif_master.binding.home.mappers.LikeAndSaveStatusEntityMappe
 import com.vd.study.home.domain.entities.GifEntity
 import com.vd.study.home.domain.entities.LikeAndSaveStatusEntity
 import com.vd.study.home.domain.repositories.HomeRepository
+import kotlinx.coroutines.flow.Flow
+import androidx.paging.PagingData
+import androidx.paging.map
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class HomeAdapterRepository @Inject constructor(
@@ -29,5 +33,11 @@ class HomeAdapterRepository @Inject constructor(
     ): Result<LikeAndSaveStatusEntity> {
         return localRepository.readGifByUrl(accountId, gif.url)
             .suspendMap(likeAndSaveStatusEntityMapper::map)
+    }
+
+    override suspend fun pagingReadGifs(): Flow<PagingData<GifEntity>> {
+        return remoteRepository.pagingReadGifs().map { pagingData ->
+            pagingData.map(gifEntityMapper::map)
+        }
     }
 }

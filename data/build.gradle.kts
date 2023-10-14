@@ -49,6 +49,7 @@ dependencies {
 
     implementation(project(Build.Modules.Core))
 
+    implementation(Build.Libs.Android.Paging)
     implementation(Build.Libs.Android.CoreKtx)
     implementation(Build.Libs.Android.AppCompat)
     implementation(Build.Libs.Android.Room)
