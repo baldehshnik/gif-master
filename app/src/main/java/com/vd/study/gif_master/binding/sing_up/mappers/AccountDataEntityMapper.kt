@@ -3,8 +3,9 @@ package com.vd.study.gif_master.binding.sing_up.mappers
 import com.vd.study.core.mapper.Mapper
 import com.vd.study.data.local.accounts.entities.AccountDataEntity
 import com.vd.study.sign_up.domain.entities.AccountEntity
+import javax.inject.Inject
 
-class AccountDataEntityMapper : Mapper<AccountEntity, AccountDataEntity> {
+class AccountDataEntityMapper @Inject constructor() : Mapper<AccountEntity, AccountDataEntity> {
 
     override fun map(input: AccountEntity): AccountDataEntity {
         return AccountDataEntity(
