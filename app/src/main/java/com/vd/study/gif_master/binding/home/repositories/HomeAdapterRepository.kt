@@ -3,6 +3,7 @@ package com.vd.study.gif_master.binding.home.repositories
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.vd.study.core.container.Result
+import com.vd.study.core.global.AccountIdentifier
 import com.vd.study.data.LocalGifsDataRepository
 import com.vd.study.data.RemoteGifsDataRepository
 import com.vd.study.gif_master.binding.home.mappers.GifEntityMapper
@@ -21,7 +22,8 @@ class HomeAdapterRepository @Inject constructor(
     private val localRepository: LocalGifsDataRepository,
     private val gifEntityMapper: GifEntityMapper,
     private val likeAndSaveStatusEntityMapper: LikeAndSaveStatusEntityMapper,
-    private val localGifDataEntityMapper: LocalGifDataEntityMapper
+    private val localGifDataEntityMapper: LocalGifDataEntityMapper,
+    private val accountIdentifier: AccountIdentifier
 ) : HomeRepository {
 
     override suspend fun readGifs(): Result<List<GifEntity>> {
@@ -30,11 +32,8 @@ class HomeAdapterRepository @Inject constructor(
         }
     }
 
-    override suspend fun readLikeAndSaveStatus(
-        accountId: Int,
-        gif: GifEntity
-    ): Result<LikeAndSaveStatusEntity> {
-        return localRepository.readGifByUrl(accountId, gif.url)
+    override suspend fun readLikeAndSaveStatus(gif: GifEntity): Result<LikeAndSaveStatusEntity> {
+        return localRepository.readGifByUrl(accountIdentifier.accountIdentifier, gif.url)
             .suspendMap(likeAndSaveStatusEntityMapper::map)
     }
 
@@ -44,7 +43,7 @@ class HomeAdapterRepository @Inject constructor(
         }
     }
 
-    override suspend fun updateGif(accountId: Int, gif: FullGifEntity): Result<Boolean> {
+    override suspend fun updateGif(gif: FullGifEntity): Result<Boolean> {
         return localRepository.updateGif(localGifDataEntityMapper.map(gif))
     }
 

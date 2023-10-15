@@ -32,8 +32,6 @@ class AccountViewModel @AssistedInject constructor(
         readAccount()
     }
 
-    private var accountId = -1
-
     private val _accountLiveValue = MutableLiveData<Result<AccountEntity>>()
     val accountLiveValue: LiveData<Result<AccountEntity>> get() = _accountLiveValue
 
@@ -47,7 +45,7 @@ class AccountViewModel @AssistedInject constructor(
         viewModelScope.launch {
             showProgress(_likedGifsCountLiveValue)
 
-            val countResult = readLikedGifsCountUseCase(accountId)
+            val countResult = readLikedGifsCountUseCase()
             _likedGifsCountLiveValue.value = countResult
         }
     }
@@ -56,7 +54,7 @@ class AccountViewModel @AssistedInject constructor(
         viewModelScope.launch {
             showProgress(_likedGifsLiveValue)
 
-            val gifsResult = readLikedGifsUseCase(accountId)
+            val gifsResult = readLikedGifsUseCase()
             handleLikedGifsReadingResult(gifsResult)
         }
     }
@@ -66,7 +64,6 @@ class AccountViewModel @AssistedInject constructor(
             showProgress(_accountLiveValue)
 
             val accountResult = readSavedAccountUseCase(email)
-            accountId = accountResult.getOrNull()?.id!!
             _accountLiveValue.value = accountResult
         }
     }

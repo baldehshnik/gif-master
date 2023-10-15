@@ -11,10 +11,10 @@ interface HomeRepository {
 
     suspend fun readGifs(): Result<List<GifEntity>>
 
-    suspend fun readLikeAndSaveStatus(accountId: Int, gif: GifEntity): Result<LikeAndSaveStatusEntity>
+    suspend fun readLikeAndSaveStatus(gif: GifEntity): Result<LikeAndSaveStatusEntity>
 
     suspend fun pagingReadGifs(): Flow<PagingData<GifEntity>>
 
-    suspend fun updateGif(accountId: Int, gif: FullGifEntity): Result<Boolean>
+    suspend fun updateGif(gif: FullGifEntity): Result<Boolean>
 
 }

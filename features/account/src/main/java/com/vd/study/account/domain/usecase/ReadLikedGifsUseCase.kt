@@ -14,8 +14,8 @@ class ReadLikedGifsUseCase @Inject constructor(
     private val repository: AccountRepository
 ) {
 
-    suspend operator fun invoke(accountId: Int): Result<Flow<List<GifEntity>>> =
+    suspend operator fun invoke(): Result<Flow<List<GifEntity>>> =
         withContext(ioDispatcher) {
-            return@withContext repository.readLikedGifs(accountId)
+            return@withContext repository.readLikedGifs()
         }
 }

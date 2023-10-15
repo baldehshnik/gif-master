@@ -13,7 +13,7 @@ class UpdateGifUseCase @Inject constructor(
     private val repository: HomeRepository
 ) {
 
-    suspend operator fun invoke(accountId: Int, gif: FullGifEntity): Result<Boolean> = withContext(ioDispatcher) {
-        return@withContext repository.updateGif(accountId, gif)
+    suspend operator fun invoke(gif: FullGifEntity): Result<Boolean> = withContext(ioDispatcher) {
+        return@withContext repository.updateGif(gif)
     }
 }

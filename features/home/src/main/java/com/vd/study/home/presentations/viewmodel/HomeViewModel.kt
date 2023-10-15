@@ -2,8 +2,6 @@ package com.vd.study.home.presentations.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -16,20 +14,17 @@ import com.vd.study.home.domain.entities.GifEntity
 import com.vd.study.home.domain.entities.LikeAndSaveStatusEntity
 import com.vd.study.home.domain.usecases.PagingReadGifsUseCase
 import com.vd.study.home.domain.usecases.ReadLikeAndSaveStatusUseCase
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @AssistedInject constructor(
+class HomeViewModel @Inject constructor(
     private val dispatchers: Dispatchers,
     private val pagingReadGifsUseCase: PagingReadGifsUseCase,
-    private val readLikeAndSaveStatusUseCase: ReadLikeAndSaveStatusUseCase,
-    @Assisted("account") private val accountId: Int
+    private val readLikeAndSaveStatusUseCase: ReadLikeAndSaveStatusUseCase
 ) : BaseViewModel() {
 
     private val _readGifsResult = MutableLiveData<PagingData<FullGifEntity>>()
@@ -47,7 +42,7 @@ class HomeViewModel @AssistedInject constructor(
     ) = withContext(dispatchers.defaultDispatcher) {
         dataFlow.collect { data ->
             val mappedData = data.map { gifEntity ->
-                val likeAndSaveStatusEntity = readLikeAndSaveStatusUseCase(accountId, gifEntity)
+                val likeAndSaveStatusEntity = readLikeAndSaveStatusUseCase(gifEntity)
                 val status = handleLikeAndSaveStatusReading(likeAndSaveStatusEntity)
                 FullGifEntity.getInstateWith(gifEntity, status)
             }
@@ -67,23 +62,5 @@ class HomeViewModel @AssistedInject constructor(
 
     init {
         readGifs()
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun createViewModel(@Assisted("account") accountId: Int): HomeViewModel
-    }
-
-    companion object {
-
-        @JvmStatic
-        @Suppress("UNCHECKED_CAST")
-        fun provideFactory(factory: Factory, accountId: Int): ViewModelProvider.Factory {
-            return object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return factory.createViewModel(accountId) as T
-                }
-            }
-        }
     }
 }

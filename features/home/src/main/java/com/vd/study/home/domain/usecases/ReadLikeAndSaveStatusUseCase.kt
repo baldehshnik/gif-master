@@ -14,8 +14,8 @@ class ReadLikeAndSaveStatusUseCase @Inject constructor(
     private val repository: HomeRepository
 ) {
 
-    suspend operator fun invoke(accountId: Int, gif: GifEntity): Result<LikeAndSaveStatusEntity> =
+    suspend operator fun invoke(gif: GifEntity): Result<LikeAndSaveStatusEntity> =
         withContext(ioDispatcher) {
-            return@withContext repository.readLikeAndSaveStatus(accountId, gif)
+            return@withContext repository.readLikeAndSaveStatus(gif)
         }
 }

@@ -9,8 +9,8 @@ interface AccountRepository {
 
     suspend fun readAccount(email: String): Result<AccountEntity>
 
-    suspend fun readLikedGifs(accountId: Int): Result<Flow<List<GifEntity>>>
+    suspend fun readLikedGifs(): Result<Flow<List<GifEntity>>>
 
-    suspend fun readLikedGifsCount(accountId: Int): Result<Int>
+    suspend fun readLikedGifsCount(): Result<Int>
 
 }

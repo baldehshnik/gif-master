@@ -12,7 +12,7 @@ class ReadLikedGifsCountUseCase @Inject constructor(
     private val repository: AccountRepository
 ) {
 
-    suspend operator fun invoke(accountId: Int): Result<Int> = withContext(ioDispatcher) {
-        return@withContext repository.readLikedGifsCount(accountId)
+    suspend operator fun invoke(): Result<Int> = withContext(ioDispatcher) {
+        return@withContext repository.readLikedGifsCount()
     }
 }
