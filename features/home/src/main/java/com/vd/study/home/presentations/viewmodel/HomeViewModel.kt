@@ -8,7 +8,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.vd.study.core.container.Result
 import com.vd.study.core.dispatchers.Dispatchers
-import com.vd.study.core.viewmodel.BaseViewModel
+import com.vd.study.core.presentation.viewmodel.BaseViewModel
 import com.vd.study.home.domain.entities.FullGifEntity
 import com.vd.study.home.domain.entities.GifEntity
 import com.vd.study.home.domain.entities.LikeAndSaveStatusEntity

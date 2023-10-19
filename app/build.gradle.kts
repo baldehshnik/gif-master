@@ -40,6 +40,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -55,6 +58,8 @@ dependencies {
     implementation(Build.Libs.Android.CoreKtx)
     implementation(Build.Libs.Android.AppCompat)
     implementation(Build.Libs.Android.Paging)
+    implementation(Build.Libs.Android.NavigationFragmentKtx)
+    implementation(Build.Libs.Android.NavigationUIKtx)
 
     implementation(Build.Libs.Google.Material)
     implementation(Build.Libs.Google.Hilt)

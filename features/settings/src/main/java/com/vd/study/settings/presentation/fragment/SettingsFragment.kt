@@ -1,7 +1,7 @@
 package com.vd.study.settings.presentation.fragment
 
 import androidx.fragment.app.Fragment
-import com.vd.study.core.viewbinding.viewBinding
+import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.settings.R
 import com.vd.study.settings.databinding.FragmentSettingsBinding
 import com.vd.study.settings.presentation.viewmodel.SettingsViewModel

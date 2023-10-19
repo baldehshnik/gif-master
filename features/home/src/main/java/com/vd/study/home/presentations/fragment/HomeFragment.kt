@@ -1,7 +1,7 @@
 package com.vd.study.home.presentations.fragment
 
 import androidx.fragment.app.Fragment
-import com.vd.study.core.viewbinding.viewBinding
+import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.home.R
 import com.vd.study.home.databinding.FragmentHomeBinding
 

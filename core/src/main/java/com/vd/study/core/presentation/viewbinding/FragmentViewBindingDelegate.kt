@@ -1,4 +1,4 @@
-package com.vd.study.core.viewbinding
+package com.vd.study.core.presentation.viewbinding
 
 import android.view.View
 import androidx.fragment.app.Fragment

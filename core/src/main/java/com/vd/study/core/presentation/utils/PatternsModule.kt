@@ -1,4 +1,4 @@
-package com.vd.study.core.di
+package com.vd.study.core.presentation.utils
 
 import android.util.Patterns
 import dagger.Module

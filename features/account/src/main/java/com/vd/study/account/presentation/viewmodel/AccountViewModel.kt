@@ -12,15 +12,13 @@ import com.vd.study.account.domain.usecase.ReadLikedGifsCountUseCase
 import com.vd.study.account.domain.usecase.ReadLikedGifsUseCase
 import com.vd.study.account.domain.usecase.ReadSavedAccountUseCase
 import com.vd.study.core.container.Result
-import com.vd.study.core.viewmodel.BaseViewModel
+import com.vd.study.core.presentation.viewmodel.BaseViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-@HiltViewModel
 class AccountViewModel @AssistedInject constructor(
     private val readLikedGifsCountUseCase: ReadLikedGifsCountUseCase,
     private val readLikedGifsUseCase: ReadLikedGifsUseCase,

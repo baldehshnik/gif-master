@@ -2,7 +2,7 @@ package com.vd.study.settings.domain.usecases
 
 import com.vd.study.core.dispatchers.IODispatcher
 import com.vd.study.core.container.Result
-import com.vd.study.core.entities.MIN_PASSWORD_LENGTH
+import com.vd.study.core.presentation.utils.MIN_PASSWORD_LENGTH
 import com.vd.study.settings.domain.entities.AccountEntity
 import com.vd.study.settings.domain.entities.AccountEntityFields
 import com.vd.study.settings.domain.exceptions.EmptyFieldException

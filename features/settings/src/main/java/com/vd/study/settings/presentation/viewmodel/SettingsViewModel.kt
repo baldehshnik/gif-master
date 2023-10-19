@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.vd.study.core.container.Result
-import com.vd.study.core.viewmodel.BaseViewModel
+import com.vd.study.core.presentation.viewmodel.BaseViewModel
 import com.vd.study.settings.R
 import com.vd.study.settings.domain.entities.AccountEntity
 import com.vd.study.settings.domain.entities.AccountEntityFields
@@ -19,12 +19,10 @@ import com.vd.study.settings.domain.usecases.UpdateAccountUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-@HiltViewModel
 class SettingsViewModel @AssistedInject constructor(
     private val removeAccountUseCase: RemoveAccountUseCase,
     private val updateAccountUseCase: UpdateAccountUseCase,

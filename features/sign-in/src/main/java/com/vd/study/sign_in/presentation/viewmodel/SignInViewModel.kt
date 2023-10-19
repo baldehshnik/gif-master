@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.vd.study.core.container.Result
-import com.vd.study.core.viewmodel.BaseViewModel
+import com.vd.study.core.presentation.viewmodel.BaseViewModel
 import com.vd.study.sign_in.domain.entities.AccountEntity
 import com.vd.study.sign_in.domain.entities.AccountEntityFields
 import com.vd.study.sign_in.domain.entities.CheckAccountEntity

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.vd.study.core.container.Result
-import com.vd.study.core.viewmodel.BaseViewModel
+import com.vd.study.core.presentation.viewmodel.BaseViewModel
 import com.vd.study.sign_up.R
 import com.vd.study.sign_up.domain.entities.AccountEntity
 import com.vd.study.sign_up.domain.entities.AccountRegistrationFields
@@ -41,7 +41,7 @@ class SignUpViewModel @Inject constructor(
         ::State
     )
 
-    suspend fun registerAccount(account: AccountEntity) {
+    fun registerAccount(account: AccountEntity) {
         viewModelScope.launch {
             try {
                 showProgress()

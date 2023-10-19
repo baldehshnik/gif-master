@@ -7,9 +7,13 @@ object Build {
 
         object Android {
             const val RoomVersion = "2.5.2"
+            const val NavigationVersion = "2.6.0"
 
             const val CoreKtx = "androidx.core:core-ktx:1.9.0"
             const val AppCompat = "androidx.appcompat:appcompat:1.6.1"
+
+            const val NavigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:$NavigationVersion"
+            const val NavigationUIKtx = "androidx.navigation:navigation-ui-ktx:$NavigationVersion"
 
             const val Room = "androidx.room:room-runtime:$RoomVersion"
             const val RoomKtx = "androidx.room:room-ktx:$RoomVersion"
