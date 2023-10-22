@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="select_from">Select from …</string>
+    <string name="or_fill">Or fill</string>
 
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <string name="sign_in">Sign in</string>
+
+    <string name="incorrect">Incorrect</string>
 </resources>

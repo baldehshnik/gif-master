@@ -61,16 +61,16 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun readRegisteredAccounts() {
+    fun hideProgress() {
+        isOperationInProgress.value = false
+    }
+
+    private fun readRegisteredAccounts() {
         viewModelScope.launch {
             showProgress()
             val registeredAccounts = readAccountsUseCase()
             _registeredAccountsLiveEvent.value = registeredAccounts
         }
-    }
-
-    fun hideProgress() {
-        isOperationInProgress.value = false
     }
 
     private fun handleEmptyFieldException(emptyFieldException: EmptyFieldException) {
@@ -96,6 +96,10 @@ class SignInViewModel @Inject constructor(
 
     private fun setFieldError(field: AccountEntityFields, message: Int) {
         fieldErrorMessage.value = field to message
+    }
+
+    init {
+        readRegisteredAccounts()
     }
 
     data class State(

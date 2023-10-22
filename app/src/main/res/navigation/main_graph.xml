@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
-    app:startDestination="@id/signUpFragment">
-
+    app:startDestination="@id/signInFragment2">
     <fragment
-        android:id="@+id/signUpFragment"
-        android:name="com.vd.study.sign_up.presentation.fragment.SignUpFragment"
-        android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" />
+        android:id="@+id/signInFragment2"
+        android:name="com.vd.study.sign_in.presentation.fragment.SignInFragment"
+        android:label="SignInFragment" />
 </navigation>
