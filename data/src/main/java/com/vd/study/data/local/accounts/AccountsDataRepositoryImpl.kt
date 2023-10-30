@@ -60,9 +60,8 @@ class AccountsDataRepositoryImpl @Inject constructor(
     override suspend fun readAccount(email: String): Result<AccountDataEntity> =
         withContext(ioDispatcher) {
             return@withContext catchReadingExceptionOf {
-                accountDao.readAccount(email)
-                    ?: return@catchReadingExceptionOf Result.Error(NotFoundException())
-            }.suspendMap { it as AccountDataEntity }
+                accountDao.readAccount(email) ?: return@withContext Result.Error(NotFoundException())
+            }
         }
 
     override suspend fun checkAccountExistence(account: CheckAccountDataEntity): Result<Boolean> =

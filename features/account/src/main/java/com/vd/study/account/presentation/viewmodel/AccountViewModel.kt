@@ -26,10 +26,6 @@ class AccountViewModel @AssistedInject constructor(
     @Assisted("email") private val email: String
 ) : BaseViewModel() {
 
-    init {
-        readAccount()
-    }
-
     private val _accountLiveValue = MutableLiveData<Result<AccountEntity>>()
     val accountLiveValue: LiveData<Result<AccountEntity>> get() = _accountLiveValue
 
@@ -71,6 +67,7 @@ class AccountViewModel @AssistedInject constructor(
             Result.Progress -> {
                 _likedGifsLiveValue.value = Result.Progress
             }
+
             is Result.Error -> {
                 _likedGifsLiveValue.value = answer.map { it }
             }
@@ -90,6 +87,10 @@ class AccountViewModel @AssistedInject constructor(
 
     private fun <T> showProgress(liveValue: MutableLiveData<Result<T>>) {
         liveValue.value = Result.Progress
+    }
+
+    init {
+        readAccount()
     }
 
     @AssistedFactory
