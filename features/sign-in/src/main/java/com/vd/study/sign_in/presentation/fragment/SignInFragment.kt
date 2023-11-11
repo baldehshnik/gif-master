@@ -1,14 +1,20 @@
 package com.vd.study.sign_in.presentation.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import androidx.annotation.StringRes
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.textfield.TextInputEditText
 import com.vd.study.core.container.Result
+import com.vd.study.core.global.ACCOUNT_EMAIL_FIELD_NAME
+import com.vd.study.core.global.IS_ACCOUNT_ENTERED_FIELD_NAME
+import com.vd.study.core.global.SIGN_IN_SHARED_PREFERENCES_NAME
 import com.vd.study.core.presentation.utils.PASSWORD_REGEX_STRING
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.sign_in.R
@@ -29,13 +35,23 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
     private val onRegisteredAccountClickListener = object : OnRegisteredAccountClickListener {
         override fun onClick(account: AccountEntity) {
-
+            signIn()
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val sharedPreferences = requireContext().getSharedPreferences(
+            SIGN_IN_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE
+        )
+        val isSaved = sharedPreferences.getBoolean(IS_ACCOUNT_ENTERED_FIELD_NAME, false)
+        if (isSaved) viewModel.navigateToMain()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setEventsListener()
+        readRegisteredAccounts()
 
         binding.listSavedAccounts.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.HORIZONTAL, false
@@ -53,6 +69,23 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
                 setEditTextErrorMessage(binding.passwordEditText, R.string.incorrect)
             }
         }
+    }
+
+    private fun readRegisteredAccounts() {
+        viewModel.readRegisteredAccounts()
+        changeAccountsListVisibility(true)
+    }
+
+    private fun signIn() {
+        val sharedPreferences = requireContext().getSharedPreferences(
+            SIGN_IN_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE
+        )
+        sharedPreferences.edit()
+            .putBoolean(IS_ACCOUNT_ENTERED_FIELD_NAME, true)
+            .putString(ACCOUNT_EMAIL_FIELD_NAME, binding.emailEditText.text.toString())
+            .apply()
+
+        viewModel.navigateToMain()
     }
 
     private fun setEventsListener() {
@@ -78,17 +111,19 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     private fun setEditTextErrorMessage(editText: TextInputEditText, @StringRes messageId: Int) {
         editText.error = resources.getString(messageId)
     }
-    
+
     private fun handleSignInResult(result: Result<Boolean>) {
         when(result) {
             Result.Progress -> {
-
+                binding.btnSignIn.isEnabled = false
             }
             is Result.Error -> {
-
+                binding.btnSignIn.isEnabled = true
+                // add
             }
             is Result.Correct -> {
-
+                signIn()
+                binding.btnSignIn.isEnabled = true
             }
         }
     }
@@ -96,13 +131,22 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     private fun handleRegisteredAccountsReading(result: Result<List<AccountEntity>>) {
         when(result) {
             Result.Progress -> {
-
+                changeAccountsListVisibility(true)
             }
             is Result.Error -> {
-
+                changeAccountsListVisibility(false)
+                // add
             }
-            is Result.Correct -> correctAccountsReading(result.getOrNull())
+            is Result.Correct -> {
+                changeAccountsListVisibility(false)
+                correctAccountsReading(result.getOrNull())
+            }
         }
+    }
+
+    private fun changeAccountsListVisibility(inProgress: Boolean) = with(binding) {
+        listSavedAccounts.isInvisible = inProgress
+        accountsProgressBar.isVisible = inProgress
     }
 
     private fun handleOnSignInClick() {
@@ -115,6 +159,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
             return
         }
 
+        binding.btnSignIn.isEnabled = false
         val checkAccount = CheckAccountEntity(
             email = binding.emailEditText.text!!.toString(),
             password = binding.passwordEditText.text!!.toString()

@@ -32,6 +32,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textSelectFrom" />
 
+        <ProgressBar
+            android:id="@+id/accountsProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/listSavedAccounts"
+            app:layout_constraintEnd_toEndOf="@id/listSavedAccounts"
+            app:layout_constraintStart_toStartOf="@id/listSavedAccounts"
+            app:layout_constraintTop_toTopOf="@id/listSavedAccounts" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textOrFill"
             android:layout_width="0dp"

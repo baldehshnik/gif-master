@@ -90,7 +90,7 @@ class AccountViewModel @AssistedInject constructor(
     }
 
     init {
-        readAccount()
+        //readAccount()
     }
 
     @AssistedFactory

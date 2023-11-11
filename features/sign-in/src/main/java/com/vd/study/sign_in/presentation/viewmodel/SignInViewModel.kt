@@ -12,6 +12,7 @@ import com.vd.study.sign_in.domain.exceptions.EmptyFieldException
 import com.vd.study.sign_in.domain.exceptions.IncorrectEmailFormatException
 import com.vd.study.sign_in.domain.usecases.IsAccountExistsAndCorrectUseCase
 import com.vd.study.sign_in.domain.usecases.ReadAccountsUseCase
+import com.vd.study.sign_in.presentation.router.SignInRouter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -23,7 +24,8 @@ typealias AccountsListResult = Result<List<AccountEntity>>
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val readAccountsUseCase: ReadAccountsUseCase,
-    private val isAccountExistsAndCorrectUseCase: IsAccountExistsAndCorrectUseCase
+    private val isAccountExistsAndCorrectUseCase: IsAccountExistsAndCorrectUseCase,
+    private val signInRouter: SignInRouter
 ) : BaseViewModel() {
 
     private val isOperationInProgress = MutableStateFlow(false)
@@ -65,7 +67,15 @@ class SignInViewModel @Inject constructor(
         isOperationInProgress.value = false
     }
 
-    private fun readRegisteredAccounts() {
+    fun navigateToMain() {
+        signInRouter.navigateToMain()
+    }
+
+    fun navigateToRegistration() {
+        signInRouter.navigateToRegistration()
+    }
+
+    fun readRegisteredAccounts() {
         viewModelScope.launch {
             showProgress()
             val registeredAccounts = readAccountsUseCase()
@@ -96,10 +106,6 @@ class SignInViewModel @Inject constructor(
 
     private fun setFieldError(field: AccountEntityFields, message: Int) {
         fieldErrorMessage.value = field to message
-    }
-
-    init {
-        readRegisteredAccounts()
     }
 
     data class State(
