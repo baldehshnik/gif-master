@@ -1,5 +1,6 @@
 package com.vd.study.sign_up.presentation.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
@@ -7,6 +8,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputEditText
+import com.vd.study.core.container.Result
+import com.vd.study.core.global.ACCOUNT_EMAIL_FIELD_NAME
+import com.vd.study.core.global.IS_ACCOUNT_ENTERED_FIELD_NAME
+import com.vd.study.core.global.SIGN_IN_SHARED_PREFERENCES_NAME
 import com.vd.study.core.presentation.utils.PASSWORD_REGEX_STRING
 import com.vd.study.core.presentation.utils.USERNAME_REGEX_STRING
 import com.vd.study.core.presentation.viewbinding.viewBinding
@@ -41,6 +46,38 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         binding.passwordEditText.setOnFocusChangeListener { _, hasFocus ->
             textChangedListenerHandler(isPasswordInputCorrect(), binding.passwordEditText, hasFocus)
         }
+
+        viewModel.registrationResultLiveValue.observe(viewLifecycleOwner) {
+            handleRegistrationResult(it)
+        }
+    }
+
+    private fun handleRegistrationResult(result: Result<AccountEntity>) {
+        when (result) {
+            Result.Progress -> {
+                // add
+            }
+
+            is Result.Error -> {
+                // add
+            }
+
+            is Result.Correct -> {
+                // fix
+                val account = result.getOrNull()!!
+                signIn(account)
+            }
+        }
+    }
+
+    private fun signIn(account: AccountEntity) {
+        val sharedPreferences = requireContext().getSharedPreferences(SIGN_IN_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+        sharedPreferences.edit()
+            .putBoolean(IS_ACCOUNT_ENTERED_FIELD_NAME, true)
+            .putString(ACCOUNT_EMAIL_FIELD_NAME, account.email)
+            .apply()
+
+        viewModel.navigateToMain()
     }
 
     private fun isUsernameInputCorrect(): Boolean {
@@ -82,10 +119,14 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     }
 
     private fun handleBackClick() {
+        if (binding.btnNext.isVisible) {
+            viewModel.returnToSignIn()
+            return
+        }
+
         binding.imageAccount.setImageResource(0)
         setImageSelectionScreenVisibility()
         setEditTextFieldsVisibility()
-        binding.btnNext.isVisible = true
     }
 
     private fun handleNextClick() {
@@ -115,23 +156,19 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                 isEmailFieldVisible = false,
                 isPasswordFieldVisible = false
             )
-            binding.btnNext.isVisible = false
             setImageSelectionScreenVisibility(
                 isRegisterButtonVisible = true,
-                isImageAccountVisible = true,
-                isBackButtonVisible = true
+                isImageAccountVisible = true
             )
         }
     }
 
     private fun setImageSelectionScreenVisibility(
         isRegisterButtonVisible: Boolean = false,
-        isImageAccountVisible: Boolean = false,
-        isBackButtonVisible: Boolean = false
+        isImageAccountVisible: Boolean = false
     ) = with(binding) {
         btnRegister.isVisible = isRegisterButtonVisible
         imageAccount.isVisible = isImageAccountVisible
-        btnBack.isVisible = isBackButtonVisible
     }
 
     private fun setEditTextFieldsVisibility(

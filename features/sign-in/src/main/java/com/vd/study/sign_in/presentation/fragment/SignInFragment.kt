@@ -3,7 +3,9 @@ package com.vd.study.sign_in.presentation.fragment
 import android.content.Context
 import android.os.Bundle
 import android.util.Patterns
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -39,13 +41,17 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val sharedPreferences = requireContext().getSharedPreferences(
             SIGN_IN_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE
         )
         val isSaved = sharedPreferences.getBoolean(IS_ACCOUNT_ENTERED_FIELD_NAME, false)
         if (isSaved) viewModel.navigateToMain()
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,6 +75,8 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
                 setEditTextErrorMessage(binding.passwordEditText, R.string.incorrect)
             }
         }
+
+        binding.btnSignUp.setOnClickListener { viewModel.navigateToRegistration() }
     }
 
     private fun readRegisteredAccounts() {

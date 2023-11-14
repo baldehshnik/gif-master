@@ -30,6 +30,10 @@ class GlobalNavComponentRouter @Inject constructor() : ActivityRequired {
         getRootNavController().navigate(destinationId)
     }
 
+    fun popToInclusive(@IdRes destinationId: Int) {
+        getRootNavController().popBackStack(destinationId, true)
+    }
+
     private fun getRootNavController(): NavController {
         val fragmentManager = requireActivity().supportFragmentManager
         val navHost = fragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment

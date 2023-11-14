@@ -12,6 +12,7 @@ import com.vd.study.sign_up.domain.exceptions.EmptyFieldException
 import com.vd.study.sign_up.domain.exceptions.IncorrectEmailFormatException
 import com.vd.study.sign_up.domain.exceptions.ShortPasswordException
 import com.vd.study.sign_up.domain.usecases.RegisterAccountUseCase
+import com.vd.study.sign_up.presentation.router.SignUpRouter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -20,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val registerAccountUseCase: RegisterAccountUseCase
+    private val registerAccountUseCase: RegisterAccountUseCase,
+    private val signUpRouter: SignUpRouter
 ) : BaseViewModel() {
 
     private val signUpInProgressFlow = MutableStateFlow(false)
@@ -60,6 +62,14 @@ class SignUpViewModel @Inject constructor(
 
     fun hideProgress() {
         signUpInProgressFlow.value = false
+    }
+
+    fun navigateToMain() {
+        signUpRouter.navigateToMain()
+    }
+
+    fun returnToSignIn() {
+        signUpRouter.popUpToSignIn()
     }
 
     private fun showProgress() {
