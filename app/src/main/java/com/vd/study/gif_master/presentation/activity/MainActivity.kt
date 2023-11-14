@@ -2,6 +2,9 @@ package com.vd.study.gif_master.presentation.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.vd.study.gif_master.R
 import com.vd.study.gif_master.databinding.ActivityMainBinding
 import com.vd.study.gif_master.presentation.router.GlobalNavComponentRouter
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,6 +24,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         globalNavComponentRouter.onCreated(this)
+
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
+        binding.bottomNavBar.setupWithNavController(navHostFragment.navController)
     }
 
     override fun onDestroy() {

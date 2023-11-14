@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
-    app:startDestination="@id/signInFragment">
+    app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.vd.study.sign_up.presentation.fragment.SignUpFragment"
@@ -17,5 +17,16 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.vd.study.home.presentations.fragment.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home"/>
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.vd.study.account.presentation.fragment.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.vd.study.settings.presentation.fragment.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings"/>
 </navigation>
