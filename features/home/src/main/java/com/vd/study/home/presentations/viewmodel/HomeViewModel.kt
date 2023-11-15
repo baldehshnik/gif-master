@@ -14,6 +14,7 @@ import com.vd.study.home.domain.entities.GifEntity
 import com.vd.study.home.domain.entities.LikeAndSaveStatusEntity
 import com.vd.study.home.domain.usecases.PagingReadGifsUseCase
 import com.vd.study.home.domain.usecases.ReadLikeAndSaveStatusUseCase
+import com.vd.study.home.domain.usecases.UpdateGifUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -24,11 +25,19 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val dispatchers: Dispatchers,
     private val pagingReadGifsUseCase: PagingReadGifsUseCase,
-    private val readLikeAndSaveStatusUseCase: ReadLikeAndSaveStatusUseCase
+    private val readLikeAndSaveStatusUseCase: ReadLikeAndSaveStatusUseCase,
+    private val updateGifUseCase: UpdateGifUseCase
 ) : BaseViewModel() {
 
     private val _readGifsResult = MutableLiveData<PagingData<FullGifEntity>>()
     val readGifsResult: LiveData<PagingData<FullGifEntity>> get() = _readGifsResult
+
+    fun updateGif(newGif: FullGifEntity) {
+        viewModelScope.launch {
+            val result = updateGifUseCase(newGif)
+
+        }
+    }
 
     private fun readGifs() {
         viewModelScope.launch {

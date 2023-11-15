@@ -45,6 +45,13 @@ object Build {
             const val CoroutinesTesting = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9"
             const val HiltTesting = "com.google.dagger:hilt-android-testing:${Google.HiltVersion}"
         }
+
+        object Image {
+            const val CoilVersion = "2.3.0"
+
+            const val Coil = "io.coil-kt:coil:$CoilVersion"
+            const val CoilGif = "io.coil-kt:coil-gif:$CoilVersion"
+        }
     }
 
     object Modules {

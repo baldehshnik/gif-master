@@ -10,8 +10,8 @@ data class RemoteGifDataEntity(
     @SerializedName("title")
     val title: String,
 
-    @SerializedName("url")
-    val url: String,
+    @SerializedName("images")
+    val images: GifImageDataEntity,
 
     @SerializedName("user")
     val author: GifAuthorDataEntity?,

@@ -13,7 +13,9 @@ class GifEntityMapper @Inject constructor(
         return GifEntity(
             input.id,
             input.title,
-            input.url,
+            input.images.original.url,
+            input.images.original.width,
+            input.images.original.height,
             gifAuthorEntityMapper.map(input.author),
             input.rating
         )

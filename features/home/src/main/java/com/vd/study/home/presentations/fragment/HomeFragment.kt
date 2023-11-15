@@ -12,12 +12,13 @@ import com.vd.study.home.R
 import com.vd.study.home.databinding.FragmentHomeBinding
 import com.vd.study.home.domain.entities.FullGifEntity
 import com.vd.study.home.presentations.adapter.GifAdapter
+import com.vd.study.home.presentations.adapter.OnGifItemClickListener
 import com.vd.study.home.presentations.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
 
     private val binding by viewBinding<FragmentHomeBinding>()
 
@@ -29,6 +30,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
 
         initUI()
+
         viewModel.readGifsResult.observe(viewLifecycleOwner, ::handleReadingResult)
     }
 
@@ -37,10 +39,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onDestroyView()
     }
 
+    override fun onLikeClick(gif: FullGifEntity) {
+        viewModel.updateGif(gif.copy(isLiked = !gif.isLiked))
+    }
+
+    override fun onSaveClick(gif: FullGifEntity) {
+        viewModel.updateGif(gif.copy(isSaved = !gif.isSaved))
+    }
+
+    override fun onShareClick(gif: FullGifEntity) {
+
+    }
+
     private fun initUI() {
         setProgressVisibility(true)
 
-        adapter = GifAdapter()
+        adapter = GifAdapter(this)
         binding.listGifs.adapter = adapter
     }
 
