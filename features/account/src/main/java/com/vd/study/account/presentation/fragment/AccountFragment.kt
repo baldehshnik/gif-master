@@ -2,6 +2,7 @@ package com.vd.study.account.presentation.fragment
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -9,7 +10,7 @@ import com.vd.study.account.R
 import com.vd.study.account.databinding.FragmentAccountBinding
 import com.vd.study.account.domain.entities.AccountEntity
 import com.vd.study.account.domain.entities.GifEntity
-import com.vd.study.account.presentation.adapter.LikedGifsAdapter
+import com.vd.study.account.presentation.adapter.LikedGifsPagerAdapter
 import com.vd.study.account.presentation.adapter.OnLikedGifItemClickListener
 import com.vd.study.account.presentation.viewmodel.AccountViewModel
 import com.vd.study.core.container.Result
@@ -25,7 +26,7 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
     lateinit var viewModelFactory: AccountViewModel.Factory
 
     private val viewModel: AccountViewModel by viewModels {
-        AccountViewModel.provideFactory(viewModelFactory, "some@gmail.com")
+        AccountViewModel.provideFactory(viewModelFactory, "baldehshnik@gmail.com")
     }
 
     private val binding by viewBinding<FragmentAccountBinding>()
@@ -43,32 +44,11 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
             // open settings fragment
         }
 
+        val adapter = LikedGifsPagerAdapter(this, viewModel)
+        binding.viewPager.adapter = adapter
+
+
         viewModel.accountLiveValue.observe(viewLifecycleOwner, ::handleAccountReading)
-        viewModel.likedGifsLiveData.observe(viewLifecycleOwner, ::handleLikedGifsReading)
-    }
-
-    private fun setLikedGifsAdapter(items: List<GifEntity>) {
-        val adapter = LikedGifsAdapter(items, onGifItemClickListener)
-        binding.listLikedGifs.adapter = adapter
-    }
-
-    private fun handleLikedGifsReading(result: Result<List<GifEntity>>) {
-        when (result) {
-            Result.Progress -> {
-                changeLikedGifsReadingVisibility(true)
-            }
-
-            is Result.Error -> {
-                // add
-                changeLikedGifsReadingVisibility(false)
-            }
-
-            is Result.Correct -> {
-                val items = result.getOrNull()!! // fix
-                setLikedGifsAdapter(items)
-                changeLikedGifsReadingVisibility(false)
-            }
-        }
     }
 
     private fun handleAccountReading(result: Result<AccountEntity>) {
@@ -81,12 +61,15 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
                 // add
                 changeScreenVisibility(false)
 
+                Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+
                 // fix
                 changeLikedGifsReadingVisibility(false)
             }
 
             is Result.Correct -> {
                 val account = result.getOrNull()!! // fix
+                Toast.makeText(requireContext(), account.username, Toast.LENGTH_SHORT).show()
                 binding.textAccountName.text = account.username
 
                 changeScreenVisibility(false)
@@ -97,11 +80,11 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
 
     private fun changeScreenVisibility(isProgress: Boolean) {
         binding.screenProgress.isVisible = isProgress
-        binding.screen.isVisible = !isProgress
+//        binding.screen.isVisible = !isProgress
     }
 
     private fun changeLikedGifsReadingVisibility(isProgress: Boolean) {
-        binding.listLikedGifs.isVisible = !isProgress
+        binding.viewPager.isVisible = !isProgress
         binding.listProgress.isVisible = isProgress
     }
 }

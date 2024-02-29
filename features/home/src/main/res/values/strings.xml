@@ -3,4 +3,6 @@
     <string name="share_click_info">share gif</string>
     <string name="like_click_info">like gif</string>
     <string name="save_click_info">save gif</string>
+
+    <string name="update_error">Update error</string>
 </resources>

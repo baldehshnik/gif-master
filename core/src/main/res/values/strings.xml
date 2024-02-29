@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ZeniXVibe</string>
+
+    <string name="home">Home</string>
+    <string name="account">Account</string>
+
+    <string name="search_button_description">open fragment for searching gifs by keywords</string>
+</resources>

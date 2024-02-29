@@ -2,6 +2,7 @@ package com.vd.study.home.presentations.adapter
 
 import android.content.Context
 import android.graphics.Insets
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -12,16 +13,24 @@ import android.view.WindowMetrics
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import coil.imageLoader
-import coil.load
-import coil.request.CachePolicy
-import coil.request.ImageRequest
+//import coil.imageLoader
+//import coil.load
+//import coil.request.CachePolicy
+//import coil.request.ImageRequest
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
+import com.google.android.material.imageview.ShapeableImageView
 import com.vd.study.core.presentation.utils.GIPHY_USERNAME
+import com.vd.study.home.R
 import com.vd.study.home.databinding.GifItemBinding
 import com.vd.study.home.domain.entities.FullGifEntity
 import com.vd.study.home.domain.entities.GifAuthorEntity
 
-
+// delete class
 class GifAdapter(
     private val listener: OnGifItemClickListener
 ) : PagingDataAdapter<FullGifEntity, GifAdapter.GifViewHolder>(GifDiffUtil()) {
@@ -29,16 +38,31 @@ class GifAdapter(
     class GifViewHolder(private val binding: GifItemBinding): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(gif: FullGifEntity, listener: OnGifItemClickListener) = with(binding) {
-            setGifHeight(gif.height, gif.width)
+//            setGifHeight(gif.height, gif.width)
             setAuthorInfo(gif.author)
 
-            val request = ImageRequest.Builder(this.gif.context)
-                .data(gif.url)
-                .memoryCachePolicy(CachePolicy.ENABLED)
-                .crossfade(true)
-                .target(this.gif)
-                .build()
-            this.gif.context.imageLoader.enqueue(request)
+//            val request = ImageRequest.Builder(this.gif.context)
+//                .data(gif.url)
+//                .memoryCachePolicy(CachePolicy.ENABLED)
+//                .crossfade(true)
+//                .target(this.gif)
+//                .build()
+//            this.gif.context.imageLoader.enqueue(request)
+
+            val requestOptions: RequestOptions = RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .skipMemoryCache(false)
+                .format(DecodeFormat.PREFER_RGB_565)
+                .override(Target.SIZE_ORIGINAL)
+                .placeholder(R.drawable.round_share)
+                .error(R.drawable.giphy)
+                .centerCrop()
+
+            val requestBuilder: RequestBuilder<Drawable> = Glide.with(this.gif.context)
+                .load(gif.url)
+                .apply(requestOptions)
+
+            requestBuilder.into(this.gif)
 
             btnLike.setOnClickListener { listener.onLikeClick(gif) }
             btnSave.setOnClickListener { listener.onSaveClick(gif) }
@@ -52,9 +76,9 @@ class GifAdapter(
                 textAccount.text = GIPHY_USERNAME
             } else {
                 textAccount.text = author.username
-                imageAccount.load(author.avatarUrl) {
-                    crossfade(true)
-                }
+//                imageAccount.load(author.avatarUrl) {
+//                    crossfade(true)
+//                }
             }
         }
 

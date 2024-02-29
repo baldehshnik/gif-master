@@ -32,10 +32,21 @@ class HomeViewModel @Inject constructor(
     private val _readGifsResult = MutableLiveData<PagingData<FullGifEntity>>()
     val readGifsResult: LiveData<PagingData<FullGifEntity>> get() = _readGifsResult
 
+    private val _updateGifResult = MutableLiveData<FullGifEntity?>()
+    val updateGifResult: LiveData<FullGifEntity?> get() = _updateGifResult
+
     fun updateGif(newGif: FullGifEntity) {
         viewModelScope.launch {
             val result = updateGifUseCase(newGif)
+            val value = result.getOrNull() ?: return@launch
 
+            withContext(dispatchers.mainDispatcher) {
+                if (value) {
+                    _updateGifResult.value = newGif
+                } else {
+                    _updateGifResult.value = null
+                }
+            }
         }
     }
 

@@ -53,7 +53,7 @@ class AccountViewModel @AssistedInject constructor(
         }
     }
 
-    private fun readAccount() {
+    fun readAccount() {
         viewModelScope.launch {
             showProgress(_accountLiveValue)
 
@@ -90,7 +90,7 @@ class AccountViewModel @AssistedInject constructor(
     }
 
     init {
-        //readAccount()
+        readAccount()
     }
 
     @AssistedFactory

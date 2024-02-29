@@ -44,6 +44,9 @@ android {
 
 dependencies {
 
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+
+
     implementation(project(Build.Modules.Core))
 
     implementation(Build.Libs.Android.CoreKtx)
@@ -53,8 +56,8 @@ dependencies {
     implementation(Build.Libs.Android.NavigationFragmentKtx)
     implementation(Build.Libs.Android.NavigationUIKtx)
 
-    implementation(Build.Libs.Image.Coil)
-    implementation(Build.Libs.Image.CoilGif)
+//    implementation(Build.Libs.Image.Coil)
+//    implementation(Build.Libs.Image.CoilGif)
 
     implementation(Build.Libs.Google.Material)
     implementation(Build.Libs.Google.Hilt)

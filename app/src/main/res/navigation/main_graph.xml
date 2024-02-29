@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/signInFragment">
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.vd.study.sign_up.presentation.fragment.SignUpFragment"

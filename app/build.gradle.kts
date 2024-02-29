@@ -55,8 +55,8 @@ dependencies {
     implementation(project(Build.Modules.Features.Home))
     implementation(project(Build.Modules.Features.Settings))
 
-    implementation(Build.Libs.Image.Coil)
-    implementation(Build.Libs.Image.CoilGif)
+//    implementation(Build.Libs.Image.Coil)
+//    implementation(Build.Libs.Image.CoilGif)
 
     implementation(Build.Libs.Android.CoreKtx)
     implementation(Build.Libs.Android.AppCompat)
