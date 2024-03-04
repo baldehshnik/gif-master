@@ -4,29 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
     app:startDestination="@id/signInFragment">
+
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.vd.study.sign_up.presentation.fragment.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" />
+
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.vd.study.sign_in.presentation.fragment.SignInFragment"
         android:label="fragment_sign_in"
         tools:layout="@layout/fragment_sign_in" />
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.vd.study.home.presentations.fragment.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home"/>
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_viewingFragment"
+            app:destination="@id/viewingFragment" >
+
+            <argument
+                android:name="viewingGif"
+                app:argType="com.vd.study.viewing.domain.entities.GifEntity" />
+
+        </action>
+    </fragment>
+
     <fragment
         android:id="@+id/accountFragment"
         android:name="com.vd.study.account.presentation.fragment.AccountFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.vd.study.settings.presentation.fragment.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings"/>
+
+    <fragment
+        android:id="@+id/viewingFragment"
+        android:name="com.vd.study.viewing.presentation.fragment.ViewingFragment"
+        android:label="ViewingFragment"/>
+
 </navigation>

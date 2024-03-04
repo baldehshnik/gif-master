@@ -1,5 +1,9 @@
 package com.vd.study.home.presentations.adapter
 
+//import coil.imageLoader
+//import coil.load
+//import coil.request.CachePolicy
+//import coil.request.ImageRequest
 import android.content.Context
 import android.graphics.Insets
 import android.graphics.drawable.Drawable
@@ -13,17 +17,12 @@ import android.view.WindowMetrics
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-//import coil.imageLoader
-//import coil.load
-//import coil.request.CachePolicy
-//import coil.request.ImageRequest
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import com.google.android.material.imageview.ShapeableImageView
 import com.vd.study.core.presentation.utils.GIPHY_USERNAME
 import com.vd.study.home.R
 import com.vd.study.home.databinding.GifItemBinding

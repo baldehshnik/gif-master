@@ -15,6 +15,7 @@ import com.vd.study.home.domain.entities.LikeAndSaveStatusEntity
 import com.vd.study.home.domain.usecases.PagingReadGifsUseCase
 import com.vd.study.home.domain.usecases.ReadLikeAndSaveStatusUseCase
 import com.vd.study.home.domain.usecases.UpdateGifUseCase
+import com.vd.study.home.presentations.router.HomeRouter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -26,7 +27,8 @@ class HomeViewModel @Inject constructor(
     private val dispatchers: Dispatchers,
     private val pagingReadGifsUseCase: PagingReadGifsUseCase,
     private val readLikeAndSaveStatusUseCase: ReadLikeAndSaveStatusUseCase,
-    private val updateGifUseCase: UpdateGifUseCase
+    private val updateGifUseCase: UpdateGifUseCase,
+    private val router: HomeRouter
 ) : BaseViewModel() {
 
     private val _readGifsResult = MutableLiveData<PagingData<FullGifEntity>>()
@@ -48,6 +50,10 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun navigateToViewingFragment(gif: FullGifEntity) {
+        router.navigateToViewingFragment(gif)
     }
 
     private fun readGifs() {

@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -54,6 +55,7 @@ dependencies {
     implementation(project(Build.Modules.Features.SingIn))
     implementation(project(Build.Modules.Features.Home))
     implementation(project(Build.Modules.Features.Settings))
+    implementation(project(Build.Modules.Features.Viewing))
 
 //    implementation(Build.Libs.Image.Coil)
 //    implementation(Build.Libs.Image.CoilGif)

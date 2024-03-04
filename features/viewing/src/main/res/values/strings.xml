@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="save">Save</string>
+    <string name="like">Like</string>
+    <string name="provided_by_giphy">Provided by GIPHY</string>
+    <string name="giphy">GIPHY</string>
+
+
+    <string name="button_back_description">Used to return to HomeFragment</string>
+    <string name="button_share_description">Used to share gif-image</string>
+    <string name="button_save_description">Used to save gif-image in a local database</string>
+    <string name="button_like_description">Used to like gif-image</string>
+
+</resources>

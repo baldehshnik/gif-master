@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -60,23 +61,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
     }
 
     override fun onItemClick(gif: FullGifEntity) {
-        val view = layoutInflater.inflate(R.layout.gif_dialog, null)
-        val gifImage = view.findViewById<ShapeableImageView>(R.id.gif)
-        val accountImage = view.findViewById<ShapeableImageView>(R.id.imageAccount)
-
-        Glide.with(requireContext())
-            .load(gif.author?.avatarUrl)
-            .into(accountImage)
-
-        Glide.with(requireContext())
-            .asGif()
-            .load(gif.url)
-            .into(gifImage)
-
-        AlertDialog.Builder(requireContext())
-            .setView(view)
-            .create()
-            .show()
+        viewModel.navigateToViewingFragment(gif)
     }
 
     private fun initUI() {

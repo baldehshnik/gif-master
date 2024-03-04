@@ -3,9 +3,11 @@ package com.vd.study.gif_master.presentation.router
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
 import com.vd.study.gif_master.R
 import com.vd.study.gif_master.presentation.activity.ActivityRequired
+import com.vd.study.gif_master.presentation.activity.MainActivity
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,6 +30,10 @@ class GlobalNavComponentRouter @Inject constructor() : ActivityRequired {
 
     fun launch(@IdRes destinationId: Int) {
         getRootNavController().navigate(destinationId)
+    }
+
+    fun launch(direction: NavDirections) {
+        getRootNavController().navigate(direction)
     }
 
     fun popToInclusive(@IdRes destinationId: Int) {

@@ -3,10 +3,12 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-parcelize")
 }
 
 android {
-    namespace = "com.vd.study.home"
+    namespace = "com.vd.study.viewing"
     compileSdk = Build.CompileSdk
 
     defaultConfig {
@@ -44,20 +46,15 @@ android {
 
 dependencies {
 
-
     implementation(project(Build.Modules.Core))
 
     implementation(Build.Libs.Android.CoreKtx)
     implementation(Build.Libs.Android.AppCompat)
     implementation(Build.Libs.Android.FragmentKtx)
-    implementation(Build.Libs.Android.Paging)
     implementation(Build.Libs.Android.NavigationFragmentKtx)
     implementation(Build.Libs.Android.NavigationUIKtx)
 
     implementation(Build.Libs.Image.Glide)
-
-//    implementation(Build.Libs.Image.Coil)
-//    implementation(Build.Libs.Image.CoilGif)
 
     implementation(Build.Libs.Google.Material)
     implementation(Build.Libs.Google.Hilt)
