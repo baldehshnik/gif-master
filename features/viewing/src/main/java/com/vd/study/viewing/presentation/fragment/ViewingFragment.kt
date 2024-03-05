@@ -6,12 +6,12 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.viewing.R
 import com.vd.study.viewing.databinding.FragmentViewingBinding
 import com.vd.study.viewing.domain.entities.GifAuthorEntity
 import com.vd.study.viewing.domain.entities.GifEntity
-import com.vd.study.viewing.presentation.showToast
 import com.vd.study.viewing.presentation.viewmodel.ViewingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.vd.study.core.R as CoreResources
@@ -28,7 +28,7 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
 
         val gif = getViewingGif()
         if (gif == null) {
-            showToast(resources.getString(CoreResources.string.error))
+            requireContext().showToast(resources.getString(CoreResources.string.error))
             viewModel.popBackStack()
         } else {
             loadUI(gif)
@@ -39,8 +39,18 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
     private fun setListeners(gif: GifEntity) = with(binding) {
         btnBack.setOnClickListener { viewModel.popBackStack() }
         btnShare.setOnClickListener { shareGif(gif) }
-        btnLike.setOnClickListener { viewModel.updateGifByLike(gif) }
-        btnSave.setOnClickListener { viewModel.updateGifBySave(gif) }
+        btnLike.setOnClickListener { handleGifLike(gif) }
+        btnSave.setOnClickListener { handleGifSave(gif) }
+    }
+
+    private fun handleGifLike(gif: GifEntity) {
+        // add icon changing
+        viewModel.updateGifByLike(gif)
+    }
+
+    private fun handleGifSave(gif: GifEntity) {
+        // add icon changing
+        viewModel.updateGifBySave(gif)
     }
 
     private fun shareGif(gif: GifEntity) {

@@ -23,7 +23,7 @@ class SignInAdapterRepository @Inject constructor(
         }
     }
 
-    override suspend fun isAccountExistsAndCorrect(account: CheckAccountEntity): Result<Boolean> {
+    override suspend fun isAccountExistsAndCorrect(account: CheckAccountEntity): Result<Int> {
         return repository.checkAccountExistence(checkAccountDataEntityMapper.map(account))
     }
 }

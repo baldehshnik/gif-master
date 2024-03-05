@@ -40,8 +40,8 @@ class SignInViewModel @Inject constructor(
     private val _registeredAccountsLiveEvent = MutableLiveData<AccountsListResult>()
     val registeredAccountsLiveEvent: LiveData<AccountsListResult> = _registeredAccountsLiveEvent
 
-    private val _checkAccountLiveEvent = MutableLiveData<Result<Boolean>>()
-    val checkAccountLiveEvent: LiveData<Result<Boolean>> get() = _checkAccountLiveEvent
+    private val _checkAccountLiveEvent = MutableLiveData<Result<Int>>()
+    val checkAccountLiveEvent: LiveData<Result<Int>> get() = _checkAccountLiveEvent
 
     private val _focusFieldLiveEvent = MutableLiveData<AccountEntityFields>()
     val focusFieldLiveEvent: LiveData<AccountEntityFields> get() = _focusFieldLiveEvent

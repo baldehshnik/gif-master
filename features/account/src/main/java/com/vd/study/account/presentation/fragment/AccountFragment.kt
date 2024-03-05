@@ -47,6 +47,11 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
         val adapter = LikedGifsPagerAdapter(this, viewModel)
         binding.viewPager.adapter = adapter
 
+        viewModel.readLikedGifsCount()
+        viewModel.likedGifsCountLiveData.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it.getOrNull().toString(), Toast.LENGTH_SHORT).show()
+        }
+
 
         viewModel.accountLiveValue.observe(viewLifecycleOwner, ::handleAccountReading)
     }
@@ -69,7 +74,7 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
 
             is Result.Correct -> {
                 val account = result.getOrNull()!! // fix
-                Toast.makeText(requireContext(), account.username, Toast.LENGTH_SHORT).show()
+//                Toast.makeText(requireContext(), account.username, Toast.LENGTH_SHORT).show()
                 binding.textAccountName.text = account.username
 
                 changeScreenVisibility(false)

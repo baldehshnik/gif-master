@@ -8,6 +8,6 @@ interface SignInRepository {
 
     suspend fun readAccounts(): Result<List<AccountEntity>>
 
-    suspend fun isAccountExistsAndCorrect(account: CheckAccountEntity): Result<Boolean>
+    suspend fun isAccountExistsAndCorrect(account: CheckAccountEntity): Result<Int>
 
 }

@@ -1,6 +1,5 @@
 package com.vd.study.sign_up.presentation.fragment
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
@@ -9,9 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputEditText
 import com.vd.study.core.container.Result
-import com.vd.study.core.global.ACCOUNT_EMAIL_FIELD_NAME
-import com.vd.study.core.global.IS_ACCOUNT_ENTERED_FIELD_NAME
-import com.vd.study.core.global.SIGN_IN_SHARED_PREFERENCES_NAME
 import com.vd.study.core.presentation.utils.PASSWORD_REGEX_STRING
 import com.vd.study.core.presentation.utils.USERNAME_REGEX_STRING
 import com.vd.study.core.presentation.viewbinding.viewBinding
@@ -65,19 +61,9 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             is Result.Correct -> {
                 // fix
                 val account = result.getOrNull()!!
-                signIn(account)
+                viewModel.navigateToMain()
             }
         }
-    }
-
-    private fun signIn(account: AccountEntity) {
-        val sharedPreferences = requireContext().getSharedPreferences(SIGN_IN_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-        sharedPreferences.edit()
-            .putBoolean(IS_ACCOUNT_ENTERED_FIELD_NAME, true)
-            .putString(ACCOUNT_EMAIL_FIELD_NAME, account.email)
-            .apply()
-
-        viewModel.navigateToMain()
     }
 
     private fun isUsernameInputCorrect(): Boolean {

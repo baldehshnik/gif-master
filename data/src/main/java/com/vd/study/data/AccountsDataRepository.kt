@@ -16,6 +16,6 @@ interface AccountsDataRepository {
 
     suspend fun readAccount(email: String): Result<AccountDataEntity>
 
-    suspend fun checkAccountExistence(account: CheckAccountDataEntity): Result<Boolean>
+    suspend fun checkAccountExistence(account: CheckAccountDataEntity): Result<Int>
 
 }

@@ -19,7 +19,7 @@ class IsAccountExistsAndCorrectUseCase @Inject constructor(
     @Named("EMAIL_PATTERN") private val emailPattern: Pattern
 ) {
 
-    suspend operator fun invoke(account: CheckAccountEntity): Result<Boolean> = withContext(ioDispatcher) {
+    suspend operator fun invoke(account: CheckAccountEntity): Result<Int> = withContext(ioDispatcher) {
         if (account.email.isBlank()) throw EmptyFieldException(AccountEntityFields.EMAIL)
         if (account.password.isBlank()) throw EmptyFieldException(AccountEntityFields.PASSWORD)
 

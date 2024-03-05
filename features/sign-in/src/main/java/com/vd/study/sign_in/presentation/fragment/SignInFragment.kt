@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.textfield.TextInputEditText
 import com.vd.study.core.container.Result
 import com.vd.study.core.global.ACCOUNT_EMAIL_FIELD_NAME
+import com.vd.study.core.global.ACCOUNT_ID_FIELD_NAME
+import com.vd.study.core.global.AccountIdentifier
 import com.vd.study.core.global.IS_ACCOUNT_ENTERED_FIELD_NAME
 import com.vd.study.core.global.SIGN_IN_SHARED_PREFERENCES_NAME
 import com.vd.study.core.presentation.utils.PASSWORD_REGEX_STRING
@@ -27,9 +29,13 @@ import com.vd.study.sign_in.presentation.adapter.OnRegisteredAccountClickListene
 import com.vd.study.sign_in.presentation.adapter.RegisteredAccountAdapter
 import com.vd.study.sign_in.presentation.viewmodel.SignInViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignInFragment : Fragment(R.layout.fragment_sign_in) {
+
+    @Inject
+    lateinit var accountIdentifier: AccountIdentifier
 
     private val binding: FragmentSignInBinding by viewBinding()
 
@@ -37,7 +43,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
     private val onRegisteredAccountClickListener = object : OnRegisteredAccountClickListener {
         override fun onClick(account: AccountEntity) {
-            signIn()
+            signIn(account.id)
         }
     }
 
@@ -84,15 +90,17 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         changeAccountsListVisibility(true)
     }
 
-    private fun signIn() {
+    private fun signIn(id: Int) {
         val sharedPreferences = requireContext().getSharedPreferences(
             SIGN_IN_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE
         )
         sharedPreferences.edit()
             .putBoolean(IS_ACCOUNT_ENTERED_FIELD_NAME, true)
             .putString(ACCOUNT_EMAIL_FIELD_NAME, binding.emailEditText.text.toString())
+            .putInt(ACCOUNT_ID_FIELD_NAME, id)
             .apply()
 
+        accountIdentifier.accountIdentifier = id
         viewModel.navigateToMain()
     }
 
@@ -120,7 +128,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         editText.error = resources.getString(messageId)
     }
 
-    private fun handleSignInResult(result: Result<Boolean>) {
+    private fun handleSignInResult(result: Result<Int>) {
         when(result) {
             Result.Progress -> {
                 binding.btnSignIn.isEnabled = false
@@ -130,7 +138,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
                 // add
             }
             is Result.Correct -> {
-                signIn()
+                signIn(result.getOrNull()!!)
                 binding.btnSignIn.isEnabled = true
             }
         }
