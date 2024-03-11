@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.vd.study.account.databinding.LikedGifItemBinding
 import com.vd.study.account.domain.entities.GifEntity
 
@@ -18,7 +19,13 @@ class LikedGifsAdapter(
 ) : ListAdapter<GifEntity, LikedGifsAdapter.LikedGifsViewHolder>(LikedGifDiffUtil()) {
 
     class LikedGifsViewHolder(private val binding: LikedGifItemBinding): RecyclerView.ViewHolder(binding.root) {
+
+        // fix image loading and design
         fun bind(gif: GifEntity, listener: OnLikedGifItemClickListener) = with(binding) {
+            Glide.with(binding.imageGif.context)
+                .load(gif.url)
+                .into(binding.imageGif)
+
             root.setOnClickListener { listener.onClick(gif) }
         }
     }

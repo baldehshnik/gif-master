@@ -21,17 +21,9 @@ class ViewingViewModel @Inject constructor(
         router.popBackStack()
     }
 
-    fun updateGifByLike(gifEntity: GifEntity) {
+    fun updateGif(gif: GifEntity) {
         viewModelScope.launch(dispatchers.defaultDispatcher) {
-            val likedGif = gifEntity.copy(isLiked = !gifEntity.isLiked)
-            updateGifInLocalDatabaseUseCase(likedGif)
-        }
-    }
-
-    fun updateGifBySave(gifEntity: GifEntity) {
-        viewModelScope.launch(dispatchers.defaultDispatcher) {
-            val savedGif = gifEntity.copy(isSaved = !gifEntity.isSaved)
-            updateGifInLocalDatabaseUseCase(savedGif)
+            updateGifInLocalDatabaseUseCase(gif)
         }
     }
 }

@@ -21,70 +21,192 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/screen"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:background="#DCDCDC"
             android:visibility="visible">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/imageAccount"
-                android:layout_width="156dp"
-                android:layout_height="156dp"
-                android:layout_marginTop="40dp"
-                android:src="@color/purple_700"
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/accountImageBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/backgroundImage"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/account_background_style"
+                android:clipToOutline="true"
+                android:contentDescription="@string/account_background_description"
+                android:scaleType="centerCrop"
+                android:src="@drawable/account_default_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Gifmaster.ImageView.Circle" />
+                tools:ignore="UnusedAttribute" />
 
-            <TextView
-                android:id="@+id/textAccountName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+            <View
+                android:id="@+id/accountImageBackground"
+                android:layout_width="156dp"
+                android:layout_height="156dp"
+                android:layout_marginTop="60dp"
+                android:background="@drawable/account_image_background"
+                android:backgroundTint="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageAccount"
-                tools:text="Some account name" />
+                app:layout_constraintTop_toTopOf="@id/backgroundImage" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnEdit"
-                android:layout_width="320dp"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageAccount"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                app:layout_constraintBottom_toBottomOf="@id/accountImageBackground"
+                app:layout_constraintEnd_toEndOf="@id/accountImageBackground"
+                app:layout_constraintStart_toStartOf="@id/accountImageBackground"
+                app:layout_constraintTop_toTopOf="@id/accountImageBackground"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Gifmaster.ImageView.Circle"
+                tools:src="@color/purple_700" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/nameCard"
+                style="@style/CardViewWithRoundedBottomCorners"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="@string/edit"
-                android:textAllCaps="false"
+                app:layout_constraintBottom_toTopOf="@id/personalInfoCard"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textAccountName" />
+                app:layout_constraintTop_toBottomOf="@id/imageAccount">
 
-            <ImageButton
-                android:id="@+id/btnLiked"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:src="@drawable/round_thumb_up"
-                app:layout_constraintEnd_toStartOf="@id/btnViewed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnEdit" />
+                <TextView
+                    android:id="@+id/textAccountName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="Some account name" />
 
-            <ImageButton
-                android:id="@+id/btnViewed"
-                android:layout_width="wrap_content"
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/personalInfoCard"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:src="@drawable/round_view_compact"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btnLiked"
-                app:layout_constraintTop_toBottomOf="@id/btnEdit" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nameCard">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/personalInfoTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="20dp"
+                        android:paddingVertical="8dp"
+                        android:text="@string/personal_info"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/emailInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="20dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="4dp"
+                        android:text="@string/email_info"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/creationDateInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="20dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/date_info"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEdit"
+                        android:layout_width="300dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/button_background"
+                        android:text="@string/edit"
+                        android:textAllCaps="false"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSavedListsButtons"
+                style="@style/CardViewWithRoundedTopCorners"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/personalInfoCard">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <ImageButton
+                        android:id="@+id/btnViewed"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:contentDescription="@string/viewed_gifs_description"
+                        android:src="@drawable/round_view_compact" />
+
+                    <ImageButton
+                        android:id="@+id/btnLiked"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:contentDescription="@string/liked_gifs_description"
+                        android:src="@drawable/round_thumb_up" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
             <View
                 android:id="@+id/line"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="4dp"
                 android:background="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnViewed" />
+                app:layout_constraintTop_toBottomOf="@id/cardSavedListsButtons" />
 
             <ProgressBar
                 android:id="@+id/listProgress"
@@ -99,7 +221,8 @@
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:minHeight="180dp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

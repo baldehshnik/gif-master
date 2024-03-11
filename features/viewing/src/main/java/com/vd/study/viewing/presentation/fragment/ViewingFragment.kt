@@ -3,6 +3,7 @@ package com.vd.study.viewing.presentation.fragment
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -19,6 +20,12 @@ import com.vd.study.core.R as CoreResources
 @AndroidEntryPoint
 class ViewingFragment : Fragment(R.layout.fragment_viewing) {
 
+    private var _gif: GifEntity? = null
+    private val gif: GifEntity
+        get() = checkNotNull(_gif) {
+            resources.getString(R.string.viewing_gif_not_initialized)
+        }
+
     private val binding by viewBinding<FragmentViewingBinding>()
 
     private val viewModel by viewModels<ViewingViewModel>()
@@ -26,38 +33,59 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val gif = getViewingGif()
-        if (gif == null) {
+        _gif = getViewingGif()
+        if (_gif == null) {
             requireContext().showToast(resources.getString(CoreResources.string.error))
             viewModel.popBackStack()
         } else {
-            loadUI(gif)
-            setListeners(gif)
+            loadUI()
+            setLikeColor()
+            setListeners()
         }
     }
 
-    private fun setListeners(gif: GifEntity) = with(binding) {
+    private fun setListeners() = with(binding) {
         btnBack.setOnClickListener { viewModel.popBackStack() }
-        btnShare.setOnClickListener { shareGif(gif) }
-        btnLike.setOnClickListener { handleGifLike(gif) }
-        btnSave.setOnClickListener { handleGifSave(gif) }
+        btnShare.setOnClickListener { shareGif() }
+        btnLike.setOnClickListener { handleGifLike() }
+        btnSave.setOnClickListener { handleGifSave() }
     }
 
-    private fun handleGifLike(gif: GifEntity) {
-        // add icon changing
-        viewModel.updateGifByLike(gif)
+    private fun setLikeColor() {
+        if (gif.isLiked) {
+            binding.btnLike.setImageResource(R.drawable.heart_red)
+            binding.btnLike.setColorFilter(ContextCompat.getColor(requireContext(), R.color.like))
+        } else {
+            binding.btnLike.setImageResource(R.drawable.heart_white_border)
+            binding.btnLike.setColorFilter(
+                ContextCompat.getColor(
+                    requireContext(),
+                    CoreResources.color.white
+                )
+            )
+        }
     }
 
-    private fun handleGifSave(gif: GifEntity) {
-        // add icon changing
-        viewModel.updateGifBySave(gif)
+    private fun handleGifLike() {
+        _gif = gif.copy(isLiked = !gif.isLiked)
+        requireContext().showToast(gif.isLiked.toString())
+        setLikeColor()
+
+        viewModel.updateGif(gif)
     }
 
-    private fun shareGif(gif: GifEntity) {
+    private fun handleGifSave() {
+        _gif = gif.copy(isSaved = !gif.isSaved)
+        binding.btnSave.setImageResource(if (gif.isSaved) R.drawable.round_bookmark else R.drawable.round_bookmark_border)
+
+        viewModel.updateGif(gif)
+    }
+
+    private fun shareGif() {
 
     }
 
-    private fun loadUI(gif: GifEntity) {
+    private fun loadUI() {
         loadAuthor(gif.author)
 
         Glide.with(requireContext())
@@ -65,7 +93,7 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
             .into(binding.gif)
     }
 
-    private fun getViewingGif() : GifEntity? {
+    private fun getViewingGif(): GifEntity? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arguments?.getParcelable(INCOMING_GIF_KEY, GifEntity::class.java)
         } else {
@@ -74,17 +102,19 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
         }
     }
 
-    // add error placeholder
     private fun loadAuthor(author: GifAuthorEntity?) {
         if (author == null) {
             binding.textAuthorName.text = resources.getString(R.string.giphy)
             Glide.with(requireContext())
                 .load(R.drawable.giphy)
+                .error(R.drawable.account_loading_error)
                 .into(binding.accountImage)
         } else {
             binding.textAuthorName.text = author.username
             Glide.with(requireContext())
                 .load(author.avatarUrl)
+                .placeholder(R.drawable.account_placeholder)
+                .error(R.drawable.account_loading_error)
                 .into(binding.accountImage)
         }
     }

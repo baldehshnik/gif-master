@@ -11,6 +11,7 @@ import com.vd.study.account.domain.exceptions.NothingFoundException
 import com.vd.study.account.domain.usecase.ReadLikedGifsCountUseCase
 import com.vd.study.account.domain.usecase.ReadLikedGifsUseCase
 import com.vd.study.account.domain.usecase.ReadSavedAccountUseCase
+import com.vd.study.account.presentation.router.AccountRouter
 import com.vd.study.core.container.Result
 import com.vd.study.core.presentation.viewmodel.BaseViewModel
 import dagger.assisted.Assisted
@@ -23,6 +24,7 @@ class AccountViewModel @AssistedInject constructor(
     private val readLikedGifsCountUseCase: ReadLikedGifsCountUseCase,
     private val readLikedGifsUseCase: ReadLikedGifsUseCase,
     private val readSavedAccountUseCase: ReadSavedAccountUseCase,
+    private val router: AccountRouter,
     @Assisted("email") private val email: String
 ) : BaseViewModel() {
 
@@ -34,6 +36,10 @@ class AccountViewModel @AssistedInject constructor(
 
     private val _likedGifsLiveValue = MutableLiveData<Result<List<GifEntity>>>()
     val likedGifsLiveData: LiveData<Result<List<GifEntity>>> get() = _likedGifsLiveValue
+
+    fun navigateToViewingFragment(gif: GifEntity) {
+        router.navigateToViewingFragment(gif)
+    }
 
     fun readLikedGifsCount() {
         viewModelScope.launch {

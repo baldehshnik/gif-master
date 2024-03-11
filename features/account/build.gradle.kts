@@ -53,6 +53,8 @@ dependencies {
     implementation(Build.Libs.Android.FragmentKtx)
     implementation(Build.Libs.Android.Paging)
 
+    implementation(Build.Libs.Image.Glide)
+
     implementation(Build.Libs.Google.Material)
     implementation(Build.Libs.Google.Hilt)
     kapt(Build.Libs.Google.HiltCompiler)

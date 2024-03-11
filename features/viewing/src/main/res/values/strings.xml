@@ -5,6 +5,7 @@
     <string name="like">Like</string>
     <string name="provided_by_giphy">Provided by GIPHY</string>
     <string name="giphy">GIPHY</string>
+    <string name="viewing_gif_not_initialized">Viewing gif can\'t be viewed</string>
 
 
     <string name="button_back_description">Used to return to HomeFragment</string>

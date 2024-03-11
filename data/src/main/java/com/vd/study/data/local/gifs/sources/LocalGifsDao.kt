@@ -38,9 +38,24 @@ interface LocalGifsDao {
     suspend fun updateOrInsert(gif: LocalGifDataEntity): Long {
         val insertedGif: LocalGifDataEntity? = readGifById(gif.id)
         return if (insertedGif == null) {
-            writeGif(gif)
+            writeGif(gif.copy(id = 0))
         } else {
-            updateGif(gif).toLong()
+            updateGif(
+                insertedGif.copy(
+                    isLiked = gif.isLiked,
+                    isSaved = gif.isSaved
+                )
+            ).toLong()
         }
     }
 }
+
+
+
+
+
+
+
+
+
+

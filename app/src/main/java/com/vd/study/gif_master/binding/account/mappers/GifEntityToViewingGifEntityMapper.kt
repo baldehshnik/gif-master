@@ -1,16 +1,16 @@
-package com.vd.study.gif_master.binding.home.mappers
+package com.vd.study.gif_master.binding.account.mappers
 
-import com.vd.study.viewing.domain.entities.GifEntity
+import com.vd.study.account.domain.entities.GifEntity
+import com.vd.study.viewing.domain.entities.GifEntity as ViewingGifEntity
 import com.vd.study.core.mapper.Mapper
-import com.vd.study.home.domain.entities.FullGifEntity
 import javax.inject.Inject
 
-class FullGifEntityToViewingGifEntityMapper @Inject constructor(
+class GifEntityToViewingGifEntityMapper @Inject constructor(
     private val gifAuthorEntityToViewingGifAuthorEntityMapper: GifAuthorEntityToViewingGifAuthorEntityMapper
-) : Mapper<FullGifEntity, GifEntity> {
+) : Mapper<GifEntity, ViewingGifEntity> {
 
-    override fun map(input: FullGifEntity): GifEntity {
-        return GifEntity(
+    override fun map(input: GifEntity): ViewingGifEntity {
+        return ViewingGifEntity(
             input.id,
             input.title,
             input.url,
