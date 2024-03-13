@@ -1,0 +1,9 @@
+<resources>
+
+    <string name="hint_enter_words_here">Enter words here</string>
+    <string name="field_must_not_be_empty">Field must not be empty</string>
+
+    <string name="button_back_description">Return to the home fragment</string>
+    <string name="button_search_description">Read gifs by a query</string>
+
+</resources>

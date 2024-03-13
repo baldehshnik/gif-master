@@ -14,4 +14,6 @@ interface RemoteGifsDataRepository {
 
     suspend fun pagingReadGifs(): Flow<PagingData<RemoteGifDataEntity>>
 
+    suspend fun pagingReadSearchGifs(query: String): Flow<PagingData<RemoteGifDataEntity>>
+
 }

@@ -2,25 +2,22 @@ package com.vd.study.home.presentations.fragment
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
-import com.bumptech.glide.Glide
-import com.google.android.material.imageview.ShapeableImageView
 import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.home.R
 import com.vd.study.home.databinding.FragmentHomeBinding
 import com.vd.study.home.domain.entities.FullGifEntity
 import com.vd.study.home.presentations.adapter.OnGifItemClickListener
-import com.vd.study.home.presentations.adapter.TestAdapter
+import com.vd.study.home.presentations.adapter.GifsAdapter
 import com.vd.study.home.presentations.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -30,7 +27,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
 
     private val viewModel by viewModels<HomeViewModel>()
 
-    private var testAdapter: TestAdapter? = null
+    private var gifsAdapter: GifsAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,7 +41,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
     }
 
     override fun onDestroyView() {
-        testAdapter = null
+        gifsAdapter = null
         super.onDestroyView()
     }
 
@@ -66,8 +63,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
 
     private fun initUI() {
         setProgressVisibility(true)
-        testAdapter = TestAdapter(this)
-        binding.listGifs.adapter = testAdapter
+        gifsAdapter = GifsAdapter(this)
+        binding.listGifs.adapter = gifsAdapter
     }
 
     private fun handleUpdateResult(updatedGif: FullGifEntity?) {
@@ -80,8 +77,10 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
 
     private fun handleReadingResult(data: PagingData<FullGifEntity>) {
         lifecycleScope.launch {
+            launch { gifsAdapter?.submitData(data) }
+
+            delay(500L)
             setProgressVisibility(false)
-            testAdapter?.submitData(data)
         }
     }
 

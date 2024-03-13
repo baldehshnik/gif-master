@@ -21,4 +21,10 @@ interface GifsApiService {
     @GET("${GiphyCore.TrendingEndpoint}?api_key=${BuildConfig.GIPHY_API_KEY}")
     fun readGifs(@Query("offset") offset: Int): Call<GifsListDataEntity>
 
+    @GET("${GiphyCore.SearchEndpoint}?api_key=${BuildConfig.GIPHY_API_KEY}")
+    fun readSearchGifs(
+        @Query("q") q: String,
+        @Query("offset") offset: Int
+    ): Call<GifsListDataEntity>
+
 }

@@ -1,10 +1,14 @@
 package com.vd.study.gif_master.presentation.router
 
+import android.util.Log
 import androidx.annotation.IdRes
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.vd.study.gif_master.R
 import com.vd.study.gif_master.presentation.activity.ActivityRequired
 import com.vd.study.gif_master.presentation.activity.MainActivity
@@ -34,6 +38,10 @@ class GlobalNavComponentRouter @Inject constructor() : ActivityRequired {
 
     fun launch(direction: NavDirections) {
         getRootNavController().navigate(direction)
+    }
+
+    fun changeBottomAppBarVisibility(isVisible: Boolean) {
+        (activity as MainActivity?)?.changeBottomBarVisibility(isVisible)
     }
 
     fun popToInclusive(@IdRes destinationId: Int) {

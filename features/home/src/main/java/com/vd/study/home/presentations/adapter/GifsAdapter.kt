@@ -1,9 +1,7 @@
 package com.vd.study.home.presentations.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.annotation.DrawableRes
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -15,23 +13,22 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import com.vd.study.home.R
+import com.vd.study.core.presentation.animation.loadAnimation
 import com.vd.study.home.databinding.TestItemBinding
 import com.vd.study.home.domain.entities.FullGifEntity
+import com.vd.study.core.R as CoreResources
 
-// change name
-class TestAdapter(
+class GifsAdapter(
     private val listener: OnGifItemClickListener
-) : PagingDataAdapter<FullGifEntity, TestAdapter.TestViewHolder>(GifDiffUtil()) {
+) : PagingDataAdapter<FullGifEntity, GifsAdapter.GifsViewHolder>(GifDiffUtil()) {
 
     private val gradients = listOf(
-        R.drawable.placeholder_voilet_gradient,
-        R.drawable.placeholder_red_gradient,
-        R.drawable.placeholder_blue_gradient
+        CoreResources.drawable.placeholder_voilet_gradient,
+        CoreResources.drawable.placeholder_red_gradient,
+        CoreResources.drawable.placeholder_blue_gradient
     )
 
-    // change name
-    class TestViewHolder(private val binding: TestItemBinding) :
+    class GifsViewHolder(private val binding: TestItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
@@ -42,8 +39,9 @@ class TestAdapter(
                 .skipMemoryCache(false)
                 .format(DecodeFormat.PREFER_RGB_565)
                 .override(Target.SIZE_ORIGINAL)
+                .timeout(10000)
                 .placeholder(placeholder)
-                .error(R.drawable.giphy)
+                .error(CoreResources.drawable.giphy)
                 .centerCrop()
 
             val requestBuilder: RequestBuilder<GifDrawable> = Glide.with(this.gif.context)
@@ -59,23 +57,18 @@ class TestAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TestViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = TestItemBinding.inflate(inflater, parent, false)
-        return TestViewHolder(binding)
+        return GifsViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: TestViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: GifsViewHolder, position: Int) {
         val account: FullGifEntity? = getItem(position)
         if (account != null) {
             holder.bind(account, listener, gradients.random())
-            startAnimation(holder.itemView)
+            holder.itemView.loadAnimation(CoreResources.anim.list_gif_item)
         }
-    }
-
-    private fun startAnimation(view: View) {
-        val animation = AnimationUtils.loadAnimation(view.context, R.anim.list_gif_item)
-        view.startAnimation(animation)
     }
 
     class GifDiffUtil : DiffUtil.ItemCallback<FullGifEntity>() {

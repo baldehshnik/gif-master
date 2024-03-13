@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.vd.study.core.global.ACCOUNT_ID_FIELD_NAME
@@ -42,13 +43,19 @@ class MainActivity : AppCompatActivity() {
             handleOnBottomMenuItemClick(it, navController)
         }
         binding.searchButton.setOnClickListener {
-
+            globalNavComponentRouter.launch(R.id.searchFragment)
+            changeBottomBarVisibility(false)
         }
     }
 
     override fun onDestroy() {
         globalNavComponentRouter.onDestroyed()
         super.onDestroy()
+    }
+
+    fun changeBottomBarVisibility(isVisible: Boolean) {
+        binding.bottomAppBar.isVisible = isVisible
+        binding.searchButton.isVisible = isVisible
     }
 
     private fun setAccountIdentifier() {

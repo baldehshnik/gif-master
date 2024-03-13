@@ -16,4 +16,8 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <item name="android:textColorPrimary">?colorPrimary</item>
+    </style>
+
 </resources>

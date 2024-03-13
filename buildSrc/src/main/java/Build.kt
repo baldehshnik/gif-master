@@ -67,6 +67,7 @@ object Build {
             const val Home = ":features:home"
             const val Settings = ":features:settings"
             const val Viewing = ":features:viewing"
+            const val Search = ":features:search"
         }
     }
 }

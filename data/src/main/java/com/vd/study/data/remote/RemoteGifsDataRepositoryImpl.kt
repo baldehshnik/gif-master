@@ -39,6 +39,10 @@ class RemoteGifsDataRepositoryImpl @Inject constructor(
         return@withContext dataSource.pagingReadGifs()
     }
 
+    override suspend fun pagingReadSearchGifs(query: String): Flow<PagingData<RemoteGifDataEntity>> = withContext(ioDispatcher) {
+        return@withContext dataSource.pagingReadSearchGifs(query)
+    }
+
     private inline fun <T> catchExceptionsOf(operation: () -> T): Result<T> {
         return try {
             val popularGifsListDataEntity = operation()

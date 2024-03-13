@@ -56,6 +56,7 @@ dependencies {
     implementation(project(Build.Modules.Features.Home))
     implementation(project(Build.Modules.Features.Settings))
     implementation(project(Build.Modules.Features.Viewing))
+    implementation(project(Build.Modules.Features.Search))
 
 //    implementation(Build.Libs.Image.Coil)
 //    implementation(Build.Libs.Image.CoilGif)

@@ -48,6 +48,18 @@ class GifsApiDataSource @Inject constructor(
         ).flow
     }
 
+    override suspend fun pagingReadSearchGifs(query: String): Flow<PagingData<RemoteGifDataEntity>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = MAX_ONCE_LOADING_GIFS_COUNT,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                SearchGifPagingDataSource(gifsApiService, ioDispatcher, query)
+            }
+        ).flow
+    }
+
     private fun <T> executeReadingWithCall(call: Call<T>): T {
         val response = try {
             call.execute()
