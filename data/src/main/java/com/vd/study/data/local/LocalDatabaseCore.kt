@@ -7,5 +7,4 @@ object LocalDatabaseCore {
     const val ACCOUNTS_TABLE_NAME = "accounts"
     const val GIFS_TABLE_NAME = "gifs"
 
-    const val GIF_UPDATED_TRIGGER_NAME = "gif_updated"
 }

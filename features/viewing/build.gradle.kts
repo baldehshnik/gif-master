@@ -53,6 +53,7 @@ dependencies {
     implementation(Build.Libs.Android.FragmentKtx)
     implementation(Build.Libs.Android.NavigationFragmentKtx)
     implementation(Build.Libs.Android.NavigationUIKtx)
+    implementation(Build.Libs.Android.WorkManager)
 
     implementation(Build.Libs.Image.Glide)
 

@@ -9,7 +9,8 @@ data class FullGifEntity(
     val author: GifAuthorEntity?,
     val rating: String,
     val isLiked: Boolean,
-    val isSaved: Boolean
+    val isSaved: Boolean,
+    val isViewed: Boolean
 ) {
 
     companion object {
@@ -25,7 +26,8 @@ data class FullGifEntity(
                 author = gifEntity.author,
                 rating = gifEntity.rating,
                 isLiked = status.isLiked,
-                isSaved = status.isSaved
+                isSaved = status.isSaved,
+                isViewed = status.isViewed
             )
         }
     }

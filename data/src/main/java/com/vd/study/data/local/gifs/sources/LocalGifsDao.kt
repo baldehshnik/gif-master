@@ -6,7 +6,10 @@ import androidx.room.Query
 import androidx.room.Update
 import com.vd.study.data.local.LocalDatabaseCore
 import com.vd.study.data.local.gifs.entities.LocalGifDataEntity
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Dao
 interface LocalGifsDao {
@@ -17,10 +20,13 @@ interface LocalGifsDao {
     @Update
     suspend fun updateGif(gif: LocalGifDataEntity): Int
 
-    @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_liked = 1")
+    @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_liked = 1 ORDER BY id ASC")
     fun readLikedGifs(accountId: Int): Flow<List<LocalGifDataEntity>>
 
-    @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_saved = 1")
+    @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_viewed = 1 ORDER BY id ASC")
+    fun readViewedGifs(accountId: Int): Flow<List<LocalGifDataEntity>>
+
+    @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_saved = 1 ORDER BY id ASC")
     fun readSavedGifs(accountId: Int): Flow<List<LocalGifDataEntity>>
 
     @Query("SELECT COUNT(*) FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_liked = 1")
@@ -35,27 +41,51 @@ interface LocalGifsDao {
     @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND source_url = :url LIMIT 1")
     suspend fun readGifByUrl(accountId: Int, url: String): LocalGifDataEntity
 
-    suspend fun updateOrInsert(gif: LocalGifDataEntity): Long {
-        val insertedGif: LocalGifDataEntity? = readGifById(gif.id)
+    @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id =:accountId AND source_url = :url LIMIT 1")
+    suspend fun hasGif(accountId: Int, url: String): LocalGifDataEntity?
+
+    @Query(
+        "UPDATE ${LocalDatabaseCore.GIFS_TABLE_NAME} SET is_viewed = 0 WHERE account_id = :accountId AND id IN (" +
+                "SELECT id FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId " +
+                "ORDER BY id ASC LIMIT 200)"
+    )
+    suspend fun clearViewedGifs(accountId: Int)
+
+    @Query(
+        "DELETE FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} " +
+                "WHERE account_id = :accountId AND is_viewed = 0 AND is_liked = 0 AND is_saved = 0"
+    )
+    suspend fun clearDatabaseFromCache(accountId: Int)
+
+    @Query("SELECT COUNT(*) FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_viewed = 1")
+    suspend fun readViewedGifsCount(accountId: Int): Int
+
+    suspend fun updateOrInsert(gif: LocalGifDataEntity, ioDispatcher: CoroutineDispatcher): Long {
+        val insertedGif = hasGif(gif.accountId, gif.url)
         return if (insertedGif == null) {
-            writeGif(gif.copy(id = 0))
+            val result = writeGif(gif.copy(id = 0))
+            clearDatabase(ioDispatcher, gif.accountId)
+            result
         } else {
             updateGif(
                 insertedGif.copy(
                     isLiked = gif.isLiked,
-                    isSaved = gif.isSaved
+                    isSaved = gif.isSaved,
+                    isViewed = gif.isViewed
                 )
             ).toLong()
         }
     }
+
+    private suspend fun clearDatabase(ioDispatcher: CoroutineDispatcher, accountId: Int) {
+        withContext(ioDispatcher) {
+            launch(ioDispatcher) {
+                val count = readViewedGifsCount(accountId)
+                if (count >= 500) {
+                    clearViewedGifs(accountId)
+                    clearDatabaseFromCache(accountId)
+                }
+            }
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-

@@ -8,5 +8,6 @@ data class GifEntity(
     val author: GifAuthorEntity?,
     val isLiked: Boolean,
     val isSaved: Boolean,
+    val isViewed: Boolean,
     val accountId: Int
 )

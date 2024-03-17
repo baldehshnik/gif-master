@@ -18,6 +18,7 @@ class GifEntityMapper @Inject constructor(
             authorEntityMapper.map(input.author),
             input.isLiked,
             input.isSaved,
+            input.isViewed,
             input.accountId
         )
     }

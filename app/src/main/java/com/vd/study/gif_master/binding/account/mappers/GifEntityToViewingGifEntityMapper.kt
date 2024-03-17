@@ -17,7 +17,8 @@ class GifEntityToViewingGifEntityMapper @Inject constructor(
             gifAuthorEntityToViewingGifAuthorEntityMapper.map(input.author),
             input.rating,
             input.isLiked,
-            input.isSaved
+            input.isSaved,
+            input.isViewed
         )
     }
 }

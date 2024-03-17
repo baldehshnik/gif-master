@@ -1,5 +1,6 @@
 package com.vd.study.account.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,7 @@ import com.vd.study.account.domain.exceptions.NothingFoundException
 import com.vd.study.account.domain.usecase.ReadLikedGifsCountUseCase
 import com.vd.study.account.domain.usecase.ReadLikedGifsUseCase
 import com.vd.study.account.domain.usecase.ReadSavedAccountUseCase
+import com.vd.study.account.domain.usecase.ReadViewedGifsUseCase
 import com.vd.study.account.presentation.router.AccountRouter
 import com.vd.study.core.container.Result
 import com.vd.study.core.presentation.viewmodel.BaseViewModel
@@ -23,6 +25,7 @@ import kotlinx.coroutines.launch
 class AccountViewModel @AssistedInject constructor(
     private val readLikedGifsCountUseCase: ReadLikedGifsCountUseCase,
     private val readLikedGifsUseCase: ReadLikedGifsUseCase,
+    private val readViewedGifsUseCase: ReadViewedGifsUseCase,
     private val readSavedAccountUseCase: ReadSavedAccountUseCase,
     private val router: AccountRouter,
     @Assisted("email") private val email: String
@@ -36,6 +39,9 @@ class AccountViewModel @AssistedInject constructor(
 
     private val _likedGifsLiveValue = MutableLiveData<Result<List<GifEntity>>>()
     val likedGifsLiveData: LiveData<Result<List<GifEntity>>> get() = _likedGifsLiveValue
+
+    private val _viewedGifsLiveValue = MutableLiveData<Result<List<GifEntity>>>()
+    val viewedGifsLiveData: LiveData<Result<List<GifEntity>>> get() = _viewedGifsLiveValue
 
     fun navigateToViewingFragment(gif: GifEntity) {
         router.navigateToViewingFragment(gif)
@@ -52,10 +58,16 @@ class AccountViewModel @AssistedInject constructor(
 
     fun readLikedGifs() {
         viewModelScope.launch {
+            Log.i("MYTAG", "reading my")
             showProgress(_likedGifsLiveValue)
+            handleGifsReadingResult(readLikedGifsUseCase(), _likedGifsLiveValue)
+        }
+    }
 
-            val gifsResult = readLikedGifsUseCase()
-            handleLikedGifsReadingResult(gifsResult)
+    fun readViewedGifs() {
+        viewModelScope.launch {
+            showProgress(_viewedGifsLiveValue)
+            handleGifsReadingResult(readViewedGifsUseCase(), _viewedGifsLiveValue)
         }
     }
 
@@ -68,28 +80,54 @@ class AccountViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun handleLikedGifsReadingResult(answer: Result<Flow<List<GifEntity>>>) {
+    private suspend fun handleGifsReadingResult(
+        answer: Result<Flow<List<GifEntity>>>,
+        liveData: MutableLiveData<Result<List<GifEntity>>>
+    ) {
         when (answer) {
             Result.Progress -> {
-                _likedGifsLiveValue.value = Result.Progress
+                liveData.value = Result.Progress
             }
 
             is Result.Error -> {
-                _likedGifsLiveValue.value = answer.map { it }
+                liveData.value = answer.map { it }
             }
 
             is Result.Correct -> {
                 val value = answer.getOrNull()
                 if (value != null) {
                     value.collect {
-                        _likedGifsLiveValue.value = Result.Correct(it)
+                        liveData.value = Result.Correct(it)
                     }
                 } else {
-                    _likedGifsLiveValue.value = Result.Error(NothingFoundException())
+                    liveData.value = Result.Error(NothingFoundException())
                 }
             }
         }
     }
+
+//    private suspend fun handleLikedGifsReadingResult(answer: Result<Flow<List<GifEntity>>>) {
+//        when (answer) {
+//            Result.Progress -> {
+//                _likedGifsLiveValue.value = Result.Progress
+//            }
+//
+//            is Result.Error -> {
+//                _likedGifsLiveValue.value = answer.map { it }
+//            }
+//
+//            is Result.Correct -> {
+//                val value = answer.getOrNull()
+//                if (value != null) {
+//                    value.collect {
+//                        _likedGifsLiveValue.value = Result.Correct(it)
+//                    }
+//                } else {
+//                    _likedGifsLiveValue.value = Result.Error(NothingFoundException())
+//                }
+//            }
+//        }
+//    }
 
     private fun <T> showProgress(liveValue: MutableLiveData<Result<T>>) {
         liveValue.value = Result.Progress

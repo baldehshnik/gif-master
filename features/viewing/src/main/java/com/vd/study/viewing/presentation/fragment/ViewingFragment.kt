@@ -6,6 +6,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.viewbinding.viewBinding
@@ -14,6 +16,7 @@ import com.vd.study.viewing.databinding.FragmentViewingBinding
 import com.vd.study.viewing.domain.entities.GifAuthorEntity
 import com.vd.study.viewing.domain.entities.GifEntity
 import com.vd.study.viewing.presentation.viewmodel.ViewingViewModel
+import com.vd.study.viewing.presentation.worker.GifWorker
 import dagger.hilt.android.AndroidEntryPoint
 import com.vd.study.core.R as CoreResources
 
@@ -41,6 +44,17 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
             loadUI()
             setLikeColor()
             setListeners()
+            saveViewingGif()
+        }
+    }
+
+    private fun saveViewingGif() {
+        if (!gif.isViewed) {
+            _gif = gif.copy(isViewed = true)
+            val updateGifWorkRequest = OneTimeWorkRequestBuilder<GifWorker>()
+                .setInputData(gif.createWorkData())
+                .build()
+            WorkManager.getInstance(requireContext()).enqueue(updateGifWorkRequest)
         }
     }
 
@@ -71,14 +85,20 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
         requireContext().showToast(gif.isLiked.toString())
         setLikeColor()
 
-        viewModel.updateGif(gif)
+        val updateGifWorkRequest = OneTimeWorkRequestBuilder<GifWorker>()
+            .setInputData(gif.createWorkData())
+            .build()
+        WorkManager.getInstance(requireContext()).enqueue(updateGifWorkRequest)
     }
 
     private fun handleGifSave() {
         _gif = gif.copy(isSaved = !gif.isSaved)
         binding.btnSave.setImageResource(if (gif.isSaved) R.drawable.round_bookmark else R.drawable.round_bookmark_border)
 
-        viewModel.updateGif(gif)
+        val updateGifWorkRequest = OneTimeWorkRequestBuilder<GifWorker>()
+            .setInputData(gif.createWorkData())
+            .build()
+        WorkManager.getInstance(requireContext()).enqueue(updateGifWorkRequest)
     }
 
     private fun shareGif() {

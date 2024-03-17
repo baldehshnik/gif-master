@@ -56,6 +56,8 @@ dependencies {
     implementation(Build.Libs.Android.RoomKtx)
     kapt(Build.Libs.Android.RoomCompiler)
 
+    implementation(Build.Libs.Android.Coroutines)
+
     implementation(Build.Libs.Google.Material)
     implementation(Build.Libs.Google.Hilt)
     kapt(Build.Libs.Google.HiltCompiler)

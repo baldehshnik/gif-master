@@ -6,8 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.vd.study.account.databinding.LikedGifItemBinding
 import com.vd.study.account.domain.entities.GifEntity
+import com.vd.study.core.R
 
 interface OnLikedGifItemClickListener {
     fun onClick(gif: GifEntity)
@@ -22,11 +29,26 @@ class LikedGifsAdapter(
 
         // fix image loading and design
         fun bind(gif: GifEntity, listener: OnLikedGifItemClickListener) = with(binding) {
-            Glide.with(binding.imageGif.context)
-                .load(gif.url)
-                .into(binding.imageGif)
+            val requestOptions: RequestOptions = RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .skipMemoryCache(false)
+                .format(DecodeFormat.PREFER_RGB_565)
+                .override(Target.SIZE_ORIGINAL)
+                .timeout(10000)
+//                .placeholder(placeholder)
+                .error(R.drawable.giphy)
+                .centerCrop()
 
-            root.setOnClickListener { listener.onClick(gif) }
+            val requestBuilder: RequestBuilder<GifDrawable> = Glide.with(imageGif.context)
+                .asGif()
+                .load(gif.url)
+                .apply(requestOptions)
+
+            requestBuilder.into(imageGif)
+
+            root.setOnClickListener {
+                listener.onClick(gif)
+            }
         }
     }
 

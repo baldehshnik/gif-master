@@ -14,6 +14,8 @@ interface LocalGifsDataRepository {
 
     fun readLikedGifs(accountId: Int): Result<Flow<List<LocalGifDataEntity>>>
 
+    fun readViewedGifs(accountId: Int): Result<Flow<List<LocalGifDataEntity>>>
+
     fun readSavedGifs(accountId: Int): Result<Flow<List<LocalGifDataEntity>>>
 
     suspend fun readGifByUrl(accountId: Int, sourceUrl: String): Result<LocalGifDataEntity>

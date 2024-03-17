@@ -7,6 +7,7 @@ import com.vd.study.data.local.gifs.entities.LocalGifAuthorDataEntity
 import com.vd.study.data.local.gifs.entities.LocalGifDataEntity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -329,7 +330,7 @@ class LocalGifsDaoTest {
         val gif = createGifEntities(1)[0]
 
         val insertedAccountId = accountDao.writeAccount(account)
-        val answer = gifsDao.updateOrInsert(gif)
+        val answer = gifsDao.updateOrInsert(gif, Dispatchers.IO)
         val insertedGif = gifsDao.readGifById(1)
 
         assertEquals(1, insertedAccountId)
@@ -348,7 +349,7 @@ class LocalGifsDaoTest {
         val insertedAccountId = accountDao.writeAccount(account)
         val insertedGifId = gifsDao.writeGif(gif)
         val insertedGif = gifsDao.readGifById(1)
-        val updatedGifId = gifsDao.updateOrInsert(insertedGif!!.copy(title = "new title"))
+        val updatedGifId = gifsDao.updateOrInsert(insertedGif!!.copy(title = "new title"), Dispatchers.IO)
         val updatedGif = gifsDao.readGifById(1)
         val gifsCount = gifsDao.readSavedGifsCount(1)
 
@@ -448,7 +449,8 @@ class LocalGifsDaoTest {
                 rating = "rating $i",
                 isLiked = false,
                 isSaved = true,
-                accountId = 1
+                accountId = 1,
+                isViewed = true
             )
         }
 

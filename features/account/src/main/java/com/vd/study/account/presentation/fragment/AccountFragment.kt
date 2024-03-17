@@ -79,7 +79,7 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
 
     private fun changeScreenVisibility(isProgress: Boolean) {
         binding.screenProgress.isVisible = isProgress
-//        binding.screen.isVisible = !isProgress
+        binding.screen.isVisible = !isProgress
     }
 
     private fun changeLikedGifsReadingVisibility(isProgress: Boolean) {

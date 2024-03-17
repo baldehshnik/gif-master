@@ -7,6 +7,7 @@ import com.vd.study.core.container.Result
 import com.vd.study.core.global.AccountIdentifier
 import com.vd.study.data.AccountsDataRepository
 import com.vd.study.data.LocalGifsDataRepository
+import com.vd.study.data.local.gifs.entities.LocalGifDataEntity
 import com.vd.study.gif_master.binding.account.mappers.AccountEntityMapper
 import com.vd.study.gif_master.binding.account.mappers.GifEntityMapper
 import kotlinx.coroutines.flow.Flow
@@ -28,14 +29,22 @@ class AccountAdapterRepository @Inject constructor(
     }
 
     override suspend fun readLikedGifs(): Result<Flow<List<GifEntity>>> {
-        return gifsDataRepository.readLikedGifs(accountIdentifier.accountIdentifier).suspendMap { flow ->
-            flow.map { items ->
-                items.map(gifEntityMapper::map)
-            }
-        }
+        return gifsDataRepository.readLikedGifs(accountIdentifier.accountIdentifier)
+            .suspendMap(::flowMapping)
+    }
+
+    override suspend fun readViewedGifs(): Result<Flow<List<GifEntity>>> {
+        return gifsDataRepository.readViewedGifs(accountIdentifier.accountIdentifier)
+            .suspendMap(::flowMapping)
     }
 
     override suspend fun readLikedGifsCount(): Result<Int> {
         return gifsDataRepository.readLikedGifsCount(accountIdentifier.accountIdentifier)
+    }
+
+    private fun flowMapping(flow: Flow<List<LocalGifDataEntity>>): Flow<List<GifEntity>> {
+        return flow.map { items ->
+            items.map(gifEntityMapper::map)
+        }
     }
 }

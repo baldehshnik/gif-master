@@ -58,14 +58,12 @@ dependencies {
     implementation(project(Build.Modules.Features.Viewing))
     implementation(project(Build.Modules.Features.Search))
 
-//    implementation(Build.Libs.Image.Coil)
-//    implementation(Build.Libs.Image.CoilGif)
-
     implementation(Build.Libs.Android.CoreKtx)
     implementation(Build.Libs.Android.AppCompat)
     implementation(Build.Libs.Android.Paging)
     implementation(Build.Libs.Android.NavigationFragmentKtx)
     implementation(Build.Libs.Android.NavigationUIKtx)
+    implementation(Build.Libs.Android.WorkManager)
 
     implementation(Build.Libs.Google.Material)
     implementation(Build.Libs.Google.Hilt)

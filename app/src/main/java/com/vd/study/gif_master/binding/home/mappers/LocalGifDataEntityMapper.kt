@@ -20,7 +20,8 @@ class LocalGifDataEntityMapper @Inject constructor(
             url = input.url,
             isLiked = input.isLiked,
             isSaved = input.isSaved,
-            accountId = accountIdentifier.accountIdentifier
+            accountId = accountIdentifier.accountIdentifier,
+            isViewed = input.isViewed
         )
     }
 }

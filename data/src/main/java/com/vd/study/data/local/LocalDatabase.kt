@@ -9,7 +9,7 @@ import com.vd.study.data.local.gifs.sources.LocalGifsDao
 
 @Database(
     entities = [AccountDataEntity::class, LocalGifDataEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class LocalDatabase : RoomDatabase() {

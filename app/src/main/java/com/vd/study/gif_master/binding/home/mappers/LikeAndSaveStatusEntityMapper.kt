@@ -9,6 +9,6 @@ class LikeAndSaveStatusEntityMapper @Inject constructor() :
     Mapper<LocalGifDataEntity, LikeAndSaveStatusEntity> {
 
     override fun map(input: LocalGifDataEntity): LikeAndSaveStatusEntity {
-        return LikeAndSaveStatusEntity(input.id, input.isLiked, input.isSaved)
+        return LikeAndSaveStatusEntity(input.id, input.isLiked, input.isSaved, input.isViewed)
     }
 }

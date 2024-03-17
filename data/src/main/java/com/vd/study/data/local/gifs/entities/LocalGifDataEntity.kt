@@ -45,6 +45,9 @@ data class LocalGifDataEntity(
     @ColumnInfo(name = "is_saved")
     val isSaved: Boolean,
 
+    @ColumnInfo(name = "is_viewed")
+    val isViewed: Boolean,
+
     @ColumnInfo(name = "account_id", index = true)
     val accountId: Int
 )

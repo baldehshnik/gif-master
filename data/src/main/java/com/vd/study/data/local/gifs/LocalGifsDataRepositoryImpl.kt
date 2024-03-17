@@ -24,7 +24,7 @@ class LocalGifsDataRepositoryImpl @Inject constructor(
         withContext(ioDispatcher) {
             return@withContext executeDatabaseUpdating(
                 operation = {
-                    gifsDao.updateOrInsert(gif)
+                    gifsDao.updateOrInsert(gif, ioDispatcher)
                 }, error = Result.Error(FailedUpdateException())
             )
         }
@@ -46,6 +46,12 @@ class LocalGifsDataRepositoryImpl @Inject constructor(
     override fun readLikedGifs(accountId: Int): Result<Flow<List<LocalGifDataEntity>>> {
         return catchReadingExceptionOf {
             gifsDao.readLikedGifs(accountId)
+        }
+    }
+
+    override fun readViewedGifs(accountId: Int): Result<Flow<List<LocalGifDataEntity>>> {
+        return catchReadingExceptionOf {
+            gifsDao.readViewedGifs(accountId)
         }
     }
 

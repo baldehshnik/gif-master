@@ -21,7 +21,11 @@ object Build {
 
             const val FragmentKtx = "androidx.fragment:fragment-ktx:1.6.1"
 
+            const val Coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
+
             const val Paging = "androidx.paging:paging-runtime:3.2.1"
+
+            const val WorkManager = "androidx.work:work-runtime-ktx:2.7.0"
         }
 
         object Google {
