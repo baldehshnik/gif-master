@@ -9,5 +9,6 @@
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
 
-    <string name="incorrect">Incorrect</string>
+    <string name="reload_button_description">Reload accounts list</string>
+
 </resources>

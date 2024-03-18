@@ -17,17 +17,22 @@
             android:id="@+id/textSelectFrom"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
             android:gravity="center_horizontal"
             android:text="@string/select_from"
-            android:textSize="32sp"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listSavedAccounts"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="12dp"
+            android:minHeight="100dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textSelectFrom" />
@@ -41,13 +46,33 @@
             app:layout_constraintStart_toStartOf="@id/listSavedAccounts"
             app:layout_constraintTop_toTopOf="@id/listSavedAccounts" />
 
+        <ImageButton
+            android:id="@+id/btnReloadAccountsList"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/reload_button_description"
+            android:src="@drawable/round_replay"
+            android:tint="@color/black"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/listSavedAccounts"
+            app:layout_constraintEnd_toEndOf="@id/listSavedAccounts"
+            app:layout_constraintStart_toStartOf="@id/listSavedAccounts"
+            app:layout_constraintTop_toTopOf="@id/listSavedAccounts"
+            tools:ignore="UseAppTint" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textOrFill"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="16dp"
             android:gravity="center_horizontal"
             android:text="@string/or_fill"
-            android:textSize="32sp"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/emailEditTextLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/listSavedAccounts" />
@@ -56,7 +81,10 @@
             android:id="@+id/emailEditTextLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
+            android:layout_marginBottom="12dp"
             android:hint="@string/email"
+            app:layout_constraintBottom_toTopOf="@id/passwordEditTextLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textOrFill">
@@ -75,7 +103,9 @@
             android:id="@+id/passwordEditTextLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
             android:hint="@string/password"
+            app:layout_constraintBottom_toTopOf="@id/btnSignIn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/emailEditTextLayout">
@@ -95,16 +125,28 @@
             android:id="@+id/btnSignIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/black"
+            android:paddingHorizontal="40dp"
+            android:paddingVertical="12dp"
+            android:paddingTop="8dp"
             android:text="@string/sign_in"
+            android:textStyle="bold"
+            app:cornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/passwordEditTextLayout" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/btnSignUp"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="24dp"
             android:text="@string/sign_up"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnSignIn" />

@@ -19,8 +19,10 @@ import com.vd.study.core.global.ACCOUNT_ID_FIELD_NAME
 import com.vd.study.core.global.AccountIdentifier
 import com.vd.study.core.global.IS_ACCOUNT_ENTERED_FIELD_NAME
 import com.vd.study.core.global.SIGN_IN_SHARED_PREFERENCES_NAME
+import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.utils.PASSWORD_REGEX_STRING
 import com.vd.study.core.presentation.viewbinding.viewBinding
+import com.vd.study.core.R as CoreResources
 import com.vd.study.sign_in.R
 import com.vd.study.sign_in.databinding.FragmentSignInBinding
 import com.vd.study.sign_in.domain.entities.AccountEntity
@@ -65,6 +67,8 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         setEventsListener()
         readRegisteredAccounts()
 
+        viewModel.hideBottomBar()
+
         binding.listSavedAccounts.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.HORIZONTAL, false
         )
@@ -73,16 +77,23 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
         binding.emailEditText.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus && !isEmailInputCorrect()) {
-                setEditTextErrorMessage(binding.emailEditText, R.string.incorrect)
+                setEditTextErrorMessage(binding.emailEditText, CoreResources.string.incorrect)
             }
         }
         binding.passwordEditText.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus && !isPasswordInputCorrect()) {
-                setEditTextErrorMessage(binding.passwordEditText, R.string.incorrect)
+                setEditTextErrorMessage(binding.passwordEditText, CoreResources.string.incorrect)
             }
         }
 
         binding.btnSignUp.setOnClickListener { viewModel.navigateToRegistration() }
+        binding.btnReloadAccountsList.setOnClickListener { handleReloadClick() }
+    }
+
+    private fun handleReloadClick() {
+        binding.btnReloadAccountsList.isVisible = false
+        changeAccountsListVisibility(true)
+        viewModel.readRegisteredAccounts()
     }
 
     private fun readRegisteredAccounts() {
@@ -129,14 +140,16 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     }
 
     private fun handleSignInResult(result: Result<Int>) {
-        when(result) {
+        when (result) {
             Result.Progress -> {
                 binding.btnSignIn.isEnabled = false
             }
+
             is Result.Error -> {
                 binding.btnSignIn.isEnabled = true
-                // add
+                requireContext().showToast(resources.getString(CoreResources.string.error_try_again_later))
             }
+
             is Result.Correct -> {
                 signIn(result.getOrNull()!!)
                 binding.btnSignIn.isEnabled = true
@@ -145,14 +158,16 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     }
 
     private fun handleRegisteredAccountsReading(result: Result<List<AccountEntity>>) {
-        when(result) {
+        when (result) {
             Result.Progress -> {
                 changeAccountsListVisibility(true)
             }
+
             is Result.Error -> {
                 changeAccountsListVisibility(false)
-                // add
+                binding.btnReloadAccountsList.isVisible = true
             }
+
             is Result.Correct -> {
                 changeAccountsListVisibility(false)
                 correctAccountsReading(result.getOrNull())
@@ -167,18 +182,18 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
     private fun handleOnSignInClick() {
         if (!isEmailInputCorrect()) {
-            setEditTextErrorMessage(binding.emailEditText, R.string.incorrect)
+            setEditTextErrorMessage(binding.emailEditText, CoreResources.string.incorrect)
             return
         }
         if (!isPasswordInputCorrect()) {
-            setEditTextErrorMessage(binding.passwordEditText, R.string.incorrect)
+            setEditTextErrorMessage(binding.passwordEditText, CoreResources.string.incorrect)
             return
         }
 
         binding.btnSignIn.isEnabled = false
         val checkAccount = CheckAccountEntity(
-            email = binding.emailEditText.text!!.toString(),
-            password = binding.passwordEditText.text!!.toString()
+            binding.emailEditText.text!!.toString(),
+            binding.passwordEditText.text!!.toString()
         )
         viewModel.singIn(checkAccount)
     }

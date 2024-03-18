@@ -17,4 +17,8 @@ class AdapterSignUpRouter @Inject constructor(
         globalNavComponentRouter.popBackStack()
     }
 
+    override fun hideBottomBar() {
+        globalNavComponentRouter.changeBottomAppBarVisibility(false)
+    }
+
 }

@@ -56,6 +56,10 @@ class HomeViewModel @Inject constructor(
         router.navigateToViewingFragment(gif)
     }
 
+    fun showBottomBar() {
+        router.showBottomBar()
+    }
+
     private fun readGifs() {
         viewModelScope.launch {
             val result = pagingReadGifsUseCase().cachedIn(viewModelScope)

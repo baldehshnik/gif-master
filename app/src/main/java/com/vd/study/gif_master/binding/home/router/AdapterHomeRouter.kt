@@ -19,4 +19,8 @@ class AdapterHomeRouter @Inject constructor(
         globalNavComponentRouter.launch(action)
     }
 
+    override fun showBottomBar() {
+        globalNavComponentRouter.changeBottomAppBarVisibility(true)
+    }
+
 }

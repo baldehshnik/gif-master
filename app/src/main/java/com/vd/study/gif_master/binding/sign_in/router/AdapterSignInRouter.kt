@@ -18,4 +18,8 @@ class AdapterSignInRouter @Inject constructor(
         globalNavComponentRouter.launch(R.id.homeFragment)
     }
 
+    override fun hideBottomBar() {
+        globalNavComponentRouter.changeBottomAppBarVisibility(false)
+    }
+
 }

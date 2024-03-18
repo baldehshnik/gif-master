@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.vd.study.core.R as CoreResources
 import com.vd.study.sign_in.databinding.RegisteredAccountItemBinding
 import com.vd.study.sign_in.domain.entities.AccountEntity
 
@@ -20,6 +22,10 @@ class RegisteredAccountAdapter(
 
         fun bind(account: AccountEntity) = with(binding) {
             textAccountUsername.text = account.username
+
+            Glide.with(binding.imageRegisteredAccount.context)
+                .load(CoreResources.drawable.default_account_icon)
+                .into(binding.imageRegisteredAccount)
 
             root.setOnClickListener { onRegisteredAccountClickListener.onClick(account) }
         }

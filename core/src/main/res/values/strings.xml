@@ -4,6 +4,8 @@
     <string name="home">Home</string>
     <string name="account">Account</string>
     <string name="error">Error</string>
+    <string name="error_try_again_later">Error! Try again later</string>
+    <string name="incorrect">Incorrect</string>
 
     <string name="search_button_description">open fragment for searching gifs by keywords</string>
 </resources>

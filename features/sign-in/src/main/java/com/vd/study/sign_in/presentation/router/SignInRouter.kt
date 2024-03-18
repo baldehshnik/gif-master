@@ -6,4 +6,6 @@ interface SignInRouter {
 
     fun navigateToMain()
 
+    fun hideBottomBar()
+
 }

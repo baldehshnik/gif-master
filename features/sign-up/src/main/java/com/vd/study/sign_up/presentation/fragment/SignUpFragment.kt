@@ -8,10 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputEditText
 import com.vd.study.core.container.Result
+import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.utils.PASSWORD_REGEX_STRING
 import com.vd.study.core.presentation.utils.USERNAME_REGEX_STRING
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.sign_up.R
+import com.vd.study.core.R as CoreResources
 import com.vd.study.sign_up.databinding.FragmentSignUpBinding
 import com.vd.study.sign_up.domain.entities.AccountEntity
 import com.vd.study.sign_up.presentation.viewmodel.SignUpViewModel
@@ -19,6 +21,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
+
+    private var isProgress = false
 
     private val emailPattern = Patterns.EMAIL_ADDRESS
 
@@ -28,6 +32,8 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.hideBottomBar()
 
         binding.btnNext.setOnClickListener { handleNextClick() }
         binding.btnBack.setOnClickListener { handleBackClick() }
@@ -51,19 +57,26 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     private fun handleRegistrationResult(result: Result<AccountEntity>) {
         when (result) {
             Result.Progress -> {
-                // add
+                changeRegistrationVisibility(true)
             }
 
             is Result.Error -> {
-                // add
+                changeRegistrationVisibility(false)
+                requireContext().showToast(resources.getString(CoreResources.string.error_try_again_later))
             }
 
             is Result.Correct -> {
-                // fix
-                val account = result.getOrNull()!!
+                changeRegistrationVisibility(false)
+                result.getOrNull()
+                    ?: requireContext().showToast(resources.getString(CoreResources.string.error_try_again_later))
                 viewModel.navigateToMain()
             }
         }
+    }
+
+    private fun changeRegistrationVisibility(isProgress: Boolean) = with(binding) {
+        this@SignUpFragment.isProgress = isProgress
+        registrationProgress.isVisible = isProgress
     }
 
     private fun isUsernameInputCorrect(): Boolean {
@@ -86,22 +99,24 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         hasFocus: Boolean
     ) {
         if (!hasFocus) {
-            if (!matchResult) {
-                editText.error = resources.getString(R.string.incorrect)
-            } else {
-                editText.error = null
-            }
+            editText.error = if (!matchResult) resources.getString(CoreResources.string.incorrect) else null
         }
     }
 
     private fun handleRegisterClick() {
+        if (isProgress) return
         val account = AccountEntity(
-            username = binding.usernameEditText.text?.toString() ?: "",
-            avatarUrl = "url",
-            email = binding.emailEditText.text?.toString() ?: "",
-            password = binding.passwordEditText.text?.toString() ?: ""
+            username = binding.usernameEditText.text.toString(),
+            avatarUrl = getAccountIconUrl(),
+            email = binding.emailEditText.text.toString(),
+            password = binding.passwordEditText.text.toString()
         )
         viewModel.registerAccount(account)
+    }
+
+    // add handler
+    private fun getAccountIconUrl(): String {
+        return "url"
     }
 
     private fun handleBackClick() {
@@ -110,30 +125,43 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             return
         }
 
-        binding.imageAccount.setImageResource(0)
+        binding.imageAccount.setImageResource(R.drawable.add_a_photo)
         setImageSelectionScreenVisibility()
         setEditTextFieldsVisibility()
+        changeRegistrationVisibility(false)
     }
 
     private fun handleNextClick() {
+        var flag = true
         if (!isUsernameInputCorrect()) {
             setEditTextFieldsVisibility(isEmailFieldVisible = false, isPasswordFieldVisible = false)
             binding.usernameEditText.requestFocus()
+            showEditTextError(binding.usernameEditText)
             return
         } else {
-            setEditTextFieldsVisibility(isPasswordFieldVisible = false)
+            if (!binding.emailEditTextLayout.isVisible) {
+                setEditTextFieldsVisibility(isPasswordFieldVisible = false)
+                flag = false
+            }
         }
 
         if (!isEmailInputCorrect()) {
+            if (flag) showEditTextError(binding.emailEditText)
+
             setEditTextFieldsVisibility(isPasswordFieldVisible = false)
             binding.passwordEditText.text?.clear()
             binding.emailEditText.requestFocus()
             return
         } else {
-            setEditTextFieldsVisibility()
+            if (!binding.passwordEditTextLayout.isVisible) {
+                setEditTextFieldsVisibility()
+                flag = false
+            }
         }
 
         if (!isPasswordInputCorrect()) {
+            if (flag) showEditTextError(binding.passwordEditText)
+
             binding.passwordEditText.text?.clear()
             binding.passwordEditText.requestFocus()
         } else {
@@ -142,6 +170,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                 isEmailFieldVisible = false,
                 isPasswordFieldVisible = false
             )
+
             setImageSelectionScreenVisibility(
                 isRegisterButtonVisible = true,
                 isImageAccountVisible = true
@@ -149,12 +178,16 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         }
     }
 
+    private fun showEditTextError(editText: TextInputEditText) {
+        editText.error = resources.getString(CoreResources.string.incorrect)
+    }
+
     private fun setImageSelectionScreenVisibility(
         isRegisterButtonVisible: Boolean = false,
         isImageAccountVisible: Boolean = false
     ) = with(binding) {
         btnRegister.isVisible = isRegisterButtonVisible
-        imageAccount.isVisible = isImageAccountVisible
+        imageCard.isVisible = isImageAccountVisible
     }
 
     private fun setEditTextFieldsVisibility(
@@ -165,5 +198,6 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         usernameEditTextLayout.isVisible = isUsernameFieldVisible
         emailEditTextLayout.isVisible = isEmailFieldVisible
         passwordEditTextLayout.isVisible = isPasswordFieldVisible
+        btnNext.isVisible = isUsernameFieldVisible || isEmailFieldVisible || isPasswordFieldVisible
     }
 }

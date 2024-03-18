@@ -54,6 +54,8 @@ dependencies {
     implementation(Build.Libs.Android.NavigationFragmentKtx)
     implementation(Build.Libs.Android.NavigationUIKtx)
 
+    implementation(Build.Libs.Image.Glide)
+
     implementation(Build.Libs.Google.Material)
     implementation(Build.Libs.Google.Hilt)
     kapt(Build.Libs.Google.HiltCompiler)

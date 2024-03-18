@@ -6,4 +6,6 @@ interface SignUpRouter {
 
     fun popUpToSignIn()
 
+    fun hideBottomBar()
+
 }

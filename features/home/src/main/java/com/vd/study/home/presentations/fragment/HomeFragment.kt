@@ -62,6 +62,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
     }
 
     private fun initUI() {
+        viewModel.showBottomBar()
         setProgressVisibility(true)
         gifsAdapter = GifsAdapter(this)
         binding.listGifs.adapter = gifsAdapter

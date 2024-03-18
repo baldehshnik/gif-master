@@ -63,6 +63,10 @@ class SignInViewModel @Inject constructor(
         }
     }
 
+    fun hideBottomBar() {
+        signInRouter.hideBottomBar()
+    }
+
     fun hideProgress() {
         isOperationInProgress.value = false
     }

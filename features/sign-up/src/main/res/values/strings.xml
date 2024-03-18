@@ -3,6 +3,8 @@
     <string name="sign_up_empty_field">Field is empty</string>
     <string name="sign_up_incorrect_email">Email format is incorrect</string>
     <string name="sign_up_short_password">Password is too short</string>
+    <string name="new_account_registration">New account registration</string>
+    <string name="does_not_match_format">Doesn\'t match format</string>
 
     <string name="next">Next</string>
     <string name="register">Register</string>
@@ -10,8 +12,6 @@
     <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    
-    <string name="incorrect">Incorrect</string>
 
-    <string name="move_back">Move back on click</string>
+    <string name="move_back">Move back</string>
 </resources>

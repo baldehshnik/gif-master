@@ -6,4 +6,6 @@ interface HomeRouter {
 
     fun navigateToViewingFragment(gif: FullGifEntity)
 
+    fun showBottomBar()
+
 }

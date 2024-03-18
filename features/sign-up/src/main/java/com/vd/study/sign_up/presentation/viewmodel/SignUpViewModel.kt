@@ -60,6 +60,10 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
+    fun hideBottomBar() {
+        signUpRouter.hideBottomBar()
+    }
+
     fun hideProgress() {
         signUpInProgressFlow.value = false
     }
