@@ -137,8 +137,7 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageAccount"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/add_a_photo" />
+                android:layout_height="match_parent" />
 
         </com.google.android.material.card.MaterialCardView>
 

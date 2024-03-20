@@ -9,7 +9,7 @@ class AccountEntityMapper @Inject constructor() : Mapper<AccountDataEntity, Acco
 
     override fun map(input: AccountDataEntity): AccountEntity {
         return AccountEntity(
-            input.id, input.username, input.avatarUrl
+            input.id, input.username, input.avatarUrl, input.date
         )
     }
 }

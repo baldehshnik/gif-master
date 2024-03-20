@@ -45,7 +45,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
     private val onRegisteredAccountClickListener = object : OnRegisteredAccountClickListener {
         override fun onClick(account: AccountEntity) {
-            signIn(account.id)
+            signIn(account.id, account.email)
         }
     }
 
@@ -101,13 +101,13 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         changeAccountsListVisibility(true)
     }
 
-    private fun signIn(id: Int) {
+    private fun signIn(id: Int, email: String) {
         val sharedPreferences = requireContext().getSharedPreferences(
             SIGN_IN_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE
         )
         sharedPreferences.edit()
             .putBoolean(IS_ACCOUNT_ENTERED_FIELD_NAME, true)
-            .putString(ACCOUNT_EMAIL_FIELD_NAME, binding.emailEditText.text.toString())
+            .putString(ACCOUNT_EMAIL_FIELD_NAME, email)
             .putInt(ACCOUNT_ID_FIELD_NAME, id)
             .apply()
 
@@ -151,7 +151,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
             }
 
             is Result.Correct -> {
-                signIn(result.getOrNull()!!)
+                signIn(result.getOrNull()!!, binding.emailEditText.text.toString())
                 binding.btnSignIn.isEnabled = true
             }
         }

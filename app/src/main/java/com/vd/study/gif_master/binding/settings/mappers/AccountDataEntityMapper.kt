@@ -6,13 +6,15 @@ import com.vd.study.settings.domain.entities.AccountEntity
 import javax.inject.Inject
 
 class AccountDataEntityMapper @Inject constructor() : Mapper<AccountEntity, AccountDataEntity> {
+
     override fun map(input: AccountEntity): AccountDataEntity {
         return AccountDataEntity(
             input.id,
             input.username,
             input.avatarUrl,
             input.email,
-            input.password
+            input.password,
+            input.date
         )
     }
 }

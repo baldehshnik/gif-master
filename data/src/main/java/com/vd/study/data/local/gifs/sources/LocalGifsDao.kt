@@ -20,13 +20,16 @@ interface LocalGifsDao {
     @Update
     suspend fun updateGif(gif: LocalGifDataEntity): Int
 
-    @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_liked = 1 ORDER BY id ASC")
+    @Query("DELETE FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND id = :id")
+    suspend fun removeGif(accountId: Int, id: Int): Int
+
+    @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_liked = 1 ORDER BY id DESC")
     fun readLikedGifs(accountId: Int): Flow<List<LocalGifDataEntity>>
 
-    @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_viewed = 1 ORDER BY id ASC")
+    @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_viewed = 1 ORDER BY id DESC")
     fun readViewedGifs(accountId: Int): Flow<List<LocalGifDataEntity>>
 
-    @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_saved = 1 ORDER BY id ASC")
+    @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_saved = 1 ORDER BY id DESC")
     fun readSavedGifs(accountId: Int): Flow<List<LocalGifDataEntity>>
 
     @Query("SELECT COUNT(*) FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_liked = 1")
@@ -67,13 +70,8 @@ interface LocalGifsDao {
             clearDatabase(ioDispatcher, gif.accountId)
             result
         } else {
-            updateGif(
-                insertedGif.copy(
-                    isLiked = gif.isLiked,
-                    isSaved = gif.isSaved,
-                    isViewed = gif.isViewed
-                )
-            ).toLong()
+            removeGif(insertedGif.accountId, insertedGif.id)
+            writeGif(gif.copy(id = 0))
         }
     }
 

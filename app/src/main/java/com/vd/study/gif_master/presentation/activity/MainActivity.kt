@@ -1,9 +1,11 @@
 package com.vd.study.gif_master.presentation.activity
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -34,7 +36,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         globalNavComponentRouter.onCreated(this)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
         val navController = navHostFragment.navController
 
         setAccountIdentifier()
@@ -56,6 +59,19 @@ class MainActivity : AppCompatActivity() {
     fun changeBottomBarVisibility(isVisible: Boolean) {
         binding.bottomAppBar.isVisible = isVisible
         binding.searchButton.isVisible = isVisible
+    }
+
+    fun changeBottomBarTheme(default: Boolean) {
+        binding.bottomAppBar.backgroundTint = ContextCompat.getColorStateList(
+            applicationContext,
+            if (default) R.color.white else R.color.black
+        )
+
+        val menu = binding.bottomAppBar.menu
+        for (i in 0 until menu.size()) {
+            val menuItem = menu.getItem(i)
+            menuItem.icon?.setTint(if (default) Color.BLACK else Color.WHITE)
+        }
     }
 
     private fun setAccountIdentifier() {

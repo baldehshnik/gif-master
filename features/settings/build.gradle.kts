@@ -5,6 +5,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -51,6 +53,8 @@ dependencies {
     implementation(Build.Libs.Android.CoreKtx)
     implementation(Build.Libs.Android.AppCompat)
     implementation(Build.Libs.Android.FragmentKtx)
+    implementation(Build.Libs.Android.NavigationFragmentKtx)
+    implementation(Build.Libs.Android.NavigationUIKtx)
 
     implementation(Build.Libs.Google.Material)
     implementation(Build.Libs.Google.Hilt)

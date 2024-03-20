@@ -3,4 +3,5 @@
     <string name="empty_field">Field is empty</string>
     <string name="email_format_error">Incorrect email format</string>
     <string name="password_too_short">Password is too short</string>
+    <string name="account_was_not_initialized">Account was not initialized</string>
 </resources>

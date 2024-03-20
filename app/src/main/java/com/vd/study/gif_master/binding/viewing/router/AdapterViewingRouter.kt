@@ -12,4 +12,7 @@ class AdapterViewingRouter @Inject constructor(
         globalNavComponentRouter.popBackStack()
     }
 
+    override fun changeBottomBarTheme(default: Boolean) {
+        globalNavComponentRouter.changeBottomAppBarTheme(default)
+    }
 }

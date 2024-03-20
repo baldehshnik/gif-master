@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.vd.study.data.local.LocalDatabaseCore
+import java.util.Date
 
 @Entity(
     tableName = LocalDatabaseCore.ACCOUNTS_TABLE_NAME,
@@ -26,5 +27,8 @@ data class AccountDataEntity(
     val email: String,
 
     @ColumnInfo(name = "password")
-    val password: String
+    val password: String,
+
+    @ColumnInfo(name = "date")
+    val date: Date
 )

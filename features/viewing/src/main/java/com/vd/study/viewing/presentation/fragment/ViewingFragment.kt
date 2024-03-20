@@ -48,6 +48,11 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
         }
     }
 
+    override fun onDestroyView() {
+        viewModel.changeBottomBarTheme(true)
+        super.onDestroyView()
+    }
+
     private fun saveViewingGif() {
         if (!gif.isViewed) {
             _gif = gif.copy(isViewed = true)
@@ -106,10 +111,12 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
     }
 
     private fun loadUI() {
+        viewModel.changeBottomBarTheme(false)
         loadAuthor(gif.author)
 
         Glide.with(requireContext())
             .load(gif.url)
+            .error(CoreResources.drawable.image_error)
             .into(binding.gif)
     }
 

@@ -12,7 +12,8 @@ class AccountEntityMapper @Inject constructor() : Mapper<AccountDataEntity, Acco
             input.username,
             input.avatarUrl,
             input.email,
-            input.password
+            input.password,
+            input.date
         )
     }
 }

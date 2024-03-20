@@ -1,13 +1,17 @@
 package com.vd.study.sign_up.presentation.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.vd.study.core.container.Result
+import com.vd.study.core.presentation.image.getDefaultAccountDrawableUrl
 import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.utils.PASSWORD_REGEX_STRING
 import com.vd.study.core.presentation.utils.USERNAME_REGEX_STRING
@@ -18,6 +22,7 @@ import com.vd.study.sign_up.databinding.FragmentSignUpBinding
 import com.vd.study.sign_up.domain.entities.AccountEntity
 import com.vd.study.sign_up.presentation.viewmodel.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Date
 
 @AndroidEntryPoint
 class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
@@ -34,6 +39,9 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.hideBottomBar()
+        Glide.with(requireContext())
+            .load(CoreResources.drawable.default_account_icon)
+            .into(binding.imageAccount)
 
         binding.btnNext.setOnClickListener { handleNextClick() }
         binding.btnBack.setOnClickListener { handleBackClick() }
@@ -109,14 +117,25 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             username = binding.usernameEditText.text.toString(),
             avatarUrl = getAccountIconUrl(),
             email = binding.emailEditText.text.toString(),
-            password = binding.passwordEditText.text.toString()
+            password = binding.passwordEditText.text.toString(),
+            date = Date()
         )
         viewModel.registerAccount(account)
     }
 
     // add handler
+    // comparing is not work
     private fun getAccountIconUrl(): String {
-        return "url"
+        val defaultImageFromView = binding.imageAccount.drawable
+        val imageFromResources = ContextCompat.getDrawable(requireContext(), CoreResources.drawable.default_account_icon)
+        if (defaultImageFromView.equals(imageFromResources)) {
+            Log.i("MYTAG", "HEHEHEHEHEHHEHEHEHHEHEHEHEHHEHE")
+            return requireContext().getDefaultAccountDrawableUrl()
+        }
+
+        Log.i("MYTAG", "------------------------------------")
+
+        return requireContext().getDefaultAccountDrawableUrl()
     }
 
     private fun handleBackClick() {
@@ -125,7 +144,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             return
         }
 
-        binding.imageAccount.setImageResource(R.drawable.add_a_photo)
+        binding.imageAccount.setImageResource(CoreResources.drawable.default_account_icon)
         setImageSelectionScreenVisibility()
         setEditTextFieldsVisibility()
         changeRegistrationVisibility(false)

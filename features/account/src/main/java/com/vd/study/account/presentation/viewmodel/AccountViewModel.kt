@@ -1,6 +1,5 @@
 package com.vd.study.account.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -58,7 +57,6 @@ class AccountViewModel @AssistedInject constructor(
 
     fun readLikedGifs() {
         viewModelScope.launch {
-            Log.i("MYTAG", "reading my")
             showProgress(_likedGifsLiveValue)
             handleGifsReadingResult(readLikedGifsUseCase(), _likedGifsLiveValue)
         }
@@ -105,29 +103,6 @@ class AccountViewModel @AssistedInject constructor(
             }
         }
     }
-
-//    private suspend fun handleLikedGifsReadingResult(answer: Result<Flow<List<GifEntity>>>) {
-//        when (answer) {
-//            Result.Progress -> {
-//                _likedGifsLiveValue.value = Result.Progress
-//            }
-//
-//            is Result.Error -> {
-//                _likedGifsLiveValue.value = answer.map { it }
-//            }
-//
-//            is Result.Correct -> {
-//                val value = answer.getOrNull()
-//                if (value != null) {
-//                    value.collect {
-//                        _likedGifsLiveValue.value = Result.Correct(it)
-//                    }
-//                } else {
-//                    _likedGifsLiveValue.value = Result.Error(NothingFoundException())
-//                }
-//            }
-//        }
-//    }
 
     private fun <T> showProgress(liveValue: MutableLiveData<Result<T>>) {
         liveValue.value = Result.Progress

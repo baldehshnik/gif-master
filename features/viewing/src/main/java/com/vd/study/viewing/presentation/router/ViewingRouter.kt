@@ -4,4 +4,6 @@ interface ViewingRouter {
 
     fun popBackStack()
 
+    fun changeBottomBarTheme(default: Boolean)
+
 }

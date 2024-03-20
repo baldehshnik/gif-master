@@ -22,6 +22,7 @@
         android:name="com.vd.study.home.presentations.fragment.HomeFragment"
         android:label="HomeFragment"
         tools:layout="@layout/fragment_home">
+
         <action
             android:id="@+id/action_homeFragment_to_viewingFragment"
             app:destination="@id/viewingFragment" >
@@ -31,13 +32,15 @@
                 app:argType="com.vd.study.viewing.domain.entities.GifEntity" />
 
         </action>
+
     </fragment>
 
     <fragment
         android:id="@+id/accountFragment"
         android:name="com.vd.study.account.presentation.fragment.AccountFragment"
         android:label="fragment_account"
-        tools:layout="@layout/fragment_account" >
+        tools:layout="@layout/fragment_account">
+
         <action
             android:id="@+id/action_accountFragment_to_viewingFragment"
             app:destination="@id/viewingFragment">
@@ -46,6 +49,15 @@
                 android:name="viewingGif"
                 app:argType="com.vd.study.viewing.domain.entities.GifEntity" />
 
+        </action>
+
+        <action
+            android:id="@+id/action_accountFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment">
+
+            <argument
+                android:name="account"
+                app:argType="com.vd.study.settings.domain.entities.AccountEntity" />
 
         </action>
     </fragment>

@@ -53,6 +53,8 @@ dependencies {
     implementation(Build.Libs.Google.Hilt)
     kapt(Build.Libs.Google.HiltCompiler)
 
+    implementation(Build.Libs.Image.Glide)
+
     implementation(Build.Libs.Testing.JUnit)
     androidTestImplementation(Build.Libs.Testing.JUnitEXT)
     androidTestImplementation(Build.Libs.Testing.EspressoCore)

@@ -5,6 +5,7 @@
     <string name="personal_info">Personal Information</string>
     <string name="email_info">Email: %s</string>
     <string name="date_info">Date: %s</string>
+    <string name="account_was_not_initialized">Account was not initialized</string>
 
     <string name="account_background_description">Account background</string>
     <string name="liked_gifs_description">Show list with liked gifs</string>
