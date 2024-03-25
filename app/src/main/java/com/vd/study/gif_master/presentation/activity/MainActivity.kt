@@ -15,6 +15,7 @@ import com.vd.study.core.global.APP_THEME
 import com.vd.study.core.global.AccountIdentifier
 import com.vd.study.core.global.SIGN_IN_SHARED_PREFERENCES_NAME
 import com.vd.study.core.global.ThemeIdentifier
+import com.vd.study.gif_master.MainGraphDirections
 import com.vd.study.gif_master.R
 import com.vd.study.gif_master.databinding.ActivityMainBinding
 import com.vd.study.gif_master.presentation.router.GlobalNavComponentRouter
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             handleOnBottomMenuItemClick(it, navController)
         }
         binding.searchButton.setOnClickListener {
-            globalNavComponentRouter.launch(R.id.searchFragment)
+            globalNavComponentRouter.launch(MainGraphDirections.actionGlobalSearchFragment())
             changeBottomBarVisibility(false)
         }
     }
@@ -164,7 +165,7 @@ class MainActivity : AppCompatActivity() {
             R.id.accountFragment -> {
                 if (navController.currentDestination?.id != R.id.accountFragment) {
                     navController.popBackStack(R.id.homeFragment, false)
-                    navController.navigate(R.id.accountFragment)
+                    navController.navigate(R.id.action_homeFragment_to_accountFragment)
                     true
                 } else false
             }

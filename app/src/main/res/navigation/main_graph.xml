@@ -24,14 +24,12 @@
         tools:layout="@layout/fragment_home">
 
         <action
-            android:id="@+id/action_homeFragment_to_viewingFragment"
-            app:destination="@id/viewingFragment" >
-
-            <argument
-                android:name="viewingGif"
-                app:argType="com.vd.study.viewing.domain.entities.GifEntity" />
-
-        </action>
+            android:id="@+id/action_homeFragment_to_accountFragment"
+            app:destination="@id/accountFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
 
@@ -42,16 +40,6 @@
         tools:layout="@layout/fragment_account">
 
         <action
-            android:id="@+id/action_accountFragment_to_viewingFragment"
-            app:destination="@id/viewingFragment">
-
-            <argument
-                android:name="viewingGif"
-                app:argType="com.vd.study.viewing.domain.entities.GifEntity" />
-
-        </action>
-
-        <action
             android:id="@+id/action_accountFragment_to_settingsFragment"
             app:destination="@id/settingsFragment">
 
@@ -60,21 +48,43 @@
                 app:argType="com.vd.study.settings.domain.entities.AccountEntity" />
 
         </action>
+
     </fragment>
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.vd.study.settings.presentation.fragment.SettingsFragment"
         android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings"/>
+        tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/viewingFragment"
         android:name="com.vd.study.viewing.presentation.fragment.ViewingFragment"
-        android:label="ViewingFragment"/>
+        android:label="ViewingFragment" />
+
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.vd.study.search.presentation.fragment.SearchFragment"
         android:label="SearchFragment" />
+
+    <action
+        android:id="@+id/action_global_searchFragment"
+        app:destination="@id/searchFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
+    <action
+        android:id="@+id/action_global_viewingFragment"
+        app:destination="@id/viewingFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left">
+
+        <argument
+            android:name="viewingGif"
+            app:argType="com.vd.study.viewing.domain.entities.GifEntity" />
+
+    </action>
 
 </navigation>
