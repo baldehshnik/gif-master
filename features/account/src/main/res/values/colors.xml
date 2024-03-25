@@ -2,5 +2,7 @@
 <resources>
     
     <color name="semi_transparent">#7000</color>
+
+    <color name="gray_background">#DCDCDC</color>
     
 </resources>

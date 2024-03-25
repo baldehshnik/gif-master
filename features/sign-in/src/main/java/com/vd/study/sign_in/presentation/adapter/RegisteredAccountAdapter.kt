@@ -1,5 +1,6 @@
 package com.vd.study.sign_in.presentation.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -12,7 +13,8 @@ import com.vd.study.sign_in.domain.entities.AccountEntity
 
 class RegisteredAccountAdapter(
     private val items: List<AccountEntity>,
-    private val onRegisteredAccountClickListener: OnRegisteredAccountClickListener
+    private val onRegisteredAccountClickListener: OnRegisteredAccountClickListener,
+    private val isLightTheme: Boolean
 ) : ListAdapter<AccountEntity, RegisteredAccountAdapter.RegisteredAccountViewHolder>(RegisteredAccountDiffUtil()) {
 
     class RegisteredAccountViewHolder(
@@ -20,7 +22,8 @@ class RegisteredAccountAdapter(
         private val onRegisteredAccountClickListener: OnRegisteredAccountClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(account: AccountEntity) = with(binding) {
+        fun bind(account: AccountEntity, isDarkTheme: Boolean) = with(binding) {
+            if (isDarkTheme) textAccountUsername.setTextColor(Color.WHITE)
             textAccountUsername.text = account.username
 
             Glide.with(binding.imageRegisteredAccount.context)
@@ -38,7 +41,7 @@ class RegisteredAccountAdapter(
     }
 
     override fun onBindViewHolder(holder: RegisteredAccountViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position], !isLightTheme)
     }
 
     override fun getItemCount(): Int {

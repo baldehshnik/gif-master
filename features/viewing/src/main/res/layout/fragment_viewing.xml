@@ -27,6 +27,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="24dp"
+        android:tint="@null"
         app:layout_constraintBottom_toBottomOf="@id/btnBack"
         app:layout_constraintStart_toEndOf="@id/btnBack"
         app:layout_constraintTop_toTopOf="@id/btnBack" />
@@ -65,6 +66,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
+        android:tint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -146,7 +148,8 @@
                 android:layout_height="36dp"
                 android:layout_marginStart="8dp"
                 android:padding="4dp"
-                android:src="@drawable/giphy" />
+                android:src="@drawable/giphy"
+                android:tint="@null" />
 
             <TextView
                 android:id="@+id/textProvider"
@@ -163,31 +166,3 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

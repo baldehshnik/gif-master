@@ -4,12 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:fillViewport="true"
-    android:theme="@style/Theme.Gifmaster.Core"
     tools:context="com.vd.study.sign_up.presentation.fragment.SignUpFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/screen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -137,7 +135,8 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageAccount"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:tint="@null" />
 
         </com.google.android.material.card.MaterialCardView>
 

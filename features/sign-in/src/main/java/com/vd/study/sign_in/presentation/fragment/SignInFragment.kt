@@ -1,6 +1,7 @@
 package com.vd.study.sign_in.presentation.fragment
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -19,10 +20,11 @@ import com.vd.study.core.global.ACCOUNT_ID_FIELD_NAME
 import com.vd.study.core.global.AccountIdentifier
 import com.vd.study.core.global.IS_ACCOUNT_ENTERED_FIELD_NAME
 import com.vd.study.core.global.SIGN_IN_SHARED_PREFERENCES_NAME
+import com.vd.study.core.global.ThemeIdentifier
 import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.utils.PASSWORD_REGEX_STRING
+import com.vd.study.core.presentation.utils.setDarkTheme
 import com.vd.study.core.presentation.viewbinding.viewBinding
-import com.vd.study.core.R as CoreResources
 import com.vd.study.sign_in.R
 import com.vd.study.sign_in.databinding.FragmentSignInBinding
 import com.vd.study.sign_in.domain.entities.AccountEntity
@@ -32,12 +34,16 @@ import com.vd.study.sign_in.presentation.adapter.RegisteredAccountAdapter
 import com.vd.study.sign_in.presentation.viewmodel.SignInViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import com.vd.study.core.R as CoreResources
 
 @AndroidEntryPoint
 class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
     @Inject
     lateinit var accountIdentifier: AccountIdentifier
+
+    @Inject
+    lateinit var themeIdentifier: ThemeIdentifier
 
     private val binding: FragmentSignInBinding by viewBinding()
 
@@ -66,6 +72,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         super.onViewCreated(view, savedInstanceState)
         setEventsListener()
         readRegisteredAccounts()
+        initUI()
 
         viewModel.hideBottomBar()
 
@@ -88,6 +95,20 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
         binding.btnSignUp.setOnClickListener { viewModel.navigateToRegistration() }
         binding.btnReloadAccountsList.setOnClickListener { handleReloadClick() }
+    }
+
+    private fun initUI() {
+        if (themeIdentifier.isLightTheme) {
+            binding.btnSignIn.setTextColor(Color.WHITE)
+            binding.btnSignUp.setTextColor(Color.BLACK)
+        } else {
+            binding.textSelectFrom.setTextColor(Color.WHITE)
+            binding.textOrFill.setTextColor(Color.WHITE)
+            binding.btnSignUp.setTextColor(Color.WHITE)
+            binding.btnSignIn.setDarkTheme()
+            binding.emailEditTextLayout.setDarkTheme(binding.emailEditText)
+            binding.passwordEditTextLayout.setDarkTheme(binding.passwordEditText)
+        }
     }
 
     private fun handleReloadClick() {
@@ -203,7 +224,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
             return
         }
 
-        val adapter = RegisteredAccountAdapter(accounts, onRegisteredAccountClickListener)
+        val adapter = RegisteredAccountAdapter(accounts, onRegisteredAccountClickListener, themeIdentifier.isLightTheme)
         binding.listSavedAccounts.adapter = adapter
         viewModel.hideProgress()
     }

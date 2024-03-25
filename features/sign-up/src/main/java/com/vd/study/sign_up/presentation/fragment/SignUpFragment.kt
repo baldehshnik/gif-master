@@ -1,5 +1,6 @@
 package com.vd.study.sign_up.presentation.fragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -10,24 +11,31 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.vd.study.core.container.Result
+import com.vd.study.core.global.ThemeIdentifier
 import com.vd.study.core.presentation.image.getDefaultAccountDrawableUrl
 import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.utils.PASSWORD_REGEX_STRING
 import com.vd.study.core.presentation.utils.USERNAME_REGEX_STRING
+import com.vd.study.core.presentation.utils.setDarkTheme
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.sign_up.R
-import com.vd.study.core.R as CoreResources
 import com.vd.study.sign_up.databinding.FragmentSignUpBinding
 import com.vd.study.sign_up.domain.entities.AccountEntity
 import com.vd.study.sign_up.presentation.viewmodel.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
+import javax.inject.Inject
+import com.vd.study.core.R as CoreResources
 
 @AndroidEntryPoint
 class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     private var isProgress = false
+
+    @Inject
+    lateinit var themeIdentifier: ThemeIdentifier
 
     private val emailPattern = Patterns.EMAIL_ADDRESS
 
@@ -37,6 +45,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initUI()
 
         viewModel.hideBottomBar()
         Glide.with(requireContext())
@@ -60,6 +69,35 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         viewModel.registrationResultLiveValue.observe(viewLifecycleOwner) {
             handleRegistrationResult(it)
         }
+    }
+
+    private fun initUI() {
+        if (themeIdentifier.isLightTheme) {
+            binding.btnNext.setTextColor(Color.WHITE)
+            binding.btnRegister.setTextColor(Color.WHITE)
+        } else {
+            binding.textRegistrationScreen.setTextColor(Color.WHITE)
+            binding.usernameEditTextLayout.apply{
+                setDarkTheme(binding.usernameEditText)
+                applyDefaultStyleToEditText(this, binding.usernameEditText)
+            }
+            binding.emailEditTextLayout .apply {
+                setDarkTheme(binding.emailEditText)
+                applyDefaultStyleToEditText(this, binding.emailEditText)
+            }
+            binding.passwordEditTextLayout.apply {
+                setDarkTheme(binding.passwordEditText)
+                applyDefaultStyleToEditText(this, binding.passwordEditText)
+            }
+            binding.btnNext.setDarkTheme()
+            binding.btnRegister.setDarkTheme()
+        }
+    }
+
+    private fun applyDefaultStyleToEditText(textInputLayout: TextInputLayout, textInputEditText: TextInputEditText) {
+        textInputLayout.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_NONE
+        textInputEditText.background = ContextCompat.getDrawable(requireContext(), R.drawable.edit_text_dark_theme_background)
+        textInputEditText.setBackgroundColor(ContextCompat.getColor(requireContext(), CoreResources.color.second_background))
     }
 
     private fun handleRegistrationResult(result: Result<AccountEntity>) {
@@ -107,7 +145,8 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         hasFocus: Boolean
     ) {
         if (!hasFocus) {
-            editText.error = if (!matchResult) resources.getString(CoreResources.string.incorrect) else null
+            editText.error =
+                if (!matchResult) resources.getString(CoreResources.string.incorrect) else null
         }
     }
 
@@ -127,7 +166,8 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     // comparing is not work
     private fun getAccountIconUrl(): String {
         val defaultImageFromView = binding.imageAccount.drawable
-        val imageFromResources = ContextCompat.getDrawable(requireContext(), CoreResources.drawable.default_account_icon)
+        val imageFromResources =
+            ContextCompat.getDrawable(requireContext(), CoreResources.drawable.default_account_icon)
         if (defaultImageFromView.equals(imageFromResources)) {
             Log.i("MYTAG", "HEHEHEHEHEHHEHEHEHHEHEHEHEHHEHE")
             return requireContext().getDefaultAccountDrawableUrl()

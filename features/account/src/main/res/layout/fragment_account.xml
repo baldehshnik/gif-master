@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="@android:color/transparent"
-    android:theme="@style/Theme.Gifmaster.Core"
     tools:context="com.vd.study.account.presentation.fragment.AccountFragment">
 
     <FrameLayout
@@ -24,13 +23,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="?attr/actionBarSize"
-            android:background="#DCDCDC"
             android:visibility="visible">
 
             <View
+                android:id="@+id/backgroundImageView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@color/white"
+                android:background="?attr/colorSurface"
                 app:layout_constraintBottom_toBottomOf="@id/accountImageBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -46,10 +45,11 @@
                 android:contentDescription="@string/account_background_description"
                 android:scaleType="centerCrop"
                 android:src="@drawable/account_default_background"
+                android:tint="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="UnusedAttribute,UseAppTint" />
 
             <View
                 android:id="@+id/accountImageBackground"
@@ -57,7 +57,7 @@
                 android:layout_height="156dp"
                 android:layout_marginTop="60dp"
                 android:background="@drawable/account_image_background"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="?attr/colorSurface"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/backgroundImage" />
@@ -66,6 +66,7 @@
                 android:id="@+id/imageAccount"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
+                android:tint="@null"
                 app:layout_constraintBottom_toBottomOf="@id/accountImageBackground"
                 app:layout_constraintEnd_toEndOf="@id/accountImageBackground"
                 app:layout_constraintStart_toStartOf="@id/accountImageBackground"
@@ -78,6 +79,7 @@
                 style="@style/CardViewWithRoundedBottomCorners"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorSurface"
                 app:layout_constraintBottom_toTopOf="@id/personalInfoCard"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +92,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="20dp"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorOnPrimary"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     tools:text="Some account name" />
@@ -102,6 +104,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:backgroundTint="?attr/colorSurface"
                 app:cardCornerRadius="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -120,7 +123,7 @@
                         android:paddingHorizontal="20dp"
                         android:paddingVertical="8dp"
                         android:text="@string/personal_info"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -132,7 +135,7 @@
                         android:paddingTop="8dp"
                         android:paddingBottom="4dp"
                         android:text="@string/email_info"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnPrimary"
                         android:textSize="16sp" />
 
                     <TextView
@@ -143,7 +146,7 @@
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
                         android:text="@string/date_info"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnPrimary"
                         android:textSize="16sp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -168,6 +171,7 @@
                 style="@style/CardViewWithRoundedTopCorners"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorSurface"
                 app:layout_constraintBottom_toBottomOf="@id/line"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

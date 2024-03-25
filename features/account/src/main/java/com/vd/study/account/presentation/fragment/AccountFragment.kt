@@ -2,9 +2,11 @@ package com.vd.study.account.presentation.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,6 +21,7 @@ import com.vd.study.account.presentation.viewmodel.AccountViewModel
 import com.vd.study.core.container.Result
 import com.vd.study.core.global.ACCOUNT_EMAIL_FIELD_NAME
 import com.vd.study.core.global.SIGN_IN_SHARED_PREFERENCES_NAME
+import com.vd.study.core.global.ThemeIdentifier
 import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +37,9 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
     lateinit var viewModelFactory: AccountViewModel.Factory
 
     private var email: String? = null
+
+    @Inject
+    lateinit var themeIdentifier: ThemeIdentifier
 
     private val _viewModel: Lazy<AccountViewModel> by lazy {
         requireNotNull(email) { "Email must be initialized before accessing ViewModel" }
@@ -54,6 +60,7 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getEmail()
+        loadUI()
 
         binding.btnEdit.setOnClickListener {
             // open settings fragment
@@ -63,6 +70,23 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
         binding.viewPager.adapter = adapter
 
         viewModel.accountLiveValue.observe(viewLifecycleOwner, ::handleAccountReading)
+    }
+
+    private fun loadUI() {
+        if (themeIdentifier.isLightTheme) {
+            binding.screen.setBackgroundColor(
+                ContextCompat.getColor(requireContext(), R.color.gray_background)
+            )
+            binding.btnEdit.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(), CoreResources.color.black
+            )
+            binding.btnEdit.setTextColor(Color.WHITE)
+        } else {
+            binding.btnEdit.backgroundTintList = ContextCompat.getColorStateList(
+                requireContext(), CoreResources.color.purple_200
+            )
+            binding.btnEdit.setTextColor(Color.BLACK)
+        }
     }
 
     private fun getEmail() {

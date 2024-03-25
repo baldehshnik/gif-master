@@ -10,13 +10,17 @@ import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.vd.study.core.global.ACCOUNT_ID_FIELD_NAME
+import com.vd.study.core.global.APP_SHARED_PREFERENCES_NAME
+import com.vd.study.core.global.APP_THEME
 import com.vd.study.core.global.AccountIdentifier
 import com.vd.study.core.global.SIGN_IN_SHARED_PREFERENCES_NAME
+import com.vd.study.core.global.ThemeIdentifier
 import com.vd.study.gif_master.R
 import com.vd.study.gif_master.databinding.ActivityMainBinding
 import com.vd.study.gif_master.presentation.router.GlobalNavComponentRouter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import com.vd.study.core.R as CoreResources
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -27,12 +31,16 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var accountIdentifier: AccountIdentifier
 
+    @Inject
+    lateinit var themeIdentifier: ThemeIdentifier
+
     private val binding: ActivityMainBinding by lazy(LazyThreadSafetyMode.NONE) {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        loadAndSetAppTheme()
         setContentView(binding.root)
         globalNavComponentRouter.onCreated(this)
 
@@ -62,16 +70,73 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun changeBottomBarTheme(default: Boolean) {
-        binding.bottomAppBar.backgroundTint = ContextCompat.getColorStateList(
-            applicationContext,
-            if (default) R.color.white else R.color.black
-        )
+        if (themeIdentifier.isLightTheme) {
+            val bottomBarColor =
+                if (default) CoreResources.color.white else CoreResources.color.second_background
+            val itemsColor = if (default) Color.BLACK else Color.WHITE
 
+            setBottomBarColor(bottomBarColor)
+            setBottomBarItemsColor(itemsColor)
+            setBottomBarButtonIconColor(Color.WHITE)
+        } else {
+            val bottomBarColor = CoreResources.color.second_background
+            val itemsColor = Color.WHITE
+
+            setBottomBarColor(bottomBarColor)
+            setBottomBarItemsColor(itemsColor)
+            setBottomBarButtonIconColor(Color.BLACK)
+        }
+    }
+
+    private fun setBottomBarButtonIconColor(color: Int) {
+        binding.searchButton.setColorFilter(color)
+    }
+
+    private fun setBottomBarItemsColor(color: Int) {
         val menu = binding.bottomAppBar.menu
         for (i in 0 until menu.size()) {
             val menuItem = menu.getItem(i)
-            menuItem.icon?.setTint(if (default) Color.BLACK else Color.WHITE)
+            menuItem.icon?.setTint(color)
         }
+    }
+
+    private fun setBottomBarColor(color: Int) {
+        binding.bottomAppBar.backgroundTint = ContextCompat.getColorStateList(
+            applicationContext,
+            color
+        )
+    }
+
+    private fun loadAndSetAppTheme() {
+        val sharedPreferences = getSharedPreferences(APP_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+        val loadTheme = {
+            setTheme(
+                if (themeIdentifier.isLightTheme) CoreResources.style.Theme_Gifmaster_Core
+                else CoreResources.style.Theme_Gifmaster_Core_Dark
+            )
+        }
+
+        when (sharedPreferences.getInt(APP_THEME, -1)) {
+            -1 -> {
+                themeIdentifier.isLightTheme = true
+                loadTheme()
+                sharedPreferences.edit()
+                    .putInt(APP_THEME, 1)
+                    .apply()
+            }
+
+            0 -> {
+                themeIdentifier.isLightTheme = false
+                loadTheme()
+            }
+
+            1 -> {
+                themeIdentifier.isLightTheme = true
+                loadTheme()
+            }
+        }
+
+        changeBottomBarTheme(true)
     }
 
     private fun setAccountIdentifier() {

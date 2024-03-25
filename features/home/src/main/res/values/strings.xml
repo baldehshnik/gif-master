@@ -5,4 +5,6 @@
     <string name="save_click_info">save gif</string>
 
     <string name="update_error">Update error</string>
+
+    <string name="button_change_theme_description">Changes app theme</string>
 </resources>

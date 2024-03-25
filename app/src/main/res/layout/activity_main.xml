@@ -42,12 +42,10 @@
             android:id="@+id/searchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/black"
-            app:borderWidth="0dp"
             android:contentDescription="@string/search_button_description"
+            app:borderWidth="0dp"
             app:layout_anchor="@id/bottomAppBar"
-            app:srcCompat="@drawable/round_search"
-            app:tint="@color/white" />
+            app:srcCompat="@drawable/round_search" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
