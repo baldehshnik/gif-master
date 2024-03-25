@@ -54,13 +54,11 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
     }
 
     private fun saveViewingGif() {
-        if (!gif.isViewed) {
-            _gif = gif.copy(isViewed = true)
-            val updateGifWorkRequest = OneTimeWorkRequestBuilder<GifWorker>()
-                .setInputData(gif.createWorkData())
-                .build()
-            WorkManager.getInstance(requireContext()).enqueue(updateGifWorkRequest)
-        }
+        _gif = gif.copy(isViewed = true)
+        val updateGifWorkRequest = OneTimeWorkRequestBuilder<GifWorker>()
+            .setInputData(gif.createWorkData())
+            .build()
+        WorkManager.getInstance(requireContext()).enqueue(updateGifWorkRequest)
     }
 
     private fun setListeners() = with(binding) {

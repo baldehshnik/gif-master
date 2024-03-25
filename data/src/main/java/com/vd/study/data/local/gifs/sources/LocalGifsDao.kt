@@ -2,6 +2,7 @@ package com.vd.study.data.local.gifs.sources
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.vd.study.data.local.LocalDatabaseCore
@@ -14,10 +15,10 @@ import kotlinx.coroutines.withContext
 @Dao
 interface LocalGifsDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun writeGif(gif: LocalGifDataEntity): Long
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateGif(gif: LocalGifDataEntity): Int
 
     @Query("DELETE FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND id = :id")

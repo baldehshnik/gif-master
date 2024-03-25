@@ -172,7 +172,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorSurface"
-                app:layout_constraintBottom_toBottomOf="@id/line"
+                app:layout_constraintBottom_toBottomOf="@id/line1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/personalInfoCard">
@@ -206,13 +206,23 @@
             </com.google.android.material.card.MaterialCardView>
 
             <View
-                android:id="@+id/line"
+                android:id="@+id/line1"
                 android:layout_width="0dp"
-                android:layout_height="1dp"
+                android:layout_height="2dp"
                 android:background="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/line2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cardSavedListsButtons" />
+
+            <View
+                android:id="@+id/line2"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/line1"
+                app:layout_constraintTop_toBottomOf="@id/cardSavedListsButtons" />
+
 
             <ProgressBar
                 android:id="@+id/listProgress"
@@ -233,7 +243,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line" />
+                app:layout_constraintTop_toBottomOf="@id/line1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
