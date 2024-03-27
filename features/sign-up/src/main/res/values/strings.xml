@@ -5,6 +5,7 @@
     <string name="sign_up_short_password">Password is too short</string>
     <string name="new_account_registration">New account registration</string>
     <string name="does_not_match_format">Doesn\'t match format</string>
+    <string name="account_image_selection_error">Selection error</string>
 
     <string name="next">Next</string>
     <string name="register">Register</string>

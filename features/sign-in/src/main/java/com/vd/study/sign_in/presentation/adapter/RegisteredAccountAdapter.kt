@@ -15,7 +15,9 @@ class RegisteredAccountAdapter(
     private val items: List<AccountEntity>,
     private val onRegisteredAccountClickListener: OnRegisteredAccountClickListener,
     private val isLightTheme: Boolean
-) : ListAdapter<AccountEntity, RegisteredAccountAdapter.RegisteredAccountViewHolder>(RegisteredAccountDiffUtil()) {
+) : ListAdapter<AccountEntity, RegisteredAccountAdapter.RegisteredAccountViewHolder>(
+    RegisteredAccountDiffUtil()
+) {
 
     class RegisteredAccountViewHolder(
         private val binding: RegisteredAccountItemBinding,
@@ -27,7 +29,8 @@ class RegisteredAccountAdapter(
             textAccountUsername.text = account.username
 
             Glide.with(binding.imageRegisteredAccount.context)
-                .load(CoreResources.drawable.default_account_icon)
+                .load(account.avatarUrl)
+                .placeholder(CoreResources.drawable.placeholder_gray_gradient)
                 .into(binding.imageRegisteredAccount)
 
             root.setOnClickListener { onRegisteredAccountClickListener.onClick(account) }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -165,8 +164,6 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
             .load(account.avatarUrl)
             .placeholder(CoreResources.drawable.placeholder_gray_gradient)
             .into(binding.imageAccount)
-
-        Log.i("MYTAG", account.avatarUrl)
     }
 
     @SuppressLint("SimpleDateFormat")

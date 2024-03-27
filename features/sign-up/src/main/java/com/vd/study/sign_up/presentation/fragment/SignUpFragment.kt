@@ -1,10 +1,12 @@
 package com.vd.study.sign_up.presentation.fragment
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -15,7 +17,9 @@ import com.google.android.material.textfield.TextInputLayout
 import com.vd.study.core.container.Result
 import com.vd.study.core.global.ThemeIdentifier
 import com.vd.study.core.presentation.image.getDefaultAccountDrawableUrl
+import com.vd.study.core.presentation.image.saveImageToInternalStorage
 import com.vd.study.core.presentation.toast.showToast
+import com.vd.study.core.presentation.utils.ACCOUNT_IMAGE_FILE_NAME
 import com.vd.study.core.presentation.utils.PASSWORD_REGEX_STRING
 import com.vd.study.core.presentation.utils.USERNAME_REGEX_STRING
 import com.vd.study.core.presentation.utils.setDarkTheme
@@ -34,6 +38,8 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     private var isProgress = false
 
+    private var imageFilePath: String? = null
+
     @Inject
     lateinit var themeIdentifier: ThemeIdentifier
 
@@ -43,18 +49,50 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     private val binding: FragmentSignUpBinding by viewBinding()
 
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val data = result.data
+            data?.data?.let { uri ->
+                binding.imageAccount.setImageURI(uri)
+                requireContext().saveImageToInternalStorage(
+                    uri, ACCOUNT_IMAGE_FILE_NAME,
+                    resultHandler = { imageFilePath = it },
+                    errorHandler = ::errorImageSelection
+                )
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI()
+        initListeners()
 
         viewModel.hideBottomBar()
-        Glide.with(requireContext())
-            .load(CoreResources.drawable.default_account_icon)
-            .into(binding.imageAccount)
+        viewModel.registrationResultLiveValue.observe(viewLifecycleOwner) {
+            handleRegistrationResult(it)
+        }
+    }
 
+    private fun handleAccountImageClick() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "image/*"
+        }
+        pickImageLauncher.launch(intent)
+    }
+
+    private fun errorImageSelection() {
+        requireContext().showToast(resources.getString(R.string.account_image_selection_error))
+    }
+
+    private fun initListeners() {
         binding.btnNext.setOnClickListener { handleNextClick() }
         binding.btnBack.setOnClickListener { handleBackClick() }
         binding.btnRegister.setOnClickListener { handleRegisterClick() }
+        binding.imageAccount.setOnClickListener { handleAccountImageClick() }
 
         binding.usernameEditText.setOnFocusChangeListener { _, hasFocus ->
             textChangedListenerHandler(isUsernameInputCorrect(), binding.usernameEditText, hasFocus)
@@ -65,23 +103,24 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         binding.passwordEditText.setOnFocusChangeListener { _, hasFocus ->
             textChangedListenerHandler(isPasswordInputCorrect(), binding.passwordEditText, hasFocus)
         }
-
-        viewModel.registrationResultLiveValue.observe(viewLifecycleOwner) {
-            handleRegistrationResult(it)
-        }
     }
 
     private fun initUI() {
+        Glide.with(requireContext())
+            .load(CoreResources.drawable.default_account_icon)
+            .placeholder(CoreResources.drawable.placeholder_gray_gradient)
+            .into(binding.imageAccount)
+
         if (themeIdentifier.isLightTheme) {
             binding.btnNext.setTextColor(Color.WHITE)
             binding.btnRegister.setTextColor(Color.WHITE)
         } else {
             binding.textRegistrationScreen.setTextColor(Color.WHITE)
-            binding.usernameEditTextLayout.apply{
+            binding.usernameEditTextLayout.apply {
                 setDarkTheme(binding.usernameEditText)
                 applyDefaultStyleToEditText(this, binding.usernameEditText)
             }
-            binding.emailEditTextLayout .apply {
+            binding.emailEditTextLayout.apply {
                 setDarkTheme(binding.emailEditText)
                 applyDefaultStyleToEditText(this, binding.emailEditText)
             }
@@ -94,10 +133,19 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         }
     }
 
-    private fun applyDefaultStyleToEditText(textInputLayout: TextInputLayout, textInputEditText: TextInputEditText) {
+    private fun applyDefaultStyleToEditText(
+        textInputLayout: TextInputLayout,
+        textInputEditText: TextInputEditText
+    ) {
         textInputLayout.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_NONE
-        textInputEditText.background = ContextCompat.getDrawable(requireContext(), R.drawable.edit_text_dark_theme_background)
-        textInputEditText.setBackgroundColor(ContextCompat.getColor(requireContext(), CoreResources.color.second_background))
+        textInputEditText.background =
+            ContextCompat.getDrawable(requireContext(), R.drawable.edit_text_dark_theme_background)
+        textInputEditText.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                CoreResources.color.second_background
+            )
+        )
     }
 
     private fun handleRegistrationResult(result: Result<AccountEntity>) {
@@ -107,14 +155,18 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             }
 
             is Result.Error -> {
+                binding.btnRegister.isClickable = true
                 changeRegistrationVisibility(false)
                 requireContext().showToast(resources.getString(CoreResources.string.error_try_again_later))
             }
 
             is Result.Correct -> {
                 changeRegistrationVisibility(false)
-                result.getOrNull()
-                    ?: requireContext().showToast(resources.getString(CoreResources.string.error_try_again_later))
+                result.getOrNull() ?: requireContext().showToast(
+                    resources.getString(CoreResources.string.error_try_again_later)
+                )
+
+                binding.btnRegister.isClickable = true
                 viewModel.navigateToMain()
             }
         }
@@ -159,23 +211,13 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             password = binding.passwordEditText.text.toString(),
             date = Date()
         )
+
+        binding.btnRegister.isClickable = false
         viewModel.registerAccount(account)
     }
 
-    // add handler
-    // comparing is not work
     private fun getAccountIconUrl(): String {
-        val defaultImageFromView = binding.imageAccount.drawable
-        val imageFromResources =
-            ContextCompat.getDrawable(requireContext(), CoreResources.drawable.default_account_icon)
-        if (defaultImageFromView.equals(imageFromResources)) {
-            Log.i("MYTAG", "HEHEHEHEHEHHEHEHEHHEHEHEHEHHEHE")
-            return requireContext().getDefaultAccountDrawableUrl()
-        }
-
-        Log.i("MYTAG", "------------------------------------")
-
-        return requireContext().getDefaultAccountDrawableUrl()
+        return imageFilePath ?: requireContext().getDefaultAccountDrawableUrl()
     }
 
     private fun handleBackClick() {
