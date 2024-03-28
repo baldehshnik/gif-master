@@ -88,12 +88,15 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
     }
 
     private fun loadListsInfoLine(isDefault: Boolean) {
+        val activeColor = if (themeIdentifier.isLightTheme) Color.BLACK else Color.GRAY
+        val inactiveColor = if (themeIdentifier.isLightTheme) Color.GRAY else Color.BLACK
+
         if (isDefault) {
-            binding.line1.setBackgroundColor(Color.BLACK)
-            binding.line2.setBackgroundColor(Color.GRAY)
+            binding.line1.setBackgroundColor(activeColor)
+            binding.line2.setBackgroundColor(inactiveColor)
         } else {
-            binding.line1.setBackgroundColor(Color.GRAY)
-            binding.line2.setBackgroundColor(Color.BLACK)
+            binding.line1.setBackgroundColor(inactiveColor)
+            binding.line2.setBackgroundColor(activeColor)
         }
     }
 

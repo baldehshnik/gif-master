@@ -7,7 +7,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-const val MAX_ONCE_LOADING_GIFS_COUNT = 50
+const val MAX_ONCE_LOADING_GIFS_COUNT = 15
 const val MAX_ELEMENTS_COUNT = 4999
 
 interface GifsApiService {
