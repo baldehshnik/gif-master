@@ -109,6 +109,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         Glide.with(requireContext())
             .load(CoreResources.drawable.default_account_icon)
             .placeholder(CoreResources.drawable.placeholder_gray_gradient)
+            .centerCrop()
             .into(binding.imageAccount)
 
         if (themeIdentifier.isLightTheme) {
@@ -288,7 +289,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         isImageAccountVisible: Boolean = false
     ) = with(binding) {
         btnRegister.isVisible = isRegisterButtonVisible
-        imageCard.isVisible = isImageAccountVisible
+        imageAccount.isVisible = isImageAccountVisible
     }
 
     private fun setEditTextFieldsVisibility(

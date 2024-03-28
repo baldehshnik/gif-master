@@ -77,9 +77,14 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
         viewModel.accountLiveValue.observe(viewLifecycleOwner, ::handleAccountReading)
     }
 
-    override fun onDestroyView() {
+    override fun onStart() {
+        binding.viewPager.registerOnPageChangeCallback(onPagerStateListenerCallback)
+        super.onStart()
+    }
+
+    override fun onStop() {
         binding.viewPager.unregisterOnPageChangeCallback(onPagerStateListenerCallback)
-        super.onDestroyView()
+        super.onStop()
     }
 
     private fun loadListsInfoLine(isDefault: Boolean) {
@@ -104,7 +109,6 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
             loadListsInfoLine(true)
             binding.viewPager.setCurrentItem(0, true)
         }
-        binding.viewPager.registerOnPageChangeCallback(onPagerStateListenerCallback)
     }
 
     private fun loadUI() {
@@ -163,6 +167,7 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
         Glide.with(requireContext())
             .load(account.avatarUrl)
             .placeholder(CoreResources.drawable.placeholder_gray_gradient)
+            .centerCrop()
             .into(binding.imageAccount)
     }
 

@@ -31,6 +31,7 @@ class RegisteredAccountAdapter(
             Glide.with(binding.imageRegisteredAccount.context)
                 .load(account.avatarUrl)
                 .placeholder(CoreResources.drawable.placeholder_gray_gradient)
+                .centerCrop()
                 .into(binding.imageRegisteredAccount)
 
             root.setOnClickListener { onRegisteredAccountClickListener.onClick(account) }

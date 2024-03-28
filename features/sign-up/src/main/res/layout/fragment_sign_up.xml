@@ -119,26 +119,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/passwordEditTextLayout" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/imageCard"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageAccount"
             android:layout_width="124dp"
             android:layout_height="124dp"
             android:layout_marginTop="20dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tint="@null"
             android:visibility="gone"
-            app:cardCornerRadius="70dp"
-            app:cardElevation="4dp"
             app:layout_constraintBottom_toTopOf="@id/btnRegister"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textRegistrationScreen">
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/imageAccount"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:tint="@null" />
-
-        </com.google.android.material.card.MaterialCardView>
+            app:layout_constraintTop_toBottomOf="@id/textRegistrationScreen"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Gifmaster.ImageView.Circle" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegister"
@@ -154,7 +148,7 @@
             app:cornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageCard" />
+            app:layout_constraintTop_toBottomOf="@id/imageAccount" />
 
         <ProgressBar
             android:id="@+id/registrationProgress"
