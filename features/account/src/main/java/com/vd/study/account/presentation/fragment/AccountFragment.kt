@@ -14,9 +14,7 @@ import com.bumptech.glide.Glide
 import com.vd.study.account.R
 import com.vd.study.account.databinding.FragmentAccountBinding
 import com.vd.study.account.domain.entities.AccountEntity
-import com.vd.study.account.domain.entities.GifEntity
 import com.vd.study.account.presentation.adapter.LikedGifsPagerAdapter
-import com.vd.study.account.presentation.adapter.OnLikedGifItemClickListener
 import com.vd.study.account.presentation.viewmodel.AccountViewModel
 import com.vd.study.core.container.Result
 import com.vd.study.core.global.ACCOUNT_EMAIL_FIELD_NAME
@@ -58,18 +56,11 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
         }
     }
 
-    private val onGifItemClickListener = object : OnLikedGifItemClickListener {
-        override fun onClick(gif: GifEntity) {
-            // open more detail fragment
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getEmail()
         loadUI()
         loadListeners()
-        loadListsInfoLine(true)
 
         val adapter = LikedGifsPagerAdapter(this, viewModel)
         binding.viewPager.adapter = adapter
@@ -80,6 +71,11 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
     override fun onStart() {
         binding.viewPager.registerOnPageChangeCallback(onPagerStateListenerCallback)
         super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.viewPager.setCurrentItem(0, true)
     }
 
     override fun onStop() {

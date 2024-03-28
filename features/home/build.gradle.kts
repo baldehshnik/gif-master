@@ -56,9 +56,6 @@ dependencies {
 
     implementation(Build.Libs.Image.Glide)
 
-//    implementation(Build.Libs.Image.Coil)
-//    implementation(Build.Libs.Image.CoilGif)
-
     implementation(Build.Libs.Google.Material)
     implementation(Build.Libs.Google.Hilt)
     kapt(Build.Libs.Google.HiltCompiler)

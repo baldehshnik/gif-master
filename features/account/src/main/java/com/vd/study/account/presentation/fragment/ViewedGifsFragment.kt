@@ -30,7 +30,7 @@ class ViewedGifsFragment : Fragment(R.layout.fragment_viewed_gifs), OnLikedGifIt
     }
 
     override fun onClick(gif: GifEntity) {
-
+        viewModel?.navigateToViewingFragment(gif)
     }
 
     private fun startViewing(viewModel: AccountViewModel) {

@@ -15,11 +15,16 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.vd.study.core.presentation.animation.loadAnimation
 import com.vd.study.search.databinding.ListItemBinding
-import com.vd.study.search.domain.entities.NetworkGifEntity
+import com.vd.study.search.domain.entities.GifEntity
 import com.vd.study.core.R as CoreResources
 
-class SearchGifAdapter :
-    PagingDataAdapter<NetworkGifEntity, SearchGifAdapter.SearchViewHolder>(NetworkGifDiffUtil()) {
+interface OnGifItemClickListener {
+    fun onClick(gif: GifEntity)
+}
+
+class SearchGifAdapter(
+    private val listener: OnGifItemClickListener
+) : PagingDataAdapter<GifEntity, SearchGifAdapter.SearchViewHolder>(GifEntityDiffUtil()) {
 
     private val gradients = listOf(
         CoreResources.drawable.placeholder_voilet_gradient,
@@ -30,23 +35,26 @@ class SearchGifAdapter :
     class SearchViewHolder(private val binding: ListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(gif: NetworkGifEntity, @DrawableRes placeholder: Int) = with(binding) {
-            val requestOptions: RequestOptions = RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .skipMemoryCache(false)
-                .format(DecodeFormat.PREFER_RGB_565)
-                .override(Target.SIZE_ORIGINAL)
-                .placeholder(placeholder)
-                .error(CoreResources.drawable.giphy)
-                .centerCrop()
+        fun bind(gif: GifEntity, @DrawableRes placeholder: Int, listener: OnGifItemClickListener) =
+            with(binding) {
+                val requestOptions: RequestOptions = RequestOptions()
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .skipMemoryCache(false)
+                    .format(DecodeFormat.PREFER_RGB_565)
+                    .override(Target.SIZE_ORIGINAL)
+                    .placeholder(placeholder)
+                    .error(CoreResources.drawable.giphy)
+                    .centerCrop()
 
-            val requestBuilder: RequestBuilder<GifDrawable> = Glide.with(this.gif.context)
-                .asGif()
-                .load(gif.url)
-                .apply(requestOptions)
+                val requestBuilder: RequestBuilder<GifDrawable> = Glide.with(this.gif.context)
+                    .asGif()
+                    .load(gif.url)
+                    .apply(requestOptions)
 
-            requestBuilder.into(this.gif)
-        }
+                requestBuilder.into(this.gif)
+
+                binding.gif.setOnClickListener { listener.onClick(gif) }
+            }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
@@ -56,20 +64,20 @@ class SearchGifAdapter :
     }
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-        val account: NetworkGifEntity? = getItem(position)
+        val account: GifEntity? = getItem(position)
         if (account != null) {
-            holder.bind(account, gradients.random())
+            holder.bind(account, gradients.random(), listener)
             holder.itemView.loadAnimation(CoreResources.anim.list_gif_item)
         }
     }
 
-    class NetworkGifDiffUtil : DiffUtil.ItemCallback<NetworkGifEntity>() {
+    class GifEntityDiffUtil : DiffUtil.ItemCallback<GifEntity>() {
 
-        override fun areItemsTheSame(oldItem: NetworkGifEntity, newItem: NetworkGifEntity): Boolean {
+        override fun areItemsTheSame(oldItem: GifEntity, newItem: GifEntity): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: NetworkGifEntity, newItem: NetworkGifEntity): Boolean {
+        override fun areContentsTheSame(oldItem: GifEntity, newItem: GifEntity): Boolean {
             return oldItem == newItem
         }
     }

@@ -18,6 +18,8 @@ import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.search.R
 import com.vd.study.search.databinding.FragmentSearchBinding
+import com.vd.study.search.domain.entities.GifEntity
+import com.vd.study.search.presentation.adapter.OnGifItemClickListener
 import com.vd.study.search.presentation.adapter.SearchGifAdapter
 import com.vd.study.search.presentation.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +30,7 @@ import javax.inject.Inject
 import com.vd.study.core.R as CoreResources
 
 @AndroidEntryPoint
-class SearchFragment : Fragment(R.layout.fragment_search) {
+class SearchFragment : Fragment(R.layout.fragment_search), OnGifItemClickListener {
 
     private val binding by viewBinding<FragmentSearchBinding>()
 
@@ -60,6 +62,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 changeProgressVisibility(false)
             }
         }
+    }
+
+    override fun onClick(gif: GifEntity) {
+        viewModel.navigateToViewingFragment(gif)
     }
 
     private fun setUI() = with(binding.etSearchLayout) {
@@ -99,7 +105,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun setListAdapter() {
-        adapter = SearchGifAdapter()
+        adapter = SearchGifAdapter(this)
         binding.listGifs.adapter = adapter
     }
 
