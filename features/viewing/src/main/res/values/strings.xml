@@ -6,7 +6,8 @@
     <string name="provided_by_giphy">Provided by GIPHY</string>
     <string name="giphy">GIPHY</string>
     <string name="viewing_gif_not_initialized">Viewing gif can\'t be viewed</string>
-
+    <string name="view_gif_here">View this gif here: %s</string>
+    <string name="share_gif_image">Share gif image</string>
 
     <string name="button_back_description">Used to return to HomeFragment</string>
     <string name="button_share_description">Used to share gif-image</string>
