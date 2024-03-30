@@ -60,7 +60,7 @@ class HomeViewModel @Inject constructor(
         router.showBottomBar()
     }
 
-    private fun readGifs() {
+    fun readGifs() {
         viewModelScope.launch {
             val result = pagingReadGifsUseCase().cachedIn(viewModelScope)
             handleGifsSynchronization(result)

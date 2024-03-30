@@ -2,6 +2,8 @@ package com.vd.study.gif_master.presentation.activity
 
 import android.content.Context
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.Network
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +15,10 @@ import com.vd.study.core.global.ACCOUNT_ID_FIELD_NAME
 import com.vd.study.core.global.APP_SHARED_PREFERENCES_NAME
 import com.vd.study.core.global.APP_THEME
 import com.vd.study.core.global.AccountIdentifier
+import com.vd.study.core.global.SHOW_NETWORK_WARNING
 import com.vd.study.core.global.SIGN_IN_SHARED_PREFERENCES_NAME
 import com.vd.study.core.global.ThemeIdentifier
+import com.vd.study.core.presentation.dialog.showNetworkWarningDialog
 import com.vd.study.gif_master.MainGraphDirections
 import com.vd.study.gif_master.R
 import com.vd.study.gif_master.databinding.ActivityMainBinding
@@ -39,6 +43,15 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+    private val connectivityManager =
+        lazy { getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager }
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onLost(network: Network) {
+            super.onLost(network)
+            handleNetworkDisabling()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadAndSetAppTheme()
@@ -58,9 +71,12 @@ class MainActivity : AppCompatActivity() {
             globalNavComponentRouter.launch(MainGraphDirections.actionGlobalSearchFragment())
             changeBottomBarVisibility(false)
         }
+
+        connectivityManager.value.registerDefaultNetworkCallback(networkCallback)
     }
 
     override fun onDestroy() {
+        connectivityManager.value.unregisterNetworkCallback(networkCallback)
         globalNavComponentRouter.onDestroyed()
         super.onDestroy()
     }
@@ -89,6 +105,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun handleNetworkDisabling() {
+        val sharedPreferences = getSharedPreferences(
+            APP_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE
+        )
+        val showNetworkWarning = sharedPreferences.getBoolean(SHOW_NETWORK_WARNING, true)
+        if (showNetworkWarning) showNetworkWarningDialog(themeIdentifier)
+    }
+
     private fun setBottomBarButtonIconColor(color: Int) {
         binding.searchButton.setColorFilter(color)
     }
@@ -109,7 +133,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadAndSetAppTheme() {
-        val sharedPreferences = getSharedPreferences(APP_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+        val sharedPreferences =
+            getSharedPreferences(APP_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
         val loadTheme = {
             setTheme(
                 if (themeIdentifier.isLightTheme) CoreResources.style.Theme_Gifmaster_Core

@@ -10,3 +10,4 @@ const val ACCOUNT_ID_FIELD_NAME = "accountId"
 const val APP_SHARED_PREFERENCES_NAME = "app_preference"
 
 const val APP_THEME = "theme"
+const val SHOW_NETWORK_WARNING = "network_warning"

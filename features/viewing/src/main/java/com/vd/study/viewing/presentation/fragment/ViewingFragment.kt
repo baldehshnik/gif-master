@@ -49,6 +49,7 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
         } else {
             loadUI()
             setLikeColor()
+            setSaveButtonImage()
             setListeners()
             saveViewingGif()
         }
@@ -74,6 +75,10 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
         btnSave.setOnClickListener { handleGifSave() }
     }
 
+    private fun setSaveButtonImage() {
+        binding.btnSave.setImageResource(if (gif.isSaved) R.drawable.round_bookmark else R.drawable.round_bookmark_border)
+    }
+
     private fun setLikeColor() {
         if (gif.isLiked) {
             binding.btnLike.setImageResource(R.drawable.heart_red)
@@ -91,7 +96,6 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
 
     private fun handleGifLike() {
         _gif = gif.copy(isLiked = !gif.isLiked)
-        requireContext().showToast(gif.isLiked.toString())
         setLikeColor()
 
         val updateGifWorkRequest = OneTimeWorkRequestBuilder<GifWorker>()
@@ -102,7 +106,7 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
 
     private fun handleGifSave() {
         _gif = gif.copy(isSaved = !gif.isSaved)
-        binding.btnSave.setImageResource(if (gif.isSaved) R.drawable.round_bookmark else R.drawable.round_bookmark_border)
+        setSaveButtonImage()
 
         val updateGifWorkRequest = OneTimeWorkRequestBuilder<GifWorker>()
             .setInputData(gif.createWorkData())
@@ -118,10 +122,7 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
                 override fun onResourceReady(resource: File, transition: Transition<in File>?) {
                     shareGifFile(resource)
                 }
-
-                override fun onLoadCleared(placeholder: Drawable?) {
-                    requireContext().showToast(resources.getString(CoreResources.string.error))
-                }
+                override fun onLoadCleared(placeholder: Drawable?) {}
             })
     }
 

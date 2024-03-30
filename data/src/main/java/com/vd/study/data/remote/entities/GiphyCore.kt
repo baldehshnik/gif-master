@@ -7,7 +7,7 @@ object GiphyCore {
     const val TrendingEndpoint = "trending"
     const val SearchEndpoint = "search"
 
-    const val ConnectTimeout = 12L
-    const val ReadTimeout = 20L
+    const val ConnectTimeout = 6L
+    const val ReadTimeout = 8L
 
 }

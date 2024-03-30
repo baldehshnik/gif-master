@@ -21,8 +21,8 @@ interface LocalGifsDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateGif(gif: LocalGifDataEntity): Int
 
-    @Query("DELETE FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND id = :id")
-    suspend fun removeGif(accountId: Int, id: Int): Int
+    @Query("DELETE FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND source_url = :url")
+    suspend fun removeGif(accountId: Int, url: String): Int
 
     @Query("SELECT * FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_liked = 1 ORDER BY id DESC")
     fun readLikedGifs(accountId: Int): Flow<List<LocalGifDataEntity>>
@@ -64,6 +64,9 @@ interface LocalGifsDao {
     @Query("SELECT COUNT(*) FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_viewed = 1")
     suspend fun readViewedGifsCount(accountId: Int): Int
 
+    @Query("SELECT COUNT(*) FROM ${LocalDatabaseCore.GIFS_TABLE_NAME} WHERE account_id = :accountId AND is_viewed = 1 AND source_url = :url")
+    suspend fun test(accountId: Int, url: String): Int
+
     suspend fun updateOrInsert(gif: LocalGifDataEntity, ioDispatcher: CoroutineDispatcher): Long {
         val insertedGif = hasGif(gif.accountId, gif.url)
         return if (insertedGif == null) {
@@ -71,7 +74,7 @@ interface LocalGifsDao {
             clearDatabase(ioDispatcher, gif.accountId)
             result
         } else {
-            removeGif(insertedGif.accountId, insertedGif.id)
+            removeGif(insertedGif.accountId, insertedGif.url)
             writeGif(gif.copy(id = 0))
         }
     }

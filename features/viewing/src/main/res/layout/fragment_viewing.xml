@@ -98,7 +98,8 @@
         android:paddingTop="30dp"
         android:src="@drawable/round_bookmark_border"
         app:layout_constraintBottom_toTopOf="@id/textOfSaveButton"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
 
     <TextView
         android:id="@+id/textOfLikeButton"

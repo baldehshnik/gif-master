@@ -10,4 +10,6 @@
     <color name="dark_gray">#808080</color>
     <color name="background">#000000</color>
     <color name="second_background">#030303</color>
+    <color name="dialog_transparent_light">#D9FFFFFF</color>
+    <color name="dialog_transparent_dark">#BF000000</color>
 </resources>

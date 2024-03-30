@@ -1,17 +1,24 @@
 package com.vd.study.home.presentations.fragment
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import com.vd.study.core.global.APP_SHARED_PREFERENCES_NAME
 import com.vd.study.core.global.APP_THEME
 import com.vd.study.core.global.ThemeIdentifier
+import com.vd.study.core.presentation.dialog.showNetworkWarningDialog
 import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.home.R
@@ -21,7 +28,6 @@ import com.vd.study.home.presentations.adapter.GifsAdapter
 import com.vd.study.home.presentations.adapter.OnGifItemClickListener
 import com.vd.study.home.presentations.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.vd.study.core.R as CoreResources
@@ -34,6 +40,31 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
     private val viewModel by viewModels<HomeViewModel>()
 
     private var gifsAdapter: GifsAdapter? = null
+
+    private val connectivityManager = lazy {
+        requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+    private val networkStateCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            super.onAvailable(network)
+            val listItemsCount = gifsAdapter?.itemCount
+            if (listItemsCount == null || listItemsCount < 1) {
+                Handler(Looper.getMainLooper()).post {
+                    setProgressVisibility(true)
+                    viewModel.readGifs()
+                }
+            }
+        }
+    }
+
+    private val listLoadStateListener = { loadState: CombinedLoadStates ->
+        if (loadState.source.refresh is LoadState.NotLoading) {
+            setProgressVisibility(false)
+        } else if (loadState.source.refresh is LoadState.Error) {
+            setProgressVisibility(false)
+            requireContext().showNetworkWarningDialog(themeIdentifier)
+        }
+    }
 
     @Inject
     lateinit var themeIdentifier: ThemeIdentifier
@@ -53,21 +84,20 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
         }
     }
 
+    override fun onStart() {
+        connectivityManager.value.registerDefaultNetworkCallback(networkStateCallback)
+        super.onStart()
+    }
+
+    override fun onStop() {
+        connectivityManager.value.unregisterNetworkCallback(networkStateCallback)
+        super.onStop()
+    }
+
     override fun onDestroyView() {
+        gifsAdapter?.removeLoadStateListener(listLoadStateListener)
         gifsAdapter = null
         super.onDestroyView()
-    }
-
-    override fun onLikeClick(gif: FullGifEntity) {
-        viewModel.updateGif(gif.copy(isLiked = !gif.isLiked))
-    }
-
-    override fun onSaveClick(gif: FullGifEntity) {
-        viewModel.updateGif(gif.copy(isSaved = !gif.isSaved))
-    }
-
-    override fun onShareClick(gif: FullGifEntity) {
-
     }
 
     override fun onItemClick(gif: FullGifEntity) {
@@ -79,6 +109,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
         setProgressVisibility(true)
         gifsAdapter = GifsAdapter(this)
         binding.listGifs.adapter = gifsAdapter
+        gifsAdapter?.addLoadStateListener(listLoadStateListener)
 
         binding.btnChangeTheme.setImageResource(
             if (themeIdentifier.isLightTheme) R.drawable.moon else R.drawable.round_wb_sunny
@@ -104,17 +135,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
     private fun handleUpdateResult(updatedGif: FullGifEntity?) {
         if (updatedGif == null) {
             requireContext().showToast(resources.getString(R.string.update_error))
-        } else {
-
         }
     }
 
     private fun handleReadingResult(data: PagingData<FullGifEntity>) {
         lifecycleScope.launch {
-            launch { gifsAdapter?.submitData(data) }
-
-            delay(500L)
-            setProgressVisibility(false)
+            gifsAdapter?.submitData(data)
         }
     }
 

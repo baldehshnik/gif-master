@@ -13,6 +13,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import com.vd.study.core.global.ThemeIdentifier
 import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.viewbinding.viewBinding
@@ -24,7 +25,6 @@ import com.vd.study.search.presentation.adapter.SearchGifAdapter
 import com.vd.study.search.presentation.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.vd.study.core.R as CoreResources
@@ -48,7 +48,6 @@ class SearchFragment : Fragment(R.layout.fragment_search), OnGifItemClickListene
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setUI()
         setOnBackPressListener()
         setEditTextListener()
@@ -56,10 +55,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), OnGifItemClickListene
 
         viewModel.gifsReadingResult.observe(viewLifecycleOwner) {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                launch { adapter?.submitData(it) }
-
-                delay(500L)
-                changeProgressVisibility(false)
+                adapter?.submitData(it)
             }
         }
     }
@@ -72,7 +68,8 @@ class SearchFragment : Fragment(R.layout.fragment_search), OnGifItemClickListene
         if (themeIdentifier.isLightTheme) {
             binding.btnSearch.setColorFilter(Color.BLACK)
             binding.btnBack.setColorFilter(Color.BLACK)
-            defaultHintTextColor = ContextCompat.getColorStateList(requireContext(), CoreResources.color.black)
+            defaultHintTextColor =
+                ContextCompat.getColorStateList(requireContext(), CoreResources.color.black)
             hintTextColor = ContextCompat.getColorStateList(
                 requireContext(), CoreResources.color.black
             )
@@ -81,11 +78,13 @@ class SearchFragment : Fragment(R.layout.fragment_search), OnGifItemClickListene
         } else {
             binding.btnSearch.setColorFilter(Color.WHITE)
             binding.btnBack.setColorFilter(Color.WHITE)
-            defaultHintTextColor = ContextCompat.getColorStateList(requireContext(), CoreResources.color.white)
+            defaultHintTextColor =
+                ContextCompat.getColorStateList(requireContext(), CoreResources.color.white)
             hintTextColor = ContextCompat.getColorStateList(
                 requireContext(), CoreResources.color.second_background
             )
-            boxStrokeColor = ContextCompat.getColor(requireContext(), CoreResources.color.second_background)
+            boxStrokeColor =
+                ContextCompat.getColor(requireContext(), CoreResources.color.second_background)
             boxStrokeWidth = 0
         }
     }
@@ -107,6 +106,14 @@ class SearchFragment : Fragment(R.layout.fragment_search), OnGifItemClickListene
     private fun setListAdapter() {
         adapter = SearchGifAdapter(this)
         binding.listGifs.adapter = adapter
+        adapter?.addLoadStateListener { loadState ->
+            if (loadState.source.refresh is LoadState.NotLoading) {
+                changeProgressVisibility(false)
+            } else if (loadState.source.refresh is LoadState.Error) {
+                changeProgressVisibility(false)
+                requireContext().showToast(resources.getString(CoreResources.string.error))
+            }
+        }
     }
 
     private fun handleEditTextValue() {
