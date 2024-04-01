@@ -7,14 +7,16 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
-import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import com.vd.study.core.dispatchers.Dispatchers
 import com.vd.study.core.global.ThemeIdentifier
+import com.vd.study.core.presentation.resources.getColorStateListValue
+import com.vd.study.core.presentation.resources.getColorValue
 import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.search.R
@@ -24,7 +26,6 @@ import com.vd.study.search.presentation.adapter.OnGifItemClickListener
 import com.vd.study.search.presentation.adapter.SearchGifAdapter
 import com.vd.study.search.presentation.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.vd.study.core.R as CoreResources
@@ -41,6 +42,8 @@ class SearchFragment : Fragment(R.layout.fragment_search), OnGifItemClickListene
     @Inject
     lateinit var themeIdentifier: ThemeIdentifier
 
+    @Inject
+    lateinit var dispatchers: Dispatchers
     private val isKeyboardVisible: Boolean
         get() = WindowInsetsCompat
             .toWindowInsetsCompat(binding.root.rootWindowInsets)
@@ -48,13 +51,10 @@ class SearchFragment : Fragment(R.layout.fragment_search), OnGifItemClickListene
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUI()
-        setOnBackPressListener()
-        setEditTextListener()
-        setListAdapter()
 
+        setUI()
         viewModel.gifsReadingResult.observe(viewLifecycleOwner) {
-            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            viewLifecycleOwner.lifecycleScope.launch(dispatchers.mainDispatcher) {
                 adapter?.submitData(it)
             }
         }
@@ -65,36 +65,37 @@ class SearchFragment : Fragment(R.layout.fragment_search), OnGifItemClickListene
     }
 
     private fun setUI() = with(binding.etSearchLayout) {
-        if (themeIdentifier.isLightTheme) {
-            binding.btnSearch.setColorFilter(Color.BLACK)
-            binding.btnBack.setColorFilter(Color.BLACK)
-            defaultHintTextColor =
-                ContextCompat.getColorStateList(requireContext(), CoreResources.color.black)
-            hintTextColor = ContextCompat.getColorStateList(
-                requireContext(), CoreResources.color.black
-            )
-            boxStrokeColor = ContextCompat.getColor(requireContext(), CoreResources.color.black)
-            boxStrokeWidth = 1
-        } else {
-            binding.btnSearch.setColorFilter(Color.WHITE)
-            binding.btnBack.setColorFilter(Color.WHITE)
-            defaultHintTextColor =
-                ContextCompat.getColorStateList(requireContext(), CoreResources.color.white)
-            hintTextColor = ContextCompat.getColorStateList(
-                requireContext(), CoreResources.color.second_background
-            )
-            boxStrokeColor =
-                ContextCompat.getColor(requireContext(), CoreResources.color.second_background)
-            boxStrokeWidth = 0
-        }
+        if (themeIdentifier.isLightTheme) setLightThemeElements() else setDarkThemeElements()
+
+        setListAdapter()
+        setEditTextListener()
+        setOnBackPressListener()
     }
 
-    private fun setEditTextListener() {
-        binding.btnSearch.setOnClickListener {
-            handleEditTextValue()
-        }
+    private fun setDarkThemeElements() = with(binding) {
+        btnSearch.setColorFilter(Color.WHITE)
+        btnBack.setColorFilter(Color.WHITE)
 
-        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+        etSearchLayout.defaultHintTextColor = requireContext().getColorStateListValue(CoreResources.color.white)
+        etSearchLayout.hintTextColor = requireContext().getColorStateListValue(CoreResources.color.second_background)
+        etSearchLayout.boxStrokeColor = requireContext().getColorValue(CoreResources.color.second_background)
+        etSearchLayout.boxStrokeWidth = 0
+    }
+
+    private fun setLightThemeElements() = with(binding) {
+        btnSearch.setColorFilter(Color.BLACK)
+        btnBack.setColorFilter(Color.BLACK)
+
+        val blackColorStateList = requireContext().getColorStateListValue(CoreResources.color.black)
+        etSearchLayout.defaultHintTextColor = blackColorStateList
+        etSearchLayout.hintTextColor = blackColorStateList
+        etSearchLayout.boxStrokeColor = requireContext().getColorValue(CoreResources.color.black)
+        etSearchLayout.boxStrokeWidth = 1
+    }
+
+    private fun setEditTextListener() = with(binding) {
+        btnSearch.setOnClickListener { handleEditTextValue() }
+        etSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 handleEditTextValue()
                 return@setOnEditorActionListener true
@@ -106,6 +107,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), OnGifItemClickListene
     private fun setListAdapter() {
         adapter = SearchGifAdapter(this)
         binding.listGifs.adapter = adapter
+
         adapter?.addLoadStateListener { loadState ->
             if (loadState.source.refresh is LoadState.NotLoading) {
                 changeProgressVisibility(false)
@@ -130,8 +132,8 @@ class SearchFragment : Fragment(R.layout.fragment_search), OnGifItemClickListene
     }
 
     private fun hideKeyboard() {
-        val inputMethodManager =
-            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        val inputMethodManager = requireActivity()
+            .getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
@@ -141,14 +143,9 @@ class SearchFragment : Fragment(R.layout.fragment_search), OnGifItemClickListene
     }
 
     private fun setOnBackPressListener() {
-        binding.btnBack.setOnClickListener {
-            viewModel.popBackStack()
-        }
-
+        binding.btnBack.setOnClickListener { viewModel.popBackStack() }
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            if (!isKeyboardVisible) {
-                viewModel.popBackStack()
-            }
+            if (!isKeyboardVisible) viewModel.popBackStack()
         }
     }
 }

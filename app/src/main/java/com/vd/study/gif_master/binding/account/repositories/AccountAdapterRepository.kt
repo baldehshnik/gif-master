@@ -38,10 +38,6 @@ class AccountAdapterRepository @Inject constructor(
             .suspendMap(::flowMapping)
     }
 
-    override suspend fun readLikedGifsCount(): Result<Int> {
-        return gifsDataRepository.readLikedGifsCount(accountIdentifier.accountIdentifier)
-    }
-
     private fun flowMapping(flow: Flow<List<LocalGifDataEntity>>): Flow<List<GifEntity>> {
         return flow.map { items ->
             items.map(gifEntityMapper::map)

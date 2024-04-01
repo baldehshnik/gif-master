@@ -75,7 +75,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailEditTextLayout"
-            android:layout_width="0dp"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
             android:layout_marginBottom="12dp"
@@ -97,7 +97,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordEditTextLayout"
-            android:layout_width="0dp"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
             android:hint="@string/password"

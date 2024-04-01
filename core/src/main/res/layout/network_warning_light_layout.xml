@@ -49,7 +49,7 @@
     <Button
         android:id="@+id/dialog_button_positive"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/round_corners_background"
         android:backgroundTint="@color/black"

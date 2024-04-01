@@ -20,5 +20,4 @@ class AdapterSignUpRouter @Inject constructor(
     override fun hideBottomBar() {
         globalNavComponentRouter.changeBottomAppBarVisibility(false)
     }
-
 }

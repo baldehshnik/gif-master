@@ -15,5 +15,4 @@ interface RegistrationAdapterRepositoryModule {
     fun bindRegistrationAdapterRepositoryToRegistrationRepository(
         registrationAdapterRepository: RegistrationAdapterRepository
     ): RegistrationRepository
-
 }

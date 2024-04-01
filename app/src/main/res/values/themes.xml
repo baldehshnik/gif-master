@@ -1,5 +1,5 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="Theme.Gifmaster" parent="Theme.Gifmaster.Core">
-    </style>
+
+    <style name="Theme.Gifmaster" parent="Theme.Gifmaster.Core"/>
+
 </resources>

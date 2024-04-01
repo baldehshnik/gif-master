@@ -15,10 +15,10 @@ interface OnLikedGifItemClickListener {
     fun onClick(gif: GifEntity)
 }
 
-class LikedGifsAdapter(
+class AccountGifsAdapter(
     private val items: List<GifEntity>,
     private val listener: OnLikedGifItemClickListener
-) : ListAdapter<GifEntity, LikedGifsAdapter.LikedGifsViewHolder>(LikedGifDiffUtil()) {
+) : ListAdapter<GifEntity, AccountGifsAdapter.LikedGifsViewHolder>(LikedGifDiffUtil()) {
 
     private val gradients = getGradientsArray()
 

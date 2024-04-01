@@ -15,9 +15,7 @@ class RegisteredAccountAdapter(
     private val items: List<AccountEntity>,
     private val onRegisteredAccountClickListener: OnRegisteredAccountClickListener,
     private val isLightTheme: Boolean
-) : ListAdapter<AccountEntity, RegisteredAccountAdapter.RegisteredAccountViewHolder>(
-    RegisteredAccountDiffUtil()
-) {
+) : ListAdapter<AccountEntity, RegisteredAccountAdapter.RegisteredAccountViewHolder>(RegisteredAccountDiffUtil()) {
 
     class RegisteredAccountViewHolder(
         private val binding: RegisteredAccountItemBinding,

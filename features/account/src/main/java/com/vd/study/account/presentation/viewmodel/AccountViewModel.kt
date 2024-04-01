@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.vd.study.account.domain.entities.AccountEntity
 import com.vd.study.account.domain.entities.GifEntity
 import com.vd.study.account.domain.exceptions.NothingFoundException
-import com.vd.study.account.domain.usecase.ReadLikedGifsCountUseCase
 import com.vd.study.account.domain.usecase.ReadLikedGifsUseCase
 import com.vd.study.account.domain.usecase.ReadSavedAccountUseCase
 import com.vd.study.account.domain.usecase.ReadViewedGifsUseCase
@@ -22,7 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class AccountViewModel @AssistedInject constructor(
-    private val readLikedGifsCountUseCase: ReadLikedGifsCountUseCase,
     private val readLikedGifsUseCase: ReadLikedGifsUseCase,
     private val readViewedGifsUseCase: ReadViewedGifsUseCase,
     private val readSavedAccountUseCase: ReadSavedAccountUseCase,
@@ -32,9 +30,6 @@ class AccountViewModel @AssistedInject constructor(
 
     private val _accountLiveValue = MutableLiveData<Result<AccountEntity>>()
     val accountLiveValue: LiveData<Result<AccountEntity>> get() = _accountLiveValue
-
-    private val _likedGifsCountLiveValue = MutableLiveData<Result<Int>>()
-    val likedGifsCountLiveData: LiveData<Result<Int>> get() = _likedGifsCountLiveValue
 
     private val _likedGifsLiveValue = MutableLiveData<Result<List<GifEntity>>>()
     val likedGifsLiveData: LiveData<Result<List<GifEntity>>> get() = _likedGifsLiveValue
@@ -46,13 +41,8 @@ class AccountViewModel @AssistedInject constructor(
         router.navigateToViewingFragment(gif)
     }
 
-    fun readLikedGifsCount() {
-        viewModelScope.launch {
-            showProgress(_likedGifsCountLiveValue)
-
-            val countResult = readLikedGifsCountUseCase()
-            _likedGifsCountLiveValue.value = countResult
-        }
+    fun returnToSignInFragment() {
+        router.returnToSignInFragment()
     }
 
     fun readLikedGifs() {
@@ -69,7 +59,7 @@ class AccountViewModel @AssistedInject constructor(
         }
     }
 
-    fun readAccount() {
+    private fun readAccount() {
         viewModelScope.launch {
             showProgress(_accountLiveValue)
 

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vd.study.core.presentation.animation.loadAnimation
 import com.vd.study.core.presentation.image.loadGif
 import com.vd.study.core.presentation.utils.getGradientsArray
-import com.vd.study.home.databinding.TestItemBinding
+import com.vd.study.home.databinding.GifItemBinding
 import com.vd.study.home.domain.entities.FullGifEntity
 import com.vd.study.core.R as CoreResources
 
@@ -19,8 +19,9 @@ class GifsAdapter(
 
     private val gradients = getGradientsArray()
 
-    class GifsViewHolder(private val binding: TestItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class GifsViewHolder(
+        private val binding: GifItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
             gif: FullGifEntity, listener: OnGifItemClickListener, @DrawableRes placeholder: Int
@@ -34,7 +35,7 @@ class GifsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = TestItemBinding.inflate(inflater, parent, false)
+        val binding = GifItemBinding.inflate(inflater, parent, false)
         return GifsViewHolder(binding)
     }
 

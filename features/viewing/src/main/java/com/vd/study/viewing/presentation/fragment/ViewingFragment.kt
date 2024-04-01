@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,6 +13,7 @@ import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.vd.study.core.presentation.resources.getColorValue
 import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.viewing.R
@@ -34,6 +34,13 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
         get() = checkNotNull(_gif) {
             resources.getString(R.string.viewing_gif_not_initialized)
         }
+
+    private val shareGifDestination = object : CustomTarget<File>() {
+        override fun onResourceReady(resource: File, transition: Transition<in File>?) {
+            shareGifFile(resource)
+        }
+        override fun onLoadCleared(placeholder: Drawable?) {}
+    }
 
     private val binding by viewBinding<FragmentViewingBinding>()
 
@@ -62,10 +69,7 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
 
     private fun saveViewingGif() {
         _gif = gif.copy(isViewed = true)
-        val updateGifWorkRequest = OneTimeWorkRequestBuilder<GifWorker>()
-            .setInputData(gif.createWorkData())
-            .build()
-        WorkManager.getInstance(requireContext()).enqueue(updateGifWorkRequest)
+        enqueueWorkManagerRequest()
     }
 
     private fun setListeners() = with(binding) {
@@ -76,54 +80,45 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
     }
 
     private fun setSaveButtonImage() {
-        binding.btnSave.setImageResource(if (gif.isSaved) R.drawable.round_bookmark else R.drawable.round_bookmark_border)
+        binding.btnSave.setImageResource(
+            if (gif.isSaved) R.drawable.round_bookmark else R.drawable.round_bookmark_border
+        )
     }
 
     private fun setLikeColor() {
         if (gif.isLiked) {
             binding.btnLike.setImageResource(R.drawable.heart_red)
-            binding.btnLike.setColorFilter(ContextCompat.getColor(requireContext(), R.color.like))
+            binding.btnLike.setColorFilter(requireContext().getColorValue(R.color.like))
         } else {
             binding.btnLike.setImageResource(R.drawable.heart_white_border)
-            binding.btnLike.setColorFilter(
-                ContextCompat.getColor(
-                    requireContext(),
-                    CoreResources.color.white
-                )
-            )
+            binding.btnLike.setColorFilter(requireContext().getColorValue(CoreResources.color.white))
         }
+    }
+
+    private fun enqueueWorkManagerRequest() {
+        val updateGifWorkRequest = OneTimeWorkRequestBuilder<GifWorker>()
+            .setInputData(gif.createWorkData())
+            .build()
+        WorkManager.getInstance(requireContext()).enqueue(updateGifWorkRequest)
     }
 
     private fun handleGifLike() {
         _gif = gif.copy(isLiked = !gif.isLiked)
         setLikeColor()
-
-        val updateGifWorkRequest = OneTimeWorkRequestBuilder<GifWorker>()
-            .setInputData(gif.createWorkData())
-            .build()
-        WorkManager.getInstance(requireContext()).enqueue(updateGifWorkRequest)
+        enqueueWorkManagerRequest()
     }
 
     private fun handleGifSave() {
         _gif = gif.copy(isSaved = !gif.isSaved)
         setSaveButtonImage()
-
-        val updateGifWorkRequest = OneTimeWorkRequestBuilder<GifWorker>()
-            .setInputData(gif.createWorkData())
-            .build()
-        WorkManager.getInstance(requireContext()).enqueue(updateGifWorkRequest)
+        enqueueWorkManagerRequest()
     }
 
     private fun shareGifFile() {
         Glide.with(this)
             .asFile()
             .load(gif.url)
-            .into(object : CustomTarget<File>() {
-                override fun onResourceReady(resource: File, transition: Transition<in File>?) {
-                    shareGifFile(resource)
-                }
-                override fun onLoadCleared(placeholder: Drawable?) {}
-            })
+            .into(shareGifDestination)
     }
 
     private fun shareGifFile(gifFile: File) {
@@ -160,6 +155,7 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
 
         Glide.with(requireContext())
             .load(gif.url)
+            .placeholder(CoreResources.drawable.placeholder_voilet_gradient)
             .error(CoreResources.drawable.image_error)
             .into(binding.gif)
     }
@@ -174,22 +170,13 @@ class ViewingFragment : Fragment(R.layout.fragment_viewing) {
     }
 
     private fun loadAuthor(author: GifAuthorEntity?) {
-        if (author == null) {
-            binding.textAuthorName.text = resources.getString(R.string.giphy)
-            Glide.with(requireContext())
-                .load(R.drawable.giphy)
-                .centerCrop()
-                .error(R.drawable.account_loading_error)
-                .into(binding.accountImage)
-        } else {
-            binding.textAuthorName.text = author.username
-            Glide.with(requireContext())
-                .load(author.avatarUrl)
-                .centerCrop()
-                .placeholder(CoreResources.drawable.placeholder_gray_gradient)
-                .error(R.drawable.account_loading_error)
-                .into(binding.accountImage)
-        }
+        binding.textAuthorName.text = author?.username ?: resources.getString(R.string.giphy)
+        Glide.with(requireContext())
+            .load(author?.avatarUrl ?: CoreResources.drawable.giphy)
+            .placeholder(CoreResources.drawable.placeholder_gray_gradient)
+            .error(R.drawable.account_loading_error)
+            .centerCrop()
+            .into(binding.accountImage)
     }
 
     companion object {

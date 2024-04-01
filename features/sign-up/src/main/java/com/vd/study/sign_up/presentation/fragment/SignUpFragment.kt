@@ -4,10 +4,8 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Patterns
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,10 +16,13 @@ import com.vd.study.core.container.Result
 import com.vd.study.core.global.ThemeIdentifier
 import com.vd.study.core.presentation.image.getDefaultAccountDrawableUrl
 import com.vd.study.core.presentation.image.saveImageToInternalStorage
+import com.vd.study.core.presentation.regex.isEmailInputCorrect
+import com.vd.study.core.presentation.regex.isPasswordInputCorrect
+import com.vd.study.core.presentation.regex.isUsernameInputCorrect
+import com.vd.study.core.presentation.resources.getColorValue
+import com.vd.study.core.presentation.resources.getDrawableValue
 import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.utils.ACCOUNT_IMAGE_FILE_NAME
-import com.vd.study.core.presentation.utils.PASSWORD_REGEX_STRING
-import com.vd.study.core.presentation.utils.USERNAME_REGEX_STRING
 import com.vd.study.core.presentation.utils.setDarkTheme
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.sign_up.R
@@ -42,8 +43,6 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     @Inject
     lateinit var themeIdentifier: ThemeIdentifier
-
-    private val emailPattern = Patterns.EMAIL_ADDRESS
 
     private val viewModel: SignUpViewModel by viewModels()
 
@@ -71,9 +70,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         initListeners()
 
         viewModel.hideBottomBar()
-        viewModel.registrationResultLiveValue.observe(viewLifecycleOwner) {
-            handleRegistrationResult(it)
-        }
+        viewModel.registrationResultLiveValue.observe(viewLifecycleOwner, ::handleRegistrationResult)
     }
 
     private fun handleAccountImageClick() {
@@ -88,20 +85,20 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         requireContext().showToast(resources.getString(R.string.account_image_selection_error))
     }
 
-    private fun initListeners() {
-        binding.btnNext.setOnClickListener { handleNextClick() }
-        binding.btnBack.setOnClickListener { handleBackClick() }
-        binding.btnRegister.setOnClickListener { handleRegisterClick() }
-        binding.imageAccount.setOnClickListener { handleAccountImageClick() }
+    private fun initListeners() = with(binding) {
+        btnNext.setOnClickListener { handleNextClick() }
+        btnBack.setOnClickListener { handleBackClick() }
+        btnRegister.setOnClickListener { handleRegisterClick() }
+        imageAccount.setOnClickListener { handleAccountImageClick() }
 
-        binding.usernameEditText.setOnFocusChangeListener { _, hasFocus ->
-            textChangedListenerHandler(isUsernameInputCorrect(), binding.usernameEditText, hasFocus)
+        usernameEditText.setOnFocusChangeListener { _, hasFocus ->
+            textChangedListenerHandler(isUsernameInputCorrect(usernameEditText), usernameEditText, hasFocus)
         }
-        binding.emailEditText.setOnFocusChangeListener { _, hasFocus ->
-            textChangedListenerHandler(isEmailInputCorrect(), binding.emailEditText, hasFocus)
+        emailEditText.setOnFocusChangeListener { _, hasFocus ->
+            textChangedListenerHandler(isEmailInputCorrect(emailEditText), emailEditText, hasFocus)
         }
-        binding.passwordEditText.setOnFocusChangeListener { _, hasFocus ->
-            textChangedListenerHandler(isPasswordInputCorrect(), binding.passwordEditText, hasFocus)
+        passwordEditText.setOnFocusChangeListener { _, hasFocus ->
+            textChangedListenerHandler(isPasswordInputCorrect(passwordEditText), passwordEditText, hasFocus)
         }
     }
 
@@ -112,41 +109,40 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             .centerCrop()
             .into(binding.imageAccount)
 
-        if (themeIdentifier.isLightTheme) {
-            binding.btnNext.setTextColor(Color.WHITE)
-            binding.btnRegister.setTextColor(Color.WHITE)
-        } else {
-            binding.textRegistrationScreen.setTextColor(Color.WHITE)
-            binding.usernameEditTextLayout.apply {
-                setDarkTheme(binding.usernameEditText)
-                applyDefaultStyleToEditText(this, binding.usernameEditText)
-            }
-            binding.emailEditTextLayout.apply {
-                setDarkTheme(binding.emailEditText)
-                applyDefaultStyleToEditText(this, binding.emailEditText)
-            }
-            binding.passwordEditTextLayout.apply {
-                setDarkTheme(binding.passwordEditText)
-                applyDefaultStyleToEditText(this, binding.passwordEditText)
-            }
-            binding.btnNext.setDarkTheme()
-            binding.btnRegister.setDarkTheme()
+        if (themeIdentifier.isLightTheme) setScreenLightTheme() else setScreenDarkTheme()
+    }
+
+    private fun setScreenDarkTheme() = with(binding) {
+        btnBack.setColorFilter(Color.WHITE)
+        btnNext.setDarkTheme()
+        btnRegister.setDarkTheme()
+
+        textRegistrationScreen.setTextColor(Color.WHITE)
+
+        usernameEditTextLayout.apply {
+            setDarkTheme(usernameEditText)
+            applyDefaultStyleToEditText(this, usernameEditText)
+        }
+        emailEditTextLayout.apply {
+            setDarkTheme(emailEditText)
+            applyDefaultStyleToEditText(this, emailEditText)
+        }
+        passwordEditTextLayout.apply {
+            setDarkTheme(passwordEditText)
+            applyDefaultStyleToEditText(this, passwordEditText)
         }
     }
 
-    private fun applyDefaultStyleToEditText(
-        textInputLayout: TextInputLayout,
-        textInputEditText: TextInputEditText
-    ) {
-        textInputLayout.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_NONE
-        textInputEditText.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.edit_text_dark_theme_background)
-        textInputEditText.setBackgroundColor(
-            ContextCompat.getColor(
-                requireContext(),
-                CoreResources.color.second_background
-            )
-        )
+    private fun setScreenLightTheme() = with(binding) {
+        btnNext.setTextColor(Color.WHITE)
+        btnRegister.setTextColor(Color.WHITE)
+        btnBack.setColorFilter(Color.BLACK)
+    }
+
+    private fun applyDefaultStyleToEditText(layout: TextInputLayout, editText: TextInputEditText) {
+        layout.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_NONE
+        editText.background = requireContext().getDrawableValue(R.drawable.edit_text_dark_theme_background)
+        editText.setBackgroundColor(requireContext().getColorValue(CoreResources.color.second_background))
     }
 
     private fun handleRegistrationResult(result: Result<AccountEntity>) {
@@ -156,7 +152,6 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             }
 
             is Result.Error -> {
-                binding.btnRegister.isClickable = true
                 changeRegistrationVisibility(false)
                 requireContext().showToast(resources.getString(CoreResources.string.error_try_again_later))
             }
@@ -167,40 +162,21 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                     resources.getString(CoreResources.string.error_try_again_later)
                 )
 
-                binding.btnRegister.isClickable = true
                 viewModel.navigateToMain()
             }
         }
     }
 
-    private fun changeRegistrationVisibility(isProgress: Boolean) = with(binding) {
-        this@SignUpFragment.isProgress = isProgress
-        registrationProgress.isVisible = isProgress
-    }
-
-    private fun isUsernameInputCorrect(): Boolean {
-        return binding.usernameEditText.text?.toString()
-            ?.matches(USERNAME_REGEX_STRING.toRegex()) != false
-    }
-
-    private fun isEmailInputCorrect(): Boolean {
-        return emailPattern.matcher(binding.emailEditText.text?.toString() ?: "").matches()
-    }
-
-    private fun isPasswordInputCorrect(): Boolean {
-        return binding.passwordEditText.text?.toString()
-            ?.matches(PASSWORD_REGEX_STRING.toRegex()) != false
+    private fun changeRegistrationVisibility(isProgress: Boolean) {
+        this.isProgress = isProgress
+        binding.registrationProgress.isVisible = isProgress
+        binding.btnRegister.isClickable = !isProgress
     }
 
     private fun textChangedListenerHandler(
-        matchResult: Boolean,
-        editText: TextInputEditText,
-        hasFocus: Boolean
+        matchResult: Boolean, editText: TextInputEditText, hasFocus: Boolean
     ) {
-        if (!hasFocus) {
-            editText.error =
-                if (!matchResult) resources.getString(CoreResources.string.incorrect) else null
-        }
+        if (!hasFocus) editText.error = if (!matchResult) resources.getString(CoreResources.string.incorrect) else null
     }
 
     private fun handleRegisterClick() {
@@ -213,7 +189,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             date = Date()
         )
 
-        binding.btnRegister.isClickable = false
+        changeRegistrationVisibility(true)
         viewModel.registerAccount(account)
     }
 
@@ -235,7 +211,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     private fun handleNextClick() {
         var flag = true
-        if (!isUsernameInputCorrect()) {
+        if (!isUsernameInputCorrect(binding.usernameEditText)) {
             setEditTextFieldsVisibility(isEmailFieldVisible = false, isPasswordFieldVisible = false)
             binding.usernameEditText.requestFocus()
             showEditTextError(binding.usernameEditText)
@@ -247,7 +223,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             }
         }
 
-        if (!isEmailInputCorrect()) {
+        if (!isEmailInputCorrect(binding.emailEditText)) {
             if (flag) showEditTextError(binding.emailEditText)
 
             setEditTextFieldsVisibility(isPasswordFieldVisible = false)
@@ -261,7 +237,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             }
         }
 
-        if (!isPasswordInputCorrect()) {
+        if (!isPasswordInputCorrect(binding.passwordEditText)) {
             if (flag) showEditTextError(binding.passwordEditText)
 
             binding.passwordEditText.text?.clear()
@@ -285,8 +261,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     }
 
     private fun setImageSelectionScreenVisibility(
-        isRegisterButtonVisible: Boolean = false,
-        isImageAccountVisible: Boolean = false
+        isRegisterButtonVisible: Boolean = false, isImageAccountVisible: Boolean = false
     ) = with(binding) {
         btnRegister.isVisible = isRegisterButtonVisible
         imageAccount.isVisible = isImageAccountVisible

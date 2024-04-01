@@ -7,7 +7,6 @@ import android.net.Network
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -18,7 +17,9 @@ import com.vd.study.core.global.AccountIdentifier
 import com.vd.study.core.global.SHOW_NETWORK_WARNING
 import com.vd.study.core.global.SIGN_IN_SHARED_PREFERENCES_NAME
 import com.vd.study.core.global.ThemeIdentifier
+import com.vd.study.core.global.setDefaultLoginValues
 import com.vd.study.core.presentation.dialog.showNetworkWarningDialog
+import com.vd.study.core.presentation.resources.getColorStateListValue
 import com.vd.study.gif_master.MainGraphDirections
 import com.vd.study.gif_master.R
 import com.vd.study.gif_master.databinding.ActivityMainBinding
@@ -58,19 +59,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         globalNavComponentRouter.onCreated(this)
 
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
-        val navController = navHostFragment.navController
-
         setAccountIdentifier()
-
-        binding.bottomAppBar.setOnMenuItemClickListener {
-            handleOnBottomMenuItemClick(it, navController)
-        }
-        binding.searchButton.setOnClickListener {
-            globalNavComponentRouter.launch(MainGraphDirections.actionGlobalSearchFragment())
-            changeBottomBarVisibility(false)
-        }
+        setListeners()
 
         connectivityManager.value.registerDefaultNetworkCallback(networkCallback)
     }
@@ -88,8 +78,8 @@ class MainActivity : AppCompatActivity() {
 
     fun changeBottomBarTheme(default: Boolean) {
         if (themeIdentifier.isLightTheme) {
-            val bottomBarColor =
-                if (default) CoreResources.color.white else CoreResources.color.second_background
+            val bottomBarColor = if (default) CoreResources.color.white
+            else CoreResources.color.second_background
             val itemsColor = if (default) Color.BLACK else Color.WHITE
 
             setBottomBarColor(bottomBarColor)
@@ -102,6 +92,18 @@ class MainActivity : AppCompatActivity() {
             setBottomBarColor(bottomBarColor)
             setBottomBarItemsColor(itemsColor)
             setBottomBarButtonIconColor(Color.BLACK)
+        }
+    }
+
+    private fun setListeners() {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
+        val navController = navHostFragment.navController
+        binding.bottomAppBar.setOnMenuItemClickListener {
+            handleOnBottomMenuItemClick(it, navController)
+        }
+        binding.searchButton.setOnClickListener {
+            globalNavComponentRouter.launch(MainGraphDirections.actionGlobalSearchFragment())
+            changeBottomBarVisibility(false)
         }
     }
 
@@ -126,15 +128,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setBottomBarColor(color: Int) {
-        binding.bottomAppBar.backgroundTint = ContextCompat.getColorStateList(
-            applicationContext,
-            color
-        )
+        binding.bottomAppBar.backgroundTint = this.getColorStateListValue(color)
     }
 
     private fun loadAndSetAppTheme() {
-        val sharedPreferences =
-            getSharedPreferences(APP_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences(
+            APP_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE
+        )
         val loadTheme = {
             setTheme(
                 if (themeIdentifier.isLightTheme) CoreResources.style.Theme_Gifmaster_Core
@@ -172,7 +172,9 @@ class MainActivity : AppCompatActivity() {
 
         val accountId = sharedPreferences.getInt(ACCOUNT_ID_FIELD_NAME, -1)
         if (accountId == -1) {
-            // add handler
+            sharedPreferences.setDefaultLoginValues()
+            globalNavComponentRouter.popToInclusive(R.id.signInFragment)
+            globalNavComponentRouter.launch(R.id.signInFragment)
             return
         }
         accountIdentifier.accountIdentifier = accountId

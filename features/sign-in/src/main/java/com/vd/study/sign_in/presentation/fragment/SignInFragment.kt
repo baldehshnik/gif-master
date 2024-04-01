@@ -3,7 +3,6 @@ package com.vd.study.sign_in.presentation.fragment
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,8 +20,9 @@ import com.vd.study.core.global.AccountIdentifier
 import com.vd.study.core.global.IS_ACCOUNT_ENTERED_FIELD_NAME
 import com.vd.study.core.global.SIGN_IN_SHARED_PREFERENCES_NAME
 import com.vd.study.core.global.ThemeIdentifier
+import com.vd.study.core.presentation.regex.isEmailInputCorrect
+import com.vd.study.core.presentation.regex.isPasswordInputCorrect
 import com.vd.study.core.presentation.toast.showToast
-import com.vd.study.core.presentation.utils.PASSWORD_REGEX_STRING
 import com.vd.study.core.presentation.utils.setDarkTheme
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.sign_in.R
@@ -56,15 +56,9 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        val sharedPreferences = requireContext().getSharedPreferences(
-            SIGN_IN_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE
-        )
-        val isSaved = sharedPreferences.getBoolean(IS_ACCOUNT_ENTERED_FIELD_NAME, false)
-        if (isSaved) viewModel.navigateToMain()
+        checkUserLogin()
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -73,53 +67,67 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         setEventsListener()
         readRegisteredAccounts()
         initUI()
+    }
 
-        viewModel.hideBottomBar()
-
-        binding.listSavedAccounts.layoutManager = LinearLayoutManager(
-            requireContext(), LinearLayoutManager.HORIZONTAL, false
+    private fun checkUserLogin() {
+        val sharedPreferences = requireContext().getSharedPreferences(
+            SIGN_IN_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE
         )
-
-        binding.btnSignIn.setOnClickListener { handleOnSignInClick() }
-
-        binding.emailEditText.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus && !isEmailInputCorrect()) {
-                setEditTextErrorMessage(binding.emailEditText, CoreResources.string.incorrect)
-            }
-        }
-        binding.passwordEditText.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus && !isPasswordInputCorrect()) {
-                setEditTextErrorMessage(binding.passwordEditText, CoreResources.string.incorrect)
-            }
-        }
-
-        binding.btnSignUp.setOnClickListener { viewModel.navigateToRegistration() }
-        binding.btnReloadAccountsList.setOnClickListener { handleReloadClick() }
+        val isSaved = sharedPreferences.getBoolean(IS_ACCOUNT_ENTERED_FIELD_NAME, false)
+        if (isSaved) viewModel.navigateToMain()
     }
 
     private fun initUI() {
-        if (themeIdentifier.isLightTheme) {
-            binding.btnSignIn.setTextColor(Color.WHITE)
-            binding.btnSignUp.setTextColor(Color.BLACK)
-        } else {
-            binding.textSelectFrom.setTextColor(Color.WHITE)
-            binding.textOrFill.setTextColor(Color.WHITE)
-            binding.btnSignUp.setTextColor(Color.WHITE)
-            binding.btnSignIn.setDarkTheme()
-            binding.emailEditTextLayout.setDarkTheme(binding.emailEditText)
-            binding.passwordEditTextLayout.setDarkTheme(binding.passwordEditText)
+        viewModel.hideBottomBar()
+        if (themeIdentifier.isLightTheme) setLightThemeElements() else setDarkThemeElements()
+
+        setListeners()
+        binding.listSavedAccounts.layoutManager = LinearLayoutManager(
+            requireContext(), LinearLayoutManager.HORIZONTAL, false
+        )
+    }
+
+    private fun setLightThemeElements() = with(binding) {
+        btnSignIn.setTextColor(Color.WHITE)
+        btnSignUp.setTextColor(Color.BLACK)
+    }
+
+    private fun setDarkThemeElements() = with(binding) {
+        textSelectFrom.setTextColor(Color.WHITE)
+        textOrFill.setTextColor(Color.WHITE)
+
+        btnSignUp.setTextColor(Color.WHITE)
+        btnSignIn.setDarkTheme()
+
+        emailEditTextLayout.setDarkTheme(emailEditText)
+        passwordEditTextLayout.setDarkTheme(passwordEditText)
+    }
+
+    private fun setListeners() = with(binding) {
+        btnSignIn.setOnClickListener { handleOnSignInClick() }
+        btnSignUp.setOnClickListener { viewModel.navigateToRegistration() }
+        btnReloadAccountsList.setOnClickListener { handleReloadClick() }
+
+        emailEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus && !isEmailInputCorrect(emailEditText)) {
+                setEditTextErrorMessage(emailEditText, CoreResources.string.incorrect)
+            }
+        }
+        passwordEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus && !isPasswordInputCorrect(passwordEditText)) {
+                setEditTextErrorMessage(passwordEditText, CoreResources.string.incorrect)
+            }
         }
     }
 
     private fun handleReloadClick() {
         binding.btnReloadAccountsList.isVisible = false
-        changeAccountsListVisibility(true)
-        viewModel.readRegisteredAccounts()
+        readRegisteredAccounts()
     }
 
     private fun readRegisteredAccounts() {
-        viewModel.readRegisteredAccounts()
         changeAccountsListVisibility(true)
+        viewModel.readRegisteredAccounts()
     }
 
     private fun signIn(id: Int, email: String) {
@@ -137,23 +145,8 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     }
 
     private fun setEventsListener() {
-        viewModel.registeredAccountsLiveEvent.observe(viewLifecycleOwner) {
-            handleRegisteredAccountsReading(it)
-        }
-        viewModel.checkAccountLiveEvent.observe(viewLifecycleOwner) {
-            handleSignInResult(it)
-        }
-    }
-
-    private fun isPasswordInputCorrect(): Boolean {
-        return PASSWORD_REGEX_STRING.toRegex()
-            .matches(binding.passwordEditText.text?.toString() ?: return false)
-    }
-
-    private fun isEmailInputCorrect(): Boolean {
-        return Patterns.EMAIL_ADDRESS
-            .matcher(binding.emailEditText.text?.toString() ?: return false)
-            .matches()
+        viewModel.registeredAccountsLiveEvent.observe(viewLifecycleOwner, ::handleRegisteredAccountsReading)
+        viewModel.checkAccountLiveEvent.observe(viewLifecycleOwner, ::handleSignInResult)
     }
 
     private fun setEditTextErrorMessage(editText: TextInputEditText, @StringRes messageId: Int) {
@@ -202,19 +195,19 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     }
 
     private fun handleOnSignInClick() {
-        if (!isEmailInputCorrect()) {
+        if (!isEmailInputCorrect(binding.emailEditText)) {
             setEditTextErrorMessage(binding.emailEditText, CoreResources.string.incorrect)
             return
         }
-        if (!isPasswordInputCorrect()) {
+        if (!isPasswordInputCorrect(binding.passwordEditText)) {
             setEditTextErrorMessage(binding.passwordEditText, CoreResources.string.incorrect)
             return
         }
 
         binding.btnSignIn.isEnabled = false
         val checkAccount = CheckAccountEntity(
-            binding.emailEditText.text!!.toString(),
-            binding.passwordEditText.text!!.toString()
+            binding.emailEditText.text.toString(),
+            binding.passwordEditText.text.toString()
         )
         viewModel.singIn(checkAccount)
     }
@@ -226,6 +219,5 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
         val adapter = RegisteredAccountAdapter(accounts, onRegisteredAccountClickListener, themeIdentifier.isLightTheme)
         binding.listSavedAccounts.adapter = adapter
-        viewModel.hideProgress()
     }
 }

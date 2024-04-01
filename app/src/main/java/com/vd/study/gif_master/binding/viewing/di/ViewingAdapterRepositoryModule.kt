@@ -15,5 +15,4 @@ interface ViewingAdapterRepositoryModule {
     fun bindViewingAdapterRepositoryToViewingRepository(
         viewingAdapterRepository: ViewingAdapterRepository
     ) : ViewingRepository
-
 }

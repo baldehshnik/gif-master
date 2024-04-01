@@ -14,6 +14,7 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -285,7 +286,8 @@ class AccountDaoTest {
                 username = "username $i",
                 avatarUrl = "url $i",
                 email = "email $i",
-                password = "password $i"
+                password = "password $i",
+                date = Date()
             )
         }
 

@@ -19,7 +19,6 @@ import com.vd.study.core.global.APP_SHARED_PREFERENCES_NAME
 import com.vd.study.core.global.APP_THEME
 import com.vd.study.core.global.ThemeIdentifier
 import com.vd.study.core.presentation.dialog.showNetworkWarningDialog
-import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import com.vd.study.home.R
 import com.vd.study.home.databinding.FragmentHomeBinding
@@ -71,17 +70,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (activity is AppCompatActivity) {
-            (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        }
 
         initUI()
         viewModel.readGifsResult.observe(viewLifecycleOwner, ::handleReadingResult)
-        viewModel.updateGifResult.observe(viewLifecycleOwner, ::handleUpdateResult)
-
-        binding.btnChangeTheme.setOnClickListener {
-            handleChangeAppThemeClick()
-        }
     }
 
     override fun onStart() {
@@ -105,8 +96,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
     }
 
     private fun initUI() {
+        (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
         viewModel.showBottomBar()
+
         setProgressVisibility(true)
+
         gifsAdapter = GifsAdapter(this)
         binding.listGifs.adapter = gifsAdapter
         gifsAdapter?.addLoadStateListener(listLoadStateListener)
@@ -114,6 +108,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
         binding.btnChangeTheme.setImageResource(
             if (themeIdentifier.isLightTheme) R.drawable.moon else R.drawable.round_wb_sunny
         )
+        binding.btnChangeTheme.setOnClickListener { handleChangeAppThemeClick() }
     }
 
     private fun handleChangeAppThemeClick() {
@@ -129,12 +124,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnGifItemClickListener {
                 else CoreResources.style.Theme_Gifmaster_Core_Dark
             )
             recreate()
-        }
-    }
-
-    private fun handleUpdateResult(updatedGif: FullGifEntity?) {
-        if (updatedGif == null) {
-            requireContext().showToast(resources.getString(R.string.update_error))
         }
     }
 

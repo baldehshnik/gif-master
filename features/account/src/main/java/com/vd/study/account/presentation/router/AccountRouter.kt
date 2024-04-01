@@ -6,4 +6,6 @@ interface AccountRouter {
 
     fun navigateToViewingFragment(gif: GifEntity)
 
+    fun returnToSignInFragment()
+
 }

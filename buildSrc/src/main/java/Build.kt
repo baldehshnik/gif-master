@@ -51,12 +51,7 @@ object Build {
         }
 
         object Image {
-            const val CoilVersion = "2.3.0"
-
             const val Glide = "com.github.bumptech.glide:glide:4.15.1"
-
-            const val Coil = "io.coil-kt:coil:$CoilVersion"
-            const val CoilGif = "io.coil-kt:coil-gif:$CoilVersion"
         }
     }
 

@@ -6,14 +6,10 @@ import com.vd.study.viewing.domain.entities.GifEntity
 
 fun Data.getGifEntity(): GifEntity {
     val hasAuthor = getBoolean("hasAuthor", false)
-    val author = if (hasAuthor) {
-        GifAuthorEntity(
-            getString("username") ?: "",
-            getString("avatarUrl") ?: ""
-        )
-    } else {
-        null
-    }
+    val author = if (hasAuthor) GifAuthorEntity(
+        getString("username") ?: "",
+        getString("avatarUrl") ?: ""
+    ) else null
 
     return GifEntity(
         getInt("id", 0),

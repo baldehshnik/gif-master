@@ -5,9 +5,10 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.vd.study.account.R
+import com.vd.study.core.R as CoreResources
 import com.vd.study.account.databinding.FragmentViewedGifsBinding
 import com.vd.study.account.domain.entities.GifEntity
-import com.vd.study.account.presentation.adapter.LikedGifsAdapter
+import com.vd.study.account.presentation.adapter.AccountGifsAdapter
 import com.vd.study.account.presentation.adapter.OnLikedGifItemClickListener
 import com.vd.study.account.presentation.viewmodel.AccountViewModel
 import com.vd.study.core.container.Result
@@ -23,7 +24,7 @@ class ViewedGifsFragment : Fragment(R.layout.fragment_viewed_gifs), OnLikedGifIt
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (viewModel == null) {
-            requireContext().showToast("NULL")
+            requireContext().showToast(resources.getString(CoreResources.string.error))
         } else {
             startViewing(viewModel!!)
         }
@@ -35,10 +36,10 @@ class ViewedGifsFragment : Fragment(R.layout.fragment_viewed_gifs), OnLikedGifIt
 
     private fun startViewing(viewModel: AccountViewModel) {
         viewModel.readViewedGifs()
-        viewModel.viewedGifsLiveData.observe(viewLifecycleOwner, ::handleLikedGifReading)
+        viewModel.viewedGifsLiveData.observe(viewLifecycleOwner, ::handleViewedGifReading)
     }
 
-    private fun handleLikedGifReading(result: Result<List<GifEntity>>) {
+    private fun handleViewedGifReading(result: Result<List<GifEntity>>) {
         when (result) {
             Result.Progress -> {
                 changeVisibility(true)
@@ -52,7 +53,7 @@ class ViewedGifsFragment : Fragment(R.layout.fragment_viewed_gifs), OnLikedGifIt
             is Result.Correct -> {
                 // fix (show empty result)
                 val data = result.getOrNull() ?: return
-                val adapter = LikedGifsAdapter(data, this)
+                val adapter = AccountGifsAdapter(data, this)
                 binding.viewedGifsList.adapter = adapter
                 changeVisibility(false)
             }

@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,12 +13,14 @@ import com.bumptech.glide.Glide
 import com.vd.study.account.R
 import com.vd.study.account.databinding.FragmentAccountBinding
 import com.vd.study.account.domain.entities.AccountEntity
-import com.vd.study.account.presentation.adapter.LikedGifsPagerAdapter
+import com.vd.study.account.presentation.adapter.AccountGifsPagerAdapter
 import com.vd.study.account.presentation.viewmodel.AccountViewModel
 import com.vd.study.core.container.Result
 import com.vd.study.core.global.ACCOUNT_EMAIL_FIELD_NAME
 import com.vd.study.core.global.SIGN_IN_SHARED_PREFERENCES_NAME
 import com.vd.study.core.global.ThemeIdentifier
+import com.vd.study.core.global.setDefaultLoginValues
+import com.vd.study.core.presentation.resources.getColorStateListValue
 import com.vd.study.core.presentation.toast.showToast
 import com.vd.study.core.presentation.viewbinding.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,13 +35,13 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
     @Inject
     lateinit var viewModelFactory: AccountViewModel.Factory
 
-    private var email: String? = null
-
     @Inject
     lateinit var themeIdentifier: ThemeIdentifier
 
+    private var email: String? = null
+
     private val _viewModel: Lazy<AccountViewModel> by lazy {
-        requireNotNull(email) { "Email must be initialized before accessing ViewModel" }
+        requireNotNull(email) { resources.getString(R.string.email_must_be_initialized) }
         viewModels {
             AccountViewModel.provideFactory(viewModelFactory, email!!)
         }
@@ -58,12 +59,9 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getEmail()
+        if (!getEmail()) return
         loadUI()
         loadListeners()
-
-        val adapter = LikedGifsPagerAdapter(this, viewModel)
-        binding.viewPager.adapter = adapter
 
         viewModel.accountLiveValue.observe(viewLifecycleOwner, ::handleAccountReading)
     }
@@ -111,27 +109,35 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
     }
 
     private fun loadUI() {
-        if (themeIdentifier.isLightTheme) {
-            binding.screen.setBackgroundColor(
-                ContextCompat.getColor(requireContext(), R.color.gray_background)
-            )
-            binding.btnEdit.backgroundTintList = ContextCompat.getColorStateList(
-                requireContext(), CoreResources.color.black
-            )
-            binding.btnEdit.setTextColor(Color.WHITE)
-        } else {
-            binding.btnEdit.backgroundTintList = ContextCompat.getColorStateList(
-                requireContext(), CoreResources.color.purple_200
-            )
-            binding.btnEdit.setTextColor(Color.BLACK)
-        }
+        if (themeIdentifier.isLightTheme) setLightThemeElements() else setDarkThemeElements()
+        val adapter = AccountGifsPagerAdapter(this, viewModel)
+        binding.viewPager.adapter = adapter
     }
 
-    private fun getEmail() {
+    private fun setDarkThemeElements() = with(binding) {
+        btnEdit.backgroundTintList = requireContext().getColorStateListValue(CoreResources.color.purple_200)
+        btnEdit.setTextColor(Color.BLACK)
+    }
+
+    private fun setLightThemeElements() = with(binding) {
+        screen.setBackgroundColor(requireContext().getColor(R.color.gray_background))
+        btnEdit.backgroundTintList = requireContext().getColorStateListValue(CoreResources.color.black)
+        btnEdit.setTextColor(Color.WHITE)
+    }
+
+    private fun getEmail(): Boolean {
         val sharedPreferences = requireContext().getSharedPreferences(
             SIGN_IN_SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE
         )
         email = sharedPreferences.getString(ACCOUNT_EMAIL_FIELD_NAME, "")
+
+        if (email == null || email?.isBlank() == true) {
+            sharedPreferences.setDefaultLoginValues()
+            viewModel.returnToSignInFragment()
+            return false
+        }
+
+        return true
     }
 
     private fun handleAccountReading(result: Result<AccountEntity>) {
@@ -158,16 +164,16 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
         }
     }
 
-    private fun loadAccountUI(account: AccountEntity) {
-        binding.textAccountName.text = account.username
-        binding.emailInfo.text = resources.getString(R.string.email_info, email)
+    private fun loadAccountUI(account: AccountEntity) = with(binding) {
+        textAccountName.text = account.username
+        emailInfo.text = resources.getString(R.string.email_info, email)
 
         setDate(account.date)
         Glide.with(requireContext())
             .load(account.avatarUrl)
             .placeholder(CoreResources.drawable.placeholder_gray_gradient)
             .centerCrop()
-            .into(binding.imageAccount)
+            .into(imageAccount)
     }
 
     @SuppressLint("SimpleDateFormat")

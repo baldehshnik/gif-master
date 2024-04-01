@@ -6,7 +6,7 @@ import com.vd.study.account.presentation.fragment.LikedGifsFragment
 import com.vd.study.account.presentation.fragment.ViewedGifsFragment
 import com.vd.study.account.presentation.viewmodel.AccountViewModel
 
-class LikedGifsPagerAdapter(
+class AccountGifsPagerAdapter(
     fragment: Fragment,
     private val viewModel: AccountViewModel
 ) : FragmentStateAdapter(fragment) {

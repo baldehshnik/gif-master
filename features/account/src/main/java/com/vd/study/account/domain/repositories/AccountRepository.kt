@@ -13,6 +13,4 @@ interface AccountRepository {
 
     suspend fun readViewedGifs(): Result<Flow<List<GifEntity>>>
 
-    suspend fun readLikedGifsCount(): Result<Int>
-
 }

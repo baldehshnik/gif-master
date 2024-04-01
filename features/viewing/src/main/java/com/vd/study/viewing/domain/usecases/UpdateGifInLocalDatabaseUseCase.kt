@@ -16,5 +16,4 @@ class UpdateGifInLocalDatabaseUseCase @Inject constructor(
     suspend operator fun invoke(gif: GifEntity): Result<Boolean> = withContext(ioDispatcher) {
         return@withContext repository.updateGif(gif)
     }
-
 }

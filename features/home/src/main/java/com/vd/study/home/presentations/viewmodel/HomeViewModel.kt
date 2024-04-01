@@ -14,7 +14,6 @@ import com.vd.study.home.domain.entities.GifEntity
 import com.vd.study.home.domain.entities.LikeAndSaveStatusEntity
 import com.vd.study.home.domain.usecases.PagingReadGifsUseCase
 import com.vd.study.home.domain.usecases.ReadLikeAndSaveStatusUseCase
-import com.vd.study.home.domain.usecases.UpdateGifUseCase
 import com.vd.study.home.presentations.router.HomeRouter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -27,30 +26,11 @@ class HomeViewModel @Inject constructor(
     private val dispatchers: Dispatchers,
     private val pagingReadGifsUseCase: PagingReadGifsUseCase,
     private val readLikeAndSaveStatusUseCase: ReadLikeAndSaveStatusUseCase,
-    private val updateGifUseCase: UpdateGifUseCase,
     private val router: HomeRouter
 ) : BaseViewModel() {
 
     private val _readGifsResult = MutableLiveData<PagingData<FullGifEntity>>()
     val readGifsResult: LiveData<PagingData<FullGifEntity>> get() = _readGifsResult
-
-    private val _updateGifResult = MutableLiveData<FullGifEntity?>()
-    val updateGifResult: LiveData<FullGifEntity?> get() = _updateGifResult
-
-    fun updateGif(newGif: FullGifEntity) {
-        viewModelScope.launch {
-            val result = updateGifUseCase(newGif)
-            val value = result.getOrNull() ?: return@launch
-
-            withContext(dispatchers.mainDispatcher) {
-                if (value) {
-                    _updateGifResult.value = newGif
-                } else {
-                    _updateGifResult.value = null
-                }
-            }
-        }
-    }
 
     fun navigateToViewingFragment(gif: FullGifEntity) {
         router.navigateToViewingFragment(gif)
@@ -67,27 +47,23 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun handleGifsSynchronization(
-        dataFlow: Flow<PagingData<GifEntity>>
-    ) = withContext(dispatchers.defaultDispatcher) {
-        dataFlow.collect { data ->
-            val mappedData = data.map { gifEntity ->
-                val likeAndSaveStatusEntity = readLikeAndSaveStatusUseCase(gifEntity)
-                val status = handleLikeAndSaveStatusReading(likeAndSaveStatusEntity)
-                FullGifEntity.getInstateWith(gifEntity, status)
-            }
+    private suspend fun handleGifsSynchronization(dataFlow: Flow<PagingData<GifEntity>>) =
+        withContext(dispatchers.defaultDispatcher) {
+            dataFlow.collect { data ->
+                val mappedData = data.map { gifEntity ->
+                    val likeAndSaveStatusEntity = readLikeAndSaveStatusUseCase(gifEntity)
+                    val status = handleLikeAndSaveStatusReading(likeAndSaveStatusEntity)
+                    FullGifEntity.getInstateWith(gifEntity, status)
+                }
 
-            withContext(dispatchers.mainDispatcher) {
-                _readGifsResult.value = mappedData
+                withContext(dispatchers.mainDispatcher) {
+                    _readGifsResult.value = mappedData
+                }
             }
         }
-    }
 
-    private fun handleLikeAndSaveStatusReading(
-        status: Result<LikeAndSaveStatusEntity>
-    ): LikeAndSaveStatusEntity {
-        val emptyStatus = LikeAndSaveStatusEntity(gifId = -1, isLiked = false, isSaved = false, isViewed = false)
-        return status.getOrNull() ?: emptyStatus
+    private fun handleLikeAndSaveStatusReading(status: Result<LikeAndSaveStatusEntity>): LikeAndSaveStatusEntity {
+        return status.getOrNull() ?: LikeAndSaveStatusEntity.getEmpty()
     }
 
     init {
