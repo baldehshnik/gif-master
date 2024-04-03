@@ -39,6 +39,16 @@ fun Context.getDefaultAccountDrawableUrl(): String {
     return "android.resource://" + this.packageName + "/" + R.drawable.default_account_icon
 }
 
+fun Context.deleteOldImages(newFileName: String, accountName: String) {
+    val directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+    val files = directory?.listFiles()
+    files?.forEach { file ->
+        if (file.isFile && file.name.startsWith(accountName) && file.name != newFileName) {
+            file.delete()
+        }
+    }
+}
+
 fun Context.saveImageToInternalStorage(
     imageUri: Uri,
     outputFileName: String,

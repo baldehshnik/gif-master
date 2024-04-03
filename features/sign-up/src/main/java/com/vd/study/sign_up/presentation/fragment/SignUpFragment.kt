@@ -56,7 +56,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             data?.data?.let { uri ->
                 binding.imageAccount.setImageURI(uri)
                 requireContext().saveImageToInternalStorage(
-                    uri, ACCOUNT_IMAGE_FILE_NAME,
+                    uri, binding.usernameEditText.text.toString() + ACCOUNT_IMAGE_FILE_NAME,
                     resultHandler = { imageFilePath = it },
                     errorHandler = ::errorImageSelection
                 )

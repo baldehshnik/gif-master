@@ -8,4 +8,6 @@ interface AccountRouter {
 
     fun returnToSignInFragment()
 
+    fun navigateToSettings()
+
 }

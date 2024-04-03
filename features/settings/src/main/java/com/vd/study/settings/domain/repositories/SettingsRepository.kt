@@ -7,8 +7,12 @@ interface SettingsRepository {
 
     suspend fun updateAccount(account: AccountEntity): Result<Boolean>
 
-    suspend fun removeAccount(account: AccountEntity): Result<Boolean>
+    suspend fun removeAccount(): Result<Boolean>
 
-    suspend fun readAccount(email: String): Result<AccountEntity>
+    suspend fun readAccount(): Result<AccountEntity>
+
+    suspend fun readLikedGifsCount(): Result<Int>
+
+    suspend fun readSavedGifsCount(): Result<Int>
 
 }

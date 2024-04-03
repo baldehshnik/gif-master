@@ -39,11 +39,11 @@ class AccountsDataRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun removeAccount(account: AccountDataEntity): Result<Boolean> =
+    override suspend fun removeAccount(accountId: Int): Result<Boolean> =
         withContext(ioDispatcher) {
             return@withContext executeDatabaseUpdating(
                 operation = {
-                    accountDao.removeAccount(account).toLong()
+                    accountDao.removeAccount(accountId).toLong()
                 }, error = Result.Error(FailedRemoveException())
             )
         }
@@ -61,6 +61,14 @@ class AccountsDataRepositoryImpl @Inject constructor(
         withContext(ioDispatcher) {
             return@withContext catchReadingExceptionOf {
                 accountDao.readAccount(email)
+                    ?: return@withContext Result.Error(NotFoundException())
+            }
+        }
+
+    override suspend fun readAccountById(id: Int): Result<AccountDataEntity> =
+        withContext(ioDispatcher) {
+            return@withContext catchReadingExceptionOf {
+                accountDao.readAccountById(id)
                     ?: return@withContext Result.Error(NotFoundException())
             }
         }

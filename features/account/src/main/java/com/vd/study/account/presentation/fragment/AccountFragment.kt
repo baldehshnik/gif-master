@@ -39,6 +39,7 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
     lateinit var themeIdentifier: ThemeIdentifier
 
     private var email: String? = null
+    private var settingsOpened: Boolean = false
 
     private val _viewModel: Lazy<AccountViewModel> by lazy {
         requireNotNull(email) { resources.getString(R.string.email_must_be_initialized) }
@@ -68,6 +69,10 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
 
     override fun onStart() {
         binding.viewPager.registerOnPageChangeCallback(onPagerStateListenerCallback)
+        if (settingsOpened) {
+            settingsOpened = false
+            viewModel.readAccount()
+        }
         super.onStart()
     }
 
@@ -96,7 +101,8 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
 
     private fun loadListeners() {
         binding.btnEdit.setOnClickListener {
-            // open settings fragment
+            settingsOpened = true
+            viewModel.navigateToSettings()
         }
         binding.btnLiked.setOnClickListener {
             loadListsInfoLine(false)

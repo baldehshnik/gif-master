@@ -23,4 +23,9 @@ class AdapterAccountRouter @Inject constructor(
         globalNavComponentRouter.popToInclusive(R.id.homeFragment)
         globalNavComponentRouter.launch(R.id.signInFragment)
     }
+
+    override fun navigateToSettings() {
+        globalNavComponentRouter.changeBottomAppBarVisibility(false)
+        globalNavComponentRouter.launch(R.id.settingsFragment)
+    }
 }

@@ -10,11 +10,13 @@ interface AccountsDataRepository {
 
     suspend fun readAccounts(): Result<List<AccountDataEntity>>
 
-    suspend fun removeAccount(account: AccountDataEntity): Result<Boolean>
+    suspend fun removeAccount(accountId: Int): Result<Boolean>
 
     suspend fun updateAccount(account: AccountDataEntity): Result<Boolean>
 
     suspend fun readAccount(email: String): Result<AccountDataEntity>
+
+    suspend fun readAccountById(id: Int): Result<AccountDataEntity>
 
     suspend fun checkAccountExistence(account: CheckAccountDataEntity): Result<Int>
 

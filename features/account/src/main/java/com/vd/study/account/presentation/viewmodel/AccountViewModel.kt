@@ -41,6 +41,10 @@ class AccountViewModel @AssistedInject constructor(
         router.navigateToViewingFragment(gif)
     }
 
+    fun navigateToSettings() {
+        router.navigateToSettings()
+    }
+
     fun returnToSignInFragment() {
         router.returnToSignInFragment()
     }
@@ -59,7 +63,7 @@ class AccountViewModel @AssistedInject constructor(
         }
     }
 
-    private fun readAccount() {
+    fun readAccount() {
         viewModelScope.launch {
             showProgress(_accountLiveValue)
 
