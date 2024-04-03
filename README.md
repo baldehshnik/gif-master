@@ -2,14 +2,15 @@ It is a test application, that provides an interaction with gifs using the <b>[G
 
 Below is some information, which is used to implement this application.
 
-Application status: <b>`in development`</b>
+Application status: <b>`temporarily closed`</b>
 
 <b>Used libraries (this list will be edited in the future):</b>
   * [Retrofit](https://medium.com/@myofficework000/android-retrofit-for-beginners-eb663e8501ac "Retrofit for beginners"). Will be used to load gifs from server.
   * [Room](https://developer.android.com/training/data-storage/room "Room in Android"). Will be used to store local user accounts and to store saved or liked gifs, to see them later.
-  * [Coil](https://coil-kt.github.io/coil/ "Coil documentation"). Will be used to load local and remote images.
+  * [Glide](https://bumptech.github.io/glide/ "Glide documentation"). Will be used to load local and remote images.
   * [Hilt](https://developer.android.com/training/dependency-injection/hilt-android "Dependency Injection with Hilt"). Will be used as Dependency Injection.
   * [Corounites](https://developer.android.com/kotlin/coroutines "Coroutines in Android") and [Flow](https://developer.android.com/kotlin/flow "Flows in Android"). Will ne used to make asynchronous operations and observe values.
+  * [Paging](https://developer.android.com/topic/libraries/architecture/paging/v3-overview "Paging 3 overview"). Will be used to load gifs by the parts.
   * [Navigation Component](https://developer.android.com/guide/navigation/get-started "Navigation Component in Android"). Will be used to implement navigation by application.
   * [XML](https://www.geeksforgeeks.org/a-complete-guide-to-learn-xml-for-android-app-development/ "XML in Android Short Guide"). Will be used to create GUI.
   * [JUnit](https://developer.android.com/training/testing/local-tests "JUnit in Android"). Will be used to write tests.  
